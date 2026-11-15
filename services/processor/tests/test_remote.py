@@ -189,4 +189,5 @@ def test_fast_path_starts_computing_before_every_date_arrives(tmp_path, monkeypa
         return process_series(files, aoi, "T048A-F015", artifacts, "PROVISIONAL", Params(), dem_sources=None)
 
     manifest = remote.run_remote(aoi, "T048A-F015", artifacts, "http://catalog", 3, process, getter=lambda url: [serie])
-    assert len(manifest["pairs"]) == 3 and order[-1] == paths[-1].stem
+    # La tercera fecha solo baja después de la primera; la segunda puede terminar antes o después que la tercera.
+    assert len(manifest["pairs"]) == 3 and order.index(paths[-1].stem) > order.index(paths[0].stem)
