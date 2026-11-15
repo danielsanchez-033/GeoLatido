@@ -1,0 +1,786 @@
+/*
+ * Ventanas informativas (components/Portal.tsx y Carrusel.tsx), con el mismo vidrio líquido que la app
+ * (tema/vidrio.css): la ventana nace como una gota de gelatina, las secciones entran con un muelle y los
+ * carruseles se deslizan con un rebote. Con movimiento reducido, index.css deja las animaciones en 0,01 ms.
+ */
+
+/* ---------- Diálogo y velo ---------- */
+
+.portal {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: var(--margen, 1.5rem);
+  box-sizing: border-box;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.portal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.portal::backdrop {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(10, 16, 30, 0.35), rgba(2, 3, 6, 0.72));
+  -webkit-backdrop-filter: blur(6px) saturate(1.2);
+  backdrop-filter: blur(6px) saturate(1.2);
+  animation: portal-velo 0.4s ease both;
+}
+
+.portal[data-cerrando='true']::backdrop {
+  animation: portal-velo 0.22s ease reverse both;
+}
+
+/* ---------- Ventana ---------- */
+
+.app-vidrio .portal-ventana,
+.portal-ventana {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(62rem, 100%);
+  height: min(44rem, 100%);
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 35%, transparent 60%, rgba(255, 255, 255, 0.05) 100%),
+    rgba(14, 15, 19, 0.82);
+  transform-origin: 50% 40%;
+  animation: portal-gota 0.8s both;
+}
+
+.portal[data-cerrando='true'] .portal-ventana {
+  animation: portal-sale 0.22s cubic-bezier(0.55, 0, 0.85, 0.35) both;
+}
+
+.portal-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 0.85rem 0.85rem 1.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portal-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+}
+
+.portal-marca .app-separador {
+  display: block;
+  width: 1px;
+  height: 1.1rem;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Pestañas: cápsulas sueltas que se encienden como una gota. */
+.portal-pestanas {
+  display: flex;
+  gap: 0.35rem;
+  margin-inline: auto;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.portal .portal-pestanas [role='tab'] {
+  flex: none;
+  min-height: 2rem;
+  padding: 0 0.95rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #e8e8e8;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.portal .portal-pestanas [role='tab']:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.portal .portal-cerrar {
+  flex: none;
+}
+
+/* ---------- Cuerpo ---------- */
+
+.portal-cuerpo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.6rem clamp(1.1rem, 3vw, 2.4rem) 2rem;
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  animation: portal-seccion 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.portal-cuerpo > * + * {
+  margin-top: 1.4rem;
+}
+
+.portal-heroe h2 {
+  margin: 0.2rem 0 0.6rem;
+  max-width: 34ch;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.portal-heroe-corto h2 {
+  font-size: clamp(1.3rem, 1rem + 1vw, 1.8rem);
+}
+
+.portal-antetitulo,
+.carrusel-antetitulo {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bdbdbd;
+}
+
+.portal-entrada {
+  max-width: 62ch;
+  margin: 0;
+  color: #e2e2e2;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.portal-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+
+.portal .portal-acciones button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.portal .portal-acciones .boton-principal {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.94);
+  color: #000000;
+}
+
+.portal-subtitulo {
+  margin-bottom: 0;
+  font-size: 1.05rem;
+}
+
+/* Tarjetas de vidrio interiores: velo claro con canto de luz. */
+.portal-tarjeta {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.1rem;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025));
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.18),
+    0 6px 18px rgba(0, 0, 0, 0.25);
+  transition:
+    translate 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.3s ease;
+}
+
+.portal-tarjeta:hover {
+  translate: 0 -3px;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.portal-cifras,
+.portal-estados,
+.portal-ventajas {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portal-cifras {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.portal-cifras li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1.1rem;
+}
+
+.portal-cifras strong {
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+.portal-cifras span,
+.portal-estados span,
+.portal-ventajas li > span:last-child {
+  color: #d6d6d6;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.portal-estados {
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.portal-estados li {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  padding: 0.9rem 1rem;
+}
+
+.portal-estados li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.portal .marca {
+  flex: none;
+  margin-top: 0.15rem;
+  border-color: #ffffff;
+}
+
+.portal .marca-change_probable {
+  background: #ffffff;
+}
+
+.portal-ventajas {
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.portal-ventajas li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem 1.1rem;
+  animation: portal-tarjeta 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.portal-ventaja-icono {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: 0.35rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.06) 70%);
+  box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.5);
+}
+
+.portal-nota {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  margin-bottom: 0;
+  padding: 0.85rem 1rem;
+  color: #e2e2e2;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.portal-nota svg {
+  flex: none;
+  margin-top: 0.1rem;
+}
+
+/* Tabla de perfiles */
+.portal-tabla-caja {
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.portal-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.portal-tabla th,
+.portal-tabla td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: center;
+}
+
+.portal-tabla tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.portal-tabla th[scope='row'] {
+  text-align: left;
+  font-weight: 400;
+  color: #e8e8e8;
+}
+
+.portal-tabla thead th {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.portal-si {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 700;
+}
+
+.portal-no {
+  color: #8f8f8f;
+}
+
+.portal-detalle {
+  font-size: 0.78rem;
+  color: #e2e2e2;
+}
+
+/* ---------- Carrusel ---------- */
+
+.carrusel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.carrusel-marco {
+  position: relative;
+  min-height: 13.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(140, 170, 255, 0.12), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(255, 255, 255, 0.06), transparent 50%),
+    rgba(255, 255, 255, 0.035);
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.22),
+    0 10px 30px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.carrusel-marco:active {
+  cursor: grabbing;
+}
+
+.carrusel-marco:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.carrusel-diapositiva {
+  display: flex;
+  gap: 1.4rem;
+  align-items: flex-start;
+  padding: 1.6rem clamp(1.1rem, 3vw, 2rem);
+  animation: carrusel-entra-der 0.7s cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+
+.carrusel-diapositiva[data-direccion='-1'] {
+  animation-name: carrusel-entra-izq;
+}
+
+.carrusel-icono {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.06) 70%);
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.25),
+    0 10px 24px rgba(0, 0, 0, 0.35);
+  animation: gota-nace 0.8s 0.05s both;
+}
+
+.carrusel-texto h3 {
+  margin: 0.2rem 0 0.45rem;
+  font-size: clamp(1.1rem, 0.95rem + 0.6vw, 1.45rem);
+  line-height: 1.2;
+}
+
+.carrusel-texto p {
+  max-width: 60ch;
+  margin: 0;
+  color: #e2e2e2;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.carrusel-puntos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.carrusel-puntos li {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+}
+
+.carrusel-controles {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.portal .carrusel-controles .boton-icono {
+  width: 2.1rem;
+  height: 2.1rem;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.carrusel-indicadores {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.portal .carrusel-punto {
+  position: relative;
+  width: 0.6rem;
+  min-width: 0;
+  height: 0.6rem;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  transition:
+    width 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.3s ease;
+}
+
+.portal .carrusel-punto[aria-current='true'] {
+  width: 2.2rem;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #ffffff;
+}
+
+.carrusel-progreso {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  background: #ffffff;
+  animation: carrusel-progreso linear both;
+}
+
+/* ---------- Pantalla estrecha ---------- */
+
+@media (max-width: 40rem) {
+  .portal {
+    padding: 0.5rem;
+  }
+
+  .portal-ventana {
+    height: 100%;
+    border-radius: 1.25rem;
+  }
+
+  .portal-cabecera {
+    flex-wrap: wrap;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+  }
+
+  .portal-pestanas {
+    order: 3;
+    flex-basis: 100%;
+    margin-inline: 0;
+  }
+
+  .portal .portal-cerrar {
+    margin-left: auto;
+  }
+
+  .carrusel-diapositiva {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .carrusel-icono {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+}
+
+/* ---------- Animaciones ---------- */
+
+@keyframes portal-velo {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* La ventana nace como una gota: se pasa de tamaño, se aplasta y se asienta. */
+@keyframes portal-gota {
+  0% {
+    opacity: 0;
+    scale: 0.55 0.4;
+  }
+  35% {
+    opacity: 1;
+    scale: 1.035 1.05;
+  }
+  55% {
+    scale: 0.985 0.97;
+  }
+  72% {
+    scale: 1.008 1.01;
+  }
+  88% {
+    scale: 0.998 0.997;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes portal-sale {
+  to {
+    opacity: 0;
+    scale: 0.6 0.45;
+  }
+}
+
+@keyframes portal-seccion {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes portal-tarjeta {
+  0% {
+    opacity: 0;
+    scale: 0.85;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.03 0.98;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes carrusel-entra-der {
+  from {
+    opacity: 0;
+    translate: 3rem 0;
+    scale: 0.96 1.02;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes carrusel-entra-izq {
+  from {
+    opacity: 0;
+    translate: -3rem 0;
+    scale: 0.96 1.02;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes carrusel-progreso {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+/* Sección «Radar y ciencia»: tabla de polarizaciones con texto, bloque de la zona y listas dentro de las tarjetas. */
+.portal-tabla-texto td {
+  color: #d6d6d6;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  text-align: start;
+  vertical-align: top;
+}
+
+.portal-bloque {
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.portal-bloque p {
+  margin: 0 0 0.5rem;
+}
+
+.portal-bloque ul,
+.portal-puntos {
+  margin: 0.25rem 0 0;
+  padding-inline-start: 1.1rem;
+  color: #d6d6d6;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.portal-puntos li + li,
+.portal-bloque li + li {
+  margin-top: 0.3rem;
+}
+
+.portal-ventajas-anchas {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+}
+
+/* En las tarjetas con lista de puntos el texto ya no es el último hijo: mismo estilo que en las demás. */
+.portal-ventajas li > span:not(.portal-ventaja-icono) {
+  color: #d6d6d6;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+/* `.portal-ventajas li` también alcanza a los puntos anidados: vuelven a ser una lista normal. */
+.portal-ventajas .portal-puntos li {
+  display: list-item;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  animation: none;
+  translate: none;
+  list-style: disc;
+}
+
+/* Bienvenida de la primera visita (Bienvenida.tsx): ventana pequeña, sin pestañas ni cuenta. */
+.bienvenida {
+  max-width: min(32rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+}
+
+.bienvenida::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.bienvenida-ventana {
+  padding: 1.6rem 1.6rem 1.3rem;
+  border-radius: 1.4rem;
+}
+
+.bienvenida-ventana h2 {
+  margin: 0.3rem 0 0.6rem;
+  font-size: 1.5rem;
+}
+
+.bienvenida-ventana p {
+  margin: 0 0 0.7rem;
+  line-height: 1.5;
+}
+
+.bienvenida-marca {
+  margin: 0;
+}
+
+.bienvenida-nota {
+  color: #d6d6d6;
+  font-size: 0.9rem;
+}
+
+.bienvenida-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.bienvenida-acciones button {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.bienvenida-acciones .boton-principal {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.94);
+  color: #000000;
+}

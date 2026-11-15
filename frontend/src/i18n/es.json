@@ -1,0 +1,588 @@
+{
+  "app": {
+    "title": "GeoLatido",
+    "tagline": "Qué cambió, qué no se detectó y qué no se puede saber, con los datos que lo respaldan.",
+    "skipToMain": "Saltar al contenido principal"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English"
+  },
+  "view": {
+    "label": "Vista",
+    "public": "Público",
+    "student": "Estudiante",
+    "researcher": "Investigador"
+  },
+  "public": {
+    "question": "¿Qué vio el radar en esta zona?",
+    "lead": "NISAR es un satélite de radar de las agencias espaciales de Estados Unidos (NASA) y de la India (ISRO). Ve a través de las nubes y pasa sobre cada zona cada 12 días. Aquí ves qué notó entre dos pasadas, qué no pudo ver y qué falta por saber."
+  },
+  "series": {
+    "loading": "Cargando datos…",
+    "error": "No se pudo conectar con la API. Comprueba que la pila está levantada."
+  },
+  "dataKind": {
+    "real": "reales",
+    "synthetic": "sintéticos"
+  },
+  "synthetic": {
+    "banner": "Datos sintéticos: sirven para mostrar cómo funciona la aplicación y no describen lo que pasó en Parral.",
+    "card": "Este veredicto usa datos sintéticos."
+  },
+  "layout": {
+    "left": "Filtros",
+    "filters": "Filtros",
+    "top": "barra superior",
+    "tools": "Herramientas del mapa",
+    "right": "Paneles de lectura",
+    "collapse": "Recoger {{name}}",
+    "expand": "Abrir {{name}}",
+    "tabs": {
+      "hallazgos": "Hallazgos",
+      "historia": "Historia de la zona",
+      "evento": "¿Pudo verlo?",
+      "comunidad": "Comunidad",
+      "mundo": "Mundo",
+      "investigacion": "Investigar"
+    }
+  },
+  "search": {
+    "heading": "Buscar veredictos",
+    "allSeries": "Todas las series",
+    "allShort": "Todas",
+    "timeline": "Periodo",
+    "from": "Desde",
+    "to": "Hasta",
+    "states": "Estados",
+    "fullWindows": "Incluir ventanas completas",
+    "more": "Más filtros",
+    "results_one": "{{count}} veredicto",
+    "results_other": "{{count}} veredictos",
+    "help": "Elige qué pasadas mirar, el periodo y qué buscas. Luego toca un resultado para verlo en el mapa.",
+    "direction": {
+      "A": "ascendente",
+      "D": "descendente"
+    },
+    "periodHelp": "Cada barra es un par de pasadas seguidas: cuanto más alta, más cambió la señal. Los picos que brillan son cambio probable. Arrastra las asas para elegir el periodo o toca una barra para verla en el mapa.",
+    "shortcuts": "Atajos de periodo",
+    "shortcut": {
+      "all": "Todo",
+      "last30": "Último mes",
+      "last90": "Últimos 3 meses"
+    },
+    "statesHelp": "Qué tipo de respuesta quieres ver. Cada estado tiene su forma en el mapa.",
+    "fullWindowsHelp": "Compara la primera y la última pasada de la serie, no solo pasadas seguidas.",
+    "reset": "Limpiar filtros",
+    "pickHelp": "Toca uno para verlo en el mapa y leer su explicación.",
+    "none": "Nada con estos filtros. Amplía el periodo o marca más estados.",
+    "days_one": "{{count}} día",
+    "days_other": "{{count}} días",
+    "chartDesc_one": "Gráfica de la fracción de cambio por par de pasadas, con {{count}} pico de cambio probable.",
+    "chartDesc_other": "Gráfica de la fracción de cambio por par de pasadas, con {{count}} picos de cambio probable.",
+    "threshold": "umbral {{value}}",
+    "periodStart": "Inicio del periodo",
+    "periodEnd": "Fin del periodo",
+    "seriesHelp_one": "NISAR pasa sobre esta zona por {{count}} órbita, cada 12 días.",
+    "seriesHelp_other": "NISAR pasa sobre esta zona por {{count}} órbitas, cada 12 días. Puedes verlas a la vez.",
+    "groupCount_one": "{{count}} hallazgo",
+    "groupCount_other": "{{count}} hallazgos",
+    "groupChanges_one": "{{count}} con cambio probable",
+    "groupChanges_other": "{{count}} con cambio probable"
+  },
+  "interpreter": {
+    "heading": "Intérprete de historias",
+    "intro": "Arma una historia con los veredictos del buscador. Los textos son los de la API, tal cual; tus notas se guardan aparte y rotuladas como tuyas.",
+    "title": "Título",
+    "defaultTitle": "{{zone}}, {{series}}, del {{from}} al {{to}}",
+    "fromApi": "Lo que dice la API",
+    "summary_one": "{{count}} par: {{change}} con cambio probable, {{nochange}} sin cambio detectable y {{notobs}} sin poder observarse.",
+    "summary_other": "{{count}} pares: {{change}} con cambio probable, {{nochange}} sin cambio detectable y {{notobs}} sin poder observarse.",
+    "empty": "El buscador no tiene veredictos con estos filtros. Amplía el rango o los estados.",
+    "tooMany": "Una historia lleva como máximo {{max}} pares y hay {{count}}. Acota el rango o quita pares.",
+    "include": "Incluir el par del {{from}} al {{to}} de {{series}}",
+    "limits": "Qué no prueba y qué falta",
+    "notes": "Tus notas",
+    "notesHelp": "{{n}} de {{max}} caracteres. Se muestran aparte de los textos de la API y no se comprueban.",
+    "save": "Guardar historia",
+    "saved": "Historia guardada. Está en la pestaña Comunidad.",
+    "loginToSave": "Inicia sesión para publicar tu historia: saldrá con tu seudónimo y tu perfil.",
+    "reading": "Historia de la comunidad",
+    "authorNotes": "Notas de quien la escribió",
+    "notesDisclaimer": "No son texto de la API ni están comprobadas.",
+    "missingPair": "{{pair}}: este par ya no está en la API o es de otra zona.",
+    "otherZone": "Esta historia es de la zona {{aoi}}; aquí solo se pueden mostrar los pares de la zona actual.",
+    "backToDraft": "Volver al borrador",
+    "readTexts": "Leer lo que dice la API"
+  },
+  "community": {
+    "heading": "Historias de la comunidad",
+    "sort": "Ordenar",
+    "sortRecent": "Más nuevas",
+    "sortStars": "Mejor valoradas",
+    "loading": "Cargando historias…",
+    "error": "No se pudo completar la operación con las historias.",
+    "empty": "Todavía no hay historias de esta zona. Guarda la primera desde el intérprete.",
+    "meta": "Por {{role}}, del {{from}} al {{to}}",
+    "pairs_one": "{{count}} par",
+    "pairs_other": "{{count}} pares",
+    "downloads_one": "{{count}} descarga",
+    "downloads_other": "{{count}} descargas",
+    "stars": "Estrellas",
+    "votes_one": "({{count}} voto)",
+    "votes_other": "({{count}} votos)",
+    "notRated": "sin valorar",
+    "byRole": {
+      "student": "De estudiantes",
+      "researcher": "De investigación"
+    },
+    "role": {
+      "student": "estudiante",
+      "researcher": "investigador o investigadora"
+    },
+    "rate": "Tu valoración",
+    "starsN_one": "{{count}} estrella",
+    "starsN_other": "{{count}} estrellas",
+    "unrate": "Quitar mi valoración",
+    "ownStory": "Es tu historia: no puedes valorarla.",
+    "loginToRate": "Inicia sesión para valorar historias y publicar las tuyas.",
+    "open": "Abrir",
+    "download": "Descargar",
+    "delete": "Borrar",
+    "confirmDelete": "¿Borrar la historia «{{title}}»? Se borran también sus valoraciones.",
+    "file": {
+      "zone": "Zona",
+      "series": "Serie",
+      "range": "Rango de fechas",
+      "author": "Autoría (perfil declarado)",
+      "generated": "Archivo generado el {{date}} UTC",
+      "apiHeading": "Lo que dice la API",
+      "apiNote": "Textos de los veredictos tal como los da la API en el momento de la descarga (idioma: {{lang}}). Cada par lleva su estado, sus tres textos y su recibo.",
+      "missingPair": "Este par ya no está en la API o es de otra zona.",
+      "cause": "Motivo de que no se pudiera medir",
+      "notesHeading": "Notas de quien escribió la historia",
+      "notesNote": "Estas notas no son texto de la API ni están comprobadas.",
+      "noNotes": "Sin notas."
+    }
+  },
+  "session": {
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "logout": "Salir",
+    "as": "Sesión de {{role}}",
+    "account": "Cuenta: {{role}}",
+    "accountTitle": "Tu cuenta",
+    "viewFromRole": "La página se adapta a tu perfil: lo que ves de más son explicaciones y herramientas, nunca otros datos.",
+    "email": "Correo",
+    "password": "Contraseña (12 caracteres o más)",
+    "role": "Perfil",
+    "declared": "El perfil lo declaras tú y no se comprueba: amplía herramientas, nunca cambia un dato.",
+    "toRegister": "No tengo cuenta",
+    "toLogin": "Ya tengo cuenta",
+    "close": "Cerrar",
+    "error": "No se pudo completar. Revisa el correo y la contraseña.",
+    "off": "El acceso con cuenta está apagado en esta pila (AUTH_ENABLED=0). Puedes buscar, ver y leer sin cuenta; para guardar, descargar o valorar historias hay que activarlo en el .env."
+  },
+  "states": {
+    "label": "Cómo se lee cada respuesta",
+    "change_probable": "La señal del radar cambió más que su ruido en suficiente terreno. No dice por qué.",
+    "no_detectable_change": "Se pudo observar y no se vio un cambio mayor que el ruido.",
+    "not_observable": "El radar no pudo verlo, y se dice por qué."
+  },
+  "evidence": {
+    "heading": "Evidencia",
+    "noData": "sin dato",
+    "db": "{{v}} dB",
+    "hhhv": "HH {{hh}}, HV {{hv}}",
+    "ofObserved": "{{v}} de lo observado",
+    "ofZone": "{{v}} de la zona",
+    "ruleValue": "Cambio probable desde el {{change}} de lo observado; no observable si se observa menos del {{observed}}.",
+    "notCalibrated": "Sin contrastar con datos de campo.",
+    "shiftExceeds": "Supera el umbral de {{v}} dB.",
+    "shiftBelow": "Por debajo del umbral de {{v}} dB.",
+    "shiftCorrected": "Ya se descontó del cambio.",
+    "shiftNotCorrected": "No se descontó del cambio.",
+    "json": "Ver el JSON de este veredicto en la API",
+    "rows": {
+      "changed": "Fracción con cambio",
+      "observed": "Fracción observada",
+      "rule": "Regla de decisión",
+      "threshold": "Umbral por píxel",
+      "meanChange": "Cambio medio",
+      "sceneShift": "Desplazamiento de toda la escena"
+    },
+    "explain": {
+      "changed": "Parte de lo que el radar pudo ver donde la señal cambió más que el umbral.",
+      "observed": "Parte de la zona que el radar pudo ver bien en las dos fechas.",
+      "rule": "El sistema fija estos límites y los declara; no los elige quien consulta.",
+      "threshold": "El decibelio (dB) mide la señal que vuelve al radar: 3 dB es el doble o la mitad. HH y HV son dos polarizaciones: HH responde más al agua lisa y a los edificios, HV a la vegetación.",
+      "meanChange": "Promedio del cambio en toda la zona observada. Negativo: la señal bajó.",
+      "sceneShift": "Si toda la escena sube o baja a la vez (por ejemplo, con el suelo húmedo), ese cambio general no es local."
+    }
+  },
+  "story": {
+    "heading": "La historia de Parral en tres escenas",
+    "intro": "Tres preguntas sobre Hidalgo del Parral. Cada respuesta la da la API con los datos ya procesados, con lo que se sabe y lo que no.",
+    "nav": "Escenas",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "position": "Escena {{n}} de {{total}}",
+    "loading": "Cargando la escena…",
+    "error": "No se pudo cargar esta escena. Las demás siguen disponibles.",
+    "storm": {
+      "step": "La tormenta",
+      "title": "1. La tormenta del 1 de julio de 2026",
+      "text": "El 1 de julio de 2026, una tormenta dejó calles con agua en Parral y un vehículo arrastrado en el Arroyo de las Quintas. Protección Civil de Chihuahua registró 22,8 mm de lluvia en una hora. ¿Pasó el satélite durante el tiempo que suponemos que duró?",
+      "source": "Fuente: boletín de la Coordinación Estatal de Protección Civil, Gobierno de Chihuahua (1 de julio de 2026)"
+    },
+    "monsoon": {
+      "step": "Agosto",
+      "title": "2. Un par de fechas de agosto",
+      "text": "Del 16 al 28 de agosto de 2026. Esto es lo que dice el radar sobre ese par de fechas, y lo que no puede probar.",
+      "showOnMap": "Ver este par en el mapa"
+    },
+    "mine": {
+      "step": "La mina",
+      "title": "3. Un punto junto a la Mina La Prieta",
+      "text": "Tomamos un punto junto a la Mina La Prieta, según OpenStreetMap, y miramos qué detectó el radar en cada par de fechas.",
+      "point": "Punto: lon {{lon}}, lat {{lat}} · serie {{series}}",
+      "count": "{{same}} de {{total}} pares sin cambio detectable en este punto.",
+      "note": "No detectar cambio también es información, pero no prueba que nada cambiara: dice que el radar no vio un cambio mayor que su umbral.",
+      "pairs": "Resultado por par de fechas"
+    }
+  },
+  "picker": {
+    "heading": "Veredicto por par de fechas",
+    "series": "Serie",
+    "pair": "Par de fechas",
+    "fullWindow": "ventana completa",
+    "loading": "Cargando veredictos…",
+    "error": "No se pudieron cargar los veredictos de esta serie. Vuelve a intentarlo en unos segundos.",
+    "empty": "Esta serie todavía no tiene veredictos.",
+    "choose": "Elegir otra serie o par de fechas"
+  },
+  "verdict": {
+    "state": {
+      "change_probable": "Cambio probable",
+      "no_detectable_change": "Sin cambio detectable",
+      "not_observable": "No observable"
+    },
+    "cause": "Motivo de que no se pudiera medir: {{cause}}",
+    "dates_one": "del {{from}} al {{to}} · {{count}} día",
+    "dates_other": "del {{from}} al {{to}} · {{count}} días",
+    "detected": "Qué detectamos",
+    "doesNotProve": "Qué no prueba",
+    "missing": "Qué falta",
+    "hypotheses": "Posibles explicaciones, sin comprobar"
+  },
+  "receipt": {
+    "summary": "Recibo: de dónde sale esta respuesta",
+    "dataKind": "Datos",
+    "maturity": "Madurez",
+    "series": "Serie",
+    "seriesValue": "{{id}}: pista {{track}}, {{direction}}, marco {{frame}}",
+    "direction": {
+      "A": "ascendente",
+      "D": "descendente"
+    },
+    "modePolarization": "Modo y polarización",
+    "crid": "Versión de procesado (CRID)",
+    "granules": "Gránulos",
+    "dataGap": "Cruza un hueco sin adquisiciones",
+    "yes": "sí",
+    "no": "no",
+    "notices": "Avisos",
+    "freshness": "Frescura",
+    "before": "Pasada anterior",
+    "after": "Pasada posterior",
+    "age_one": "{{date}}, hace {{count}} día",
+    "age_other": "{{date}}, hace {{count}} días",
+    "latency": "publicada {{hours}} h después de la pasada",
+    "latencyStatus": {
+      "synthetic": "la latencia de publicación no aplica a datos sintéticos",
+      "catalog_unavailable": "latencia desconocida: el catálogo no respondió",
+      "granule_not_in_catalog": "latencia desconocida: el gránulo no aparece en el catálogo",
+      "not_published": "latencia desconocida: el catálogo no da fecha de publicación"
+    },
+    "optical": "Contraste óptico (Sentinel-2)",
+    "water": "Contraste de agua (OPERA DSWx-S1)"
+  },
+  "event": {
+    "heading": "¿Pudo el satélite ver un evento?",
+    "intro": "Indica cuándo pasó algo (una tormenta, una crecida, un incendio) y te decimos si NISAR pasó por la zona durante el tiempo que suponemos que duró. No dice si algo cambió.",
+    "date": "Fecha del evento (UTC)",
+    "dateHelp": "Las fechas y horas van en UTC (hora universal). Si en la zona ya es de noche, en UTC puede ser el día siguiente.",
+    "type": "Tipo de evento",
+    "types": {
+      "none": "Sin especificar",
+      "urban_storm": "Tormenta urbana",
+      "river_flood": "Crecida de río",
+      "wildfire": "Incendio"
+    },
+    "time": "Hora de inicio (UTC, opcional)",
+    "timeHelp": "Pasa la hora local a UTC con el desfase de la zona; por ejemplo, en Chihuahua la hora UTC es la local más 6 horas.",
+    "submit": "Consultar",
+    "example": "Probar con la tormenta del 1 de julio de 2026",
+    "loading": "Consultando…",
+    "error": "No se pudo hacer la consulta. Revisa la fecha y vuelve a intentarlo.",
+    "state": {
+      "observable": "Observable: hubo una pasada dentro de la duración supuesta del evento",
+      "not_observable": "No observable"
+    },
+    "cause": "Motivo: {{cause}}",
+    "observableNote": "Esto no dice que algo cambiara: para eso hay que mirar el veredicto del par de fechas que incluye esa pasada.",
+    "detected": "Qué encontramos",
+    "previousPass": "Pasada anterior",
+    "nextPass": "Pasada siguiente",
+    "none": "ninguna",
+    "excluded": "Pasadas excluidas",
+    "fold": "Consultar otra fecha"
+  },
+  "map": {
+    "label": "Mapa",
+    "compare": "Comparador: óptico, HH, HV y hundimiento"
+  },
+  "footer": {
+    "attribution": "Datos NISAR: NASA/JPL e ISRO, distribuidos por ASF DAAC. Óptico: Copernicus Sentinel-2. Mapa base: EOX (CC BY 4.0) y OpenStreetMap (ODbL). Cada fuente se atribuye donde se muestra.",
+    "license": "Código abierto bajo la licencia Apache 2.0.",
+    "credits": "Créditos y datos que recabamos"
+  },
+  "tools": {
+    "projection": "Vista del mapa",
+    "view3d": "Globo en 3D",
+    "view2d": "Mapa plano en 2D",
+    "reframe": "Acercar a la zona analizada o alejarse al espacio",
+    "layers": "Capas del radar",
+    "layer": "Capa visible",
+    "opacity": "Opacidad",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "layerNames": {
+      "state": "Estado del veredicto",
+      "change_hh": "Cambio en HH",
+      "change_hv": "Cambio en HV",
+      "subsidence": "Hundimiento"
+    }
+  },
+  "geocoder": {
+    "label": "Buscar ubicación (próximamente)",
+    "placeholder": "Buscar ubicación…",
+    "soon": "Próximamente"
+  },
+  "status": {
+    "online": "En línea",
+    "offline": "Sin conexión con la API",
+    "connecting": "Conectando"
+  },
+  "player": {
+    "playStory": "Reproducir historia en el mapa",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "previous": "Par anterior",
+    "next": "Par siguiente",
+    "close": "Cerrar la reproducción",
+    "timeline": "Pares de la historia en el tiempo",
+    "position": "Par {{n}} de {{total}}"
+  },
+  "portal": {
+    "title": "GeoLatido: veredictos de radar NISAR",
+    "open": "Acerca de GeoLatido",
+    "sections": "Secciones",
+    "close": "Cerrar",
+    "carousel": "carrusel",
+    "slide": "diapositiva",
+    "slideOf": "{{n}} de {{total}}",
+    "slides": "Diapositivas",
+    "goTo": "Ir a {{n}}: {{title}}",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pause": "Pausar el carrusel",
+    "play": "Reanudar el carrusel",
+    "feature": "Función",
+    "yes": "Incluido",
+    "no": "No incluido"
+  },
+  "world": {
+    "heading": "Buscador mundial de pasadas NISAR",
+    "intro": "Busca pasadas del radar NISAR en cualquier parte del mundo sin descargar nada ni crear cuenta. Mueve el mapa hasta la zona que te interesa y busca: verás la huella de cada pasada y su vista previa.",
+    "area": "Área de búsqueda (lo que ves en el mapa):",
+    "areaHelp": "Acerca o aleja el globo para cambiar el área. Con el mundo entero a la vista se busca en todo el planeta.",
+    "direction": "Dirección de la órbita",
+    "bothDirections": "Ambas",
+    "search": "Buscar en esta área",
+    "loading": "Buscando pasadas en el catálogo de NASA…",
+    "error": "El catálogo de NASA (CMR) no respondió. Vuelve a intentarlo en unos segundos.",
+    "results": "Las {{count}} más recientes de {{total}} pasadas",
+    "none": "No hay pasadas de NISAR en esta área y estas fechas. Amplía el área o el periodo.",
+    "frame": "marco",
+    "newTab": "se abre en otra pestaña",
+    "note": "La vista previa de ASF se coloca por su contenido sobre la huella: su posición es aproximada. Descargar el producto completo (unos 7 GB) pide una cuenta de Earthdata. Los veredictos de esta zona se calculan en línea desde la pestaña Hallazgos, sin guardar recortes.",
+    "sources": "Fuentes: NASA CMR (Earthdata Search) y vistas previas de ASF DAAC (Vertex), recursos oficiales del reto.",
+    "wholeWorld": "todo el mundo"
+  },
+  "research": {
+    "heading": "Investigar con datos satelitales",
+    "intro": "Escribe una pregunta. Se busca en el catálogo de NASA qué datos existen, se miden los cambios donde este proyecto procesó NISAR, se cruzan acontecimientos verificados y se arma una historia en la que cada afirmación cita su evidencia.",
+    "question": "Tu pregunta",
+    "placeholder": "Ej.: ¿Cómo ha cambiado el terreno alrededor de las zonas mineras de Hidalgo del Parral entre 2016 y 2026?",
+    "examplesLabel": "Preguntas de ejemplo",
+    "examples": {
+      "mining": "¿Cómo ha cambiado el terreno alrededor de las zonas mineras de Hidalgo del Parral entre 2016 y 2026?",
+      "flood": "¿Cómo evolucionaron las superficies inundadas en Parral durante 2026?",
+      "glacier": "¿Cómo ha evolucionado el movimiento de Jakobshavn durante los últimos cinco años?",
+      "compare": "Compara Parral y Jakobshavn durante 2026"
+    },
+    "manual": "Elegir lugares y fechas a mano",
+    "place": "Añadir un lugar a la investigación",
+    "findPlace": "Buscar",
+    "noPlace": "Sin resultados.",
+    "areas": "Lugares elegidos",
+    "removeArea": "Quitar {{name}}",
+    "usePeriod": "Fijar el periodo",
+    "run": "Investigar",
+    "cancel": "Cancelar",
+    "cancelled": "Investigación cancelada.",
+    "failed": "La investigación falló: {{error}}",
+    "error": "El servicio de investigación no respondió.",
+    "step": {
+      "queued": "En cola…",
+      "discover": "Buscando datos en el catálogo de NASA…",
+      "analyze": "Analizando cambios, series y acontecimientos…",
+      "story": "Escribiendo la historia con su evidencia…"
+    },
+    "synthetic": "Datos sintéticos: esta historia no describe observaciones reales.",
+    "spanishOnly": "The generated story text is in Spanish.",
+    "traceOk": "Cada cifra cita su evidencia",
+    "traceFail": "Hay afirmaciones sin evidencia",
+    "chapters": "Capítulos de la historia",
+    "showOnMap": "Ver en el mapa",
+    "caveat": "Límite:",
+    "hypothesis": "Hipótesis:",
+    "evidence_one": "{{count}} evidencia",
+    "evidence_other": "{{count}} evidencias",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "previous": "Investigaciones anteriores",
+    "sources": "Fuentes: NASA CMR, NASA EONET, veredictos de este proyecto y acontecimientos verificados. Nada se descarga; coincidir en fechas no prueba una causa.",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "chapterOf": "Capítulo {{n}} de {{total}}",
+    "source": "Fuente {{n}}"
+  },
+  "places": {
+    "label": "Buscar un lugar",
+    "placeholder": "Busca un lugar del mundo…",
+    "results": "Lugares encontrados",
+    "thisView": "Lo que se ve del mapa",
+    "thisViewSource": "Busca pasadas en la vista actual",
+    "searching": "Buscando lugares…",
+    "error": "El buscador de lugares no respondió.",
+    "none": "Ningún lugar con ese nombre.",
+    "point": "Punto {{lat}}, {{lon}}",
+    "pointNamed": "{{place}} ({{lat}}, {{lon}})"
+  },
+  "zone": {
+    "passesOnly": "Aquí no hay veredictos procesados todavía: estas son las pasadas reales del radar NISAR sobre la zona, con su vista previa. Los filtros salen de lo que hay.",
+    "processed": "Zona con veredictos: {{name}}",
+    "processedList": "Zonas con veredictos procesados",
+    "back": "Ver veredictos de {{name}}",
+    "research": "Investigar esta zona",
+    "period": "Periodo",
+    "last90": "Últimos 3 meses",
+    "last365": "Último año",
+    "sinceStart": "Desde el inicio de NISAR",
+    "orbits": "Órbitas que pasan por la zona",
+    "allOrbits": "Todas ({{count}})"
+  },
+  "zoneStory": {
+    "heading": "Historia de {{name}}",
+    "intro": "Se arma con los datos de la zona: los veredictos del radar si están procesados, las pasadas de NASA y los acontecimientos citados (sismos, ciclones, inundaciones, incendios y deslizamientos). Cada frase cita su evidencia.",
+    "question": "¿Qué ha cambiado en {{name}} y qué acontecimientos hubo en el último año?"
+  },
+  "online": {
+    "heading": "Veredictos de esta zona",
+    "starting": "Pidiendo el procesado de la zona…",
+    "error": "No se pudo pedir el procesado: {{error}}",
+    "series": "Serie {{id}} ({{pol}}): se procesan sus {{dates}} fechas más recientes.",
+    "noSeries": "Aquí NISAR no tiene una serie con HH y HV (o tiene menos de dos fechas), y el cálculo de cambio necesita las dos polarizaciones. Las pasadas se pueden ver igual:",
+    "retry": "Reintentar",
+    "cancel": "Cancelar el procesado",
+    "state": {
+      "queued": "En cola: se procesa una zona a la vez.",
+      "running": "Leyendo de NASA en memoria solo la zona (sin guardar recortes), varias fechas a la vez, y calculando mientras llegan. Una zona de 0,3° tarda unos 2 a 3 minutos, según la conexión.",
+      "done": "Listo: la zona ya tiene veredictos.",
+      "failed": "El procesado falló.",
+      "cancelled": "Procesado cancelado.",
+      "no_processable_series": "Sin serie procesable."
+    },
+    "step": {
+      "zone": "Crear la zona",
+      "series": "Elegir la serie (HH y HV)",
+      "process": "Leer de NASA en memoria y calcular los veredictos"
+    },
+    "stepState": {
+      "pending": "pendiente",
+      "running": "en curso…",
+      "done": "hecho",
+      "failed": "falló"
+    },
+    "pointIntro": "Este punto no tiene veredictos todavía. Se pueden calcular en línea: se lee de NASA solo la ventana del punto (unos 0,1°) y no se guarda ningún recorte, solo el resultado.",
+    "processPoint": "Procesar veredictos de este punto",
+    "summary": {
+      "heading": "Resumen rápido de los pares",
+      "days_one": "{{count}} día",
+      "days_other": "{{count}} días",
+      "state": {
+        "change_probable": "Cambio probable",
+        "no_detectable_change": "Sin cambio detectable",
+        "not_observable": "No observable"
+      },
+      "changed": "{{pct}} de lo observable cambió",
+      "observed": "solo {{pct}} observable",
+      "note": "Calculado del manifiesto con la regla del veredicto (cambio probable desde el {{pct}}, umbral sin calibrar). El veredicto completo, con su evidencia, aparece en cuanto se carga.",
+      "synthetic": "Datos sintéticos: este resumen no describe observaciones reales."
+    },
+    "noToken": "Esta instalación no tiene EARTHDATA_TOKEN en su .env, así que no puede leer los gránulos de NASA para calcular veredictos aquí. Las pasadas de la zona se ven igual en Filtros."
+  },
+  "timeline": {
+    "heading": "Pasadas en el tiempo",
+    "help": "Cada carril es una órbita y cada punto, una pasada. Pulsa el nombre de una órbita para verla sola (o junto a otras) y mueve las dos asas para fijar el periodo; con el teclado, las flechas mueven un día y Re Pág/Av Pág, más.",
+    "oldest": "Más antigua posible: {{date}}",
+    "newest": "Más nueva posible: {{date}}",
+    "empty": "Ninguna órbita de NISAR pasa por esta zona en este periodo.",
+    "from": "Inicio del periodo",
+    "to": "Fin del periodo"
+  },
+  "subsidence": {
+    "title": "¿Se hunde el suelo?",
+    "yes": "Sí: parte de la zona se hunde más que el resto.",
+    "no": "No se ve hundimiento por encima del ruido.",
+    "none": "Sin interferogramas suficientes para medirlo.",
+    "more": "Qué no prueba y qué falta",
+    "source": "Medido con {{pairs}} interferogramas NISAR (GUNW) en {{days}} días.",
+    "showLayer": "Ver en el mapa",
+    "fly": "Ir a donde más se hunde"
+  },
+  "regenerate": {
+    "button": "Regenerar veredictos",
+    "working": "Regenerando…",
+    "help": "Vuelve a procesar esta zona con las fechas más recientes de NISAR y reescribe sus veredictos. Tarda unos 2 a 3 minutos.",
+    "offline": "Esta zona se procesa fuera de línea con sus series completas; solo se regeneran desde aquí las zonas procesadas en línea.",
+    "noToken": "Falta EARTHDATA_TOKEN en el .env del servidor: sin él no se puede leer NASA.",
+    "error": "No se pudo regenerar. Prueba de nuevo en un momento.",
+    "step": {
+      "queued": "En cola…",
+      "zone": "Preparando la zona…",
+      "series": "Eligiendo la serie con HH y HV…",
+      "process": "Leyendo NASA y calculando los veredictos…"
+    }
+  },
+  "welcome": {
+    "title": "Bienvenido a GeoLatido",
+    "text": "GeoLatido escucha el latido de la superficie de la Tierra con el radar NISAR de la NASA y la ISRO: qué cambió, qué no se detectó y qué no se puede saber, en cualquier lugar del mundo. Busca una ciudad arriba o haz clic en el mapa para empezar.",
+    "noAccount": "No necesitas cuenta: todo se ve igual sin iniciar sesión. La cuenta solo sirve para publicar y valorar historias.",
+    "start": "Empezar",
+    "more": "Conocer más"
+  }
+}

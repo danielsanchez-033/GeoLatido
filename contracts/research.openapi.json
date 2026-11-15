@@ -1,0 +1,1237 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Dancing with the SAR — investigación",
+    "description": "De una pregunta a una investigación reproducible y a una historia con evidencia por afirmación. Ninguna cifra sin evidencia; ninguna causa afirmada por coincidir en fechas.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/places": {
+      "get": {
+        "summary": "Search Places",
+        "operationId": "search_places_places_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 200,
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/places/reverse": {
+      "get": {
+        "summary": "Reverse Place",
+        "description": "Nombre del lugar en un punto (Nominatim). `place` es null si no hay geocodificador o nada cerca.",
+        "operationId": "reverse_place_places_reverse_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(es|en)$",
+              "default": "es",
+              "title": "Lang"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sources": {
+      "get": {
+        "summary": "Event Sources",
+        "description": "Proveedores de acontecimientos y capas: cuáles están activos y cuáles esperan una credencial.",
+        "operationId": "event_sources_sources_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "get": {
+        "summary": "Profiles",
+        "operationId": "profiles_profiles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Products",
+        "operationId": "products_products_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/parse": {
+      "post": {
+        "summary": "Parse",
+        "operationId": "parse_research_parse_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research": {
+      "post": {
+        "summary": "Create",
+        "operationId": "create_research_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Research",
+        "operationId": "list_research_research_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}": {
+      "get": {
+        "summary": "Get",
+        "operationId": "get_research__rid__get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/status": {
+      "get": {
+        "summary": "Status",
+        "operationId": "status_research__rid__status_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/discover-data": {
+      "post": {
+        "summary": "Discover",
+        "operationId": "discover_research__rid__discover_data_post",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/analyze": {
+      "post": {
+        "summary": "Analyze",
+        "operationId": "analyze_research__rid__analyze_post",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/generate-story": {
+      "post": {
+        "summary": "Gen Story",
+        "operationId": "gen_story_research__rid__generate_story_post",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/run": {
+      "post": {
+        "summary": "Run All",
+        "operationId": "run_all_research__rid__run_post",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/cancel": {
+      "post": {
+        "summary": "Cancel",
+        "operationId": "cancel_research__rid__cancel_post",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/acquisitions": {
+      "get": {
+        "summary": "Acquisitions",
+        "operationId": "acquisitions_research__rid__acquisitions_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          },
+          {
+            "name": "product",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Product"
+            }
+          },
+          {
+            "name": "area",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Area"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/timeline": {
+      "get": {
+        "summary": "Timeline",
+        "operationId": "timeline_research__rid__timeline_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/anomalies": {
+      "get": {
+        "summary": "Anomalies",
+        "operationId": "anomalies_research__rid__anomalies_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/events": {
+      "get": {
+        "summary": "Research Events",
+        "operationId": "research_events_research__rid__events_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/risk": {
+      "get": {
+        "summary": "Risk",
+        "operationId": "risk_research__rid__risk_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/insar": {
+      "get": {
+        "summary": "Insar",
+        "operationId": "insar_research__rid__insar_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/research/{rid}/comparison": {
+      "get": {
+        "summary": "Comparison",
+        "operationId": "comparison_research__rid__comparison_get",
+        "parameters": [
+          {
+            "name": "rid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Rid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stories": {
+      "get": {
+        "summary": "Stories",
+        "operationId": "stories_stories_get",
+        "parameters": [
+          {
+            "name": "research_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Research Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stories/{sid}": {
+      "get": {
+        "summary": "Get Story",
+        "operationId": "get_story_stories__sid__get",
+        "parameters": [
+          {
+            "name": "sid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stories/{sid}/evidence": {
+      "get": {
+        "summary": "Story Evidence",
+        "operationId": "story_evidence_stories__sid__evidence_get",
+        "parameters": [
+          {
+            "name": "sid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stories/{sid}/export": {
+      "get": {
+        "summary": "Export",
+        "operationId": "export_stories__sid__export_get",
+        "parameters": [
+          {
+            "name": "sid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sid"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "md",
+                "json"
+              ],
+              "type": "string",
+              "default": "md",
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AreaIn": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Id de un lugar del nomenclátor (GET /places)."
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bbox",
+            "description": "[oeste, sur, este, norte] en WGS84."
+          }
+        },
+        "type": "object",
+        "title": "AreaIn"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PeriodIn": {
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "PeriodIn"
+      },
+      "ResearchIn": {
+        "properties": {
+          "question": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Question"
+          },
+          "areas": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/AreaIn"
+                },
+                "type": "array",
+                "maxItems": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Areas"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PeriodIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "phenomena": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "surface_change",
+                    "mining",
+                    "flood",
+                    "landslide",
+                    "deformation",
+                    "glacier"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phenomena"
+          },
+          "products": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Products"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "mining_terrain",
+                  "flood_hydrology",
+                  "landslide_slope",
+                  "glacier_climate"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "es",
+              "en"
+            ],
+            "title": "Lang",
+            "default": "es"
+          },
+          "run": {
+            "type": "boolean",
+            "title": "Run",
+            "description": "true: lanza descubrimiento, análisis e historia al crearla.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "ResearchIn"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

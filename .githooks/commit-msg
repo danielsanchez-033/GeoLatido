@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Valida Conventional Commits con los ámbitos del proyecto. Ver CONTRIBUTING.md.
+set -euo pipefail
+
+subject=$(head -n 1 "$1")
+
+case "$subject" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *|amend!\ *) exit 0 ;;
+esac
+
+pattern='^(feat|fix|spec|docs|test|refactor|perf|build|ci|chore|revert)\((antena|eco|balanza|atlas|faro|contratos|repo)\)!?: [^ ].{0,71}$'
+
+if [[ ! "$subject" =~ $pattern ]]; then
+  echo "Mensaje de commit no válido:" >&2
+  echo "  $subject" >&2
+  echo "Formato: <tipo>(<ámbito>): <resumen de hasta 72 caracteres>" >&2
+  echo "Ejemplo: feat(eco): añade control de calidad por fecha" >&2
+  echo "Tipos y ámbitos en CONTRIBUTING.md" >&2
+  exit 1
+fi

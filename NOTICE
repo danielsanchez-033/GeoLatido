@@ -1,0 +1,38 @@
+GeoLatido
+Copyright 2026 colaboradores de GeoLatido
+(KinzzoCS, TakoKami-dev, lospapulindos2-netizen, Fransomware, danielsanchez-033)
+
+Este producto se distribuye bajo la licencia Apache 2.0 (ver LICENSE).
+Proyecto para el reto NISAR de NASA International Space Apps Challenge 2026.
+
+Créditos de los datos. Cada fuente conserva su propia licencia; quien redistribuya
+este software debe conservar estas atribuciones.
+
+- NISAR L2 GCOV: misión conjunta de NASA (Jet Propulsion Laboratory) e ISRO.
+  Datos distribuidos por el Alaska Satellite Facility DAAC (ASF DAAC), NASA Earthdata.
+- Catálogo de pasadas: NASA Common Metadata Repository (CMR); vistas previas de ASF Vertex.
+- OPERA DSWx-S1: NASA/JPL, proyecto OPERA; distribuido por PO.DAAC.
+- Contiene datos modificados de Copernicus Sentinel-2 (ESA / Comisión Europea),
+  servidos por Earth Search de Element 84.
+- Sentinel-2 cloudless 2016 de EOX IT Services GmbH (https://s2maps.eu), CC BY 4.0
+  (contiene datos modificados de Copernicus Sentinel de 2016).
+- © Colaboradores de OpenStreetMap, ODbL (mapa base y Nominatim).
+- Copernicus DEM GLO-30: © DLR e.V. 2010-2014 y © Airbus Defence and Space GmbH 2014-2018,
+  proporcionado bajo el programa COPERNICUS de la Unión Europea y la ESA. Vía AWS Open Data.
+- USGS Earthquake Catalog (ComCat): U.S. Geological Survey, dominio público.
+- GDACS: Global Disaster Alert and Coordination System (Comisión Europea y ONU).
+- Copernicus Emergency Management Service, Rapid Mapping (Comisión Europea).
+- NASA EONET y NASA Global Landslide Catalog (NASA Goddard).
+- NOAA IBTrACS: NOAA National Centers for Environmental Information, dominio público.
+- INEGI (Instituto Nacional de Estadística y Geografía, México): servicios WMS de cuencas,
+  uso de suelo y vegetación, edafología y localidades, bajo sus términos de libre uso.
+- RADARSAT-1 y RADARSAT Constellation Mission: Agencia Espacial Canadiense, vía EODMS (NRCan).
+- Tormenta del 1 de julio de 2026 en Hidalgo del Parral: Coordinación Estatal de Protección
+  Civil, Gobierno del Estado de Chihuahua, y prensa local citada en MEMORY.md.
+
+Software de terceros (cada uno con su licencia en su paquete): MapLibre GL JS (BSD-3-Clause),
+React (MIT), Vite (MIT), FastAPI (MIT), rasterio (BSD-3-Clause), GDAL (MIT), h5py (BSD-3-Clause),
+NumPy y SciPy (BSD-3-Clause), fsspec (BSD-3-Clause), TiTiler (MIT), nginx (BSD-2-Clause),
+fuente Atkinson Hyperlegible Next del Braille Institute (SIL OFL 1.1).
+
+Qué datos recaba la aplicación: ver docs/PRIVACIDAD.md.

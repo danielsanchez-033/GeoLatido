@@ -1,0 +1,2201 @@
+{
+  "components": {
+    "schemas": {
+      "Aoi": {
+        "properties": {
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Bbox",
+            "type": "array"
+          },
+          "collection": {
+            "title": "Collection",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "maturity": {
+            "title": "Maturity",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "bbox",
+          "collection",
+          "maturity"
+        ],
+        "title": "Aoi",
+        "type": "object"
+      },
+      "ExcludedGranule": {
+        "properties": {
+          "acquired_at": {
+            "description": "Inicio de la adquisición, en UTC.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "checked_on": {
+            "description": "Fecha de la comprobación.",
+            "format": "date",
+            "title": "Checked On",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "Cómo se comprobó.",
+            "title": "Evidence",
+            "type": "string"
+          },
+          "id": {
+            "description": "granule_id excluido, el título de CMR sin extensión.",
+            "title": "Id",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Código del motivo. product_defect: el fallo está en el producto publicado.",
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "acquired_at",
+          "reason",
+          "evidence",
+          "checked_on"
+        ],
+        "title": "ExcludedGranule",
+        "type": "object"
+      },
+      "ExcludedPass": {
+        "properties": {
+          "acquired_at": {
+            "description": "Inicio de la adquisición, en UTC.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "checked_on": {
+            "description": "Fecha de la comprobación.",
+            "format": "date",
+            "title": "Checked On",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "Cómo se comprobó.",
+            "title": "Evidence",
+            "type": "string"
+          },
+          "id": {
+            "description": "granule_id excluido, el título de CMR sin extensión.",
+            "title": "Id",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Código del motivo. product_defect: el fallo está en el producto publicado.",
+            "title": "Reason",
+            "type": "string"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "acquired_at",
+          "reason",
+          "evidence",
+          "checked_on",
+          "series"
+        ],
+        "title": "ExcludedPass",
+        "type": "object"
+      },
+      "FootprintGeometry": {
+        "properties": {
+          "coordinates": {
+            "description": "Un solo anillo [lon, lat] en WGS84, cerrado y con 5 decimales, tal como lo da CMR.",
+            "items": {
+              "items": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            "title": "Coordinates",
+            "type": "array"
+          },
+          "type": {
+            "const": "Polygon",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "title": "FootprintGeometry",
+        "type": "object"
+      },
+      "FootprintProperties": {
+        "properties": {
+          "basis": {
+            "const": "latest_granule",
+            "description": "La huella es la del gránulo más reciente de la serie con polígono en CMR. Todos los de una serie son del mismo marco, así que sus huellas casi coinciden.",
+            "title": "Basis",
+            "type": "string"
+          },
+          "direction": {
+            "description": "A ascendente o D descendente.",
+            "title": "Direction",
+            "type": "string"
+          },
+          "frame": {
+            "title": "Frame",
+            "type": "integer"
+          },
+          "granule_id": {
+            "description": "Gránulo del que sale la huella.",
+            "title": "Granule Id",
+            "type": "string"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          },
+          "track": {
+            "title": "Track",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "series",
+          "track",
+          "direction",
+          "frame",
+          "granule_id",
+          "basis"
+        ],
+        "title": "FootprintProperties",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "NextPassEstimate": {
+        "properties": {
+          "basis": {
+            "const": "12-day cycle",
+            "title": "Basis",
+            "type": "string"
+          },
+          "expected_at": {
+            "description": "Estimación, no plan de observación: última pasada más N ciclos.",
+            "format": "date-time",
+            "title": "Expected At",
+            "type": "string"
+          },
+          "observation_plan": {
+            "$ref": "#/components/schemas/ObservationPlan",
+            "description": "Si el plan de observación de NISAR incluye esta pasada. No cambia expected_at."
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          }
+        },
+        "required": [
+          "series",
+          "expected_at",
+          "basis",
+          "observation_plan"
+        ],
+        "title": "NextPassEstimate",
+        "type": "object"
+      },
+      "ObservationPlan": {
+        "properties": {
+          "checked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cuándo consultó ingest el plan, en UTC.",
+            "title": "Checked At"
+          },
+          "config_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "LSAR_CONFIG_ID de la observación planificada.",
+            "title": "Config Id"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Título del gránulo de NISAR_COP que se usó, con su versión.",
+            "title": "Plan"
+          },
+          "same_config": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "La configuración coincide con la del plan de la última pasada adquirida. null si falta alguna.",
+            "title": "Same Config"
+          },
+          "status": {
+            "description": "Qué dice el plan diario de NISAR (NISAR_COP) para la hora estimada. planned: una observación L-SAR cubre de 10 s antes a 40 s después. partial: la cubre solo en parte. not_planned: hay plan y no la cubre. no_plan: no hay plan publicado para esa hora. unknown: catalog no tiene el resumen de `ingest plan` o no coincide con esta pasada. Un plan no garantiza la adquisición: en el hueco de 2026-07-27 a 2026-08-02 hubo planes y no se adquirió nada.",
+            "enum": [
+              "planned",
+              "partial",
+              "not_planned",
+              "no_plan",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "plan",
+          "config_id",
+          "same_config",
+          "checked_at"
+        ],
+        "title": "ObservationPlan",
+        "type": "object"
+      },
+      "OperaAcquisition": {
+        "properties": {
+          "acquired_at": {
+            "description": "time_start de CMR de la primera tesela de la pasada, en UTC.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "covers_aoi": {
+            "description": "Las cajas de sus teselas contienen la zona. No dice si hay datos válidos en toda ella.",
+            "title": "Covers Aoi",
+            "type": "boolean"
+          },
+          "days_from_date": {
+            "description": "Días entre la fecha UTC de la pasada y la pedida; negativo si es anterior.",
+            "title": "Days From Date",
+            "type": "integer"
+          },
+          "platform": {
+            "title": "Platform",
+            "type": "string"
+          },
+          "tiles": {
+            "items": {
+              "$ref": "#/components/schemas/OperaTileOut"
+            },
+            "title": "Tiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "platform",
+          "acquired_at",
+          "days_from_date",
+          "covers_aoi",
+          "tiles"
+        ],
+        "title": "OperaAcquisition",
+        "type": "object"
+      },
+      "OperaOut": {
+        "properties": {
+          "acquisitions": {
+            "description": "Vacía si no hay productos en la ventana.",
+            "items": {
+              "$ref": "#/components/schemas/OperaAcquisition"
+            },
+            "title": "Acquisitions",
+            "type": "array"
+          },
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "attribution": {
+            "description": "Texto de atribución que debe mostrarse junto al producto.",
+            "title": "Attribution",
+            "type": "string"
+          },
+          "collection": {
+            "title": "Collection",
+            "type": "string"
+          },
+          "coverage_basis": {
+            "const": "tile_bbox",
+            "description": "covers_aoi usa la caja de cada tesela MGRS, no los píxeles válidos.",
+            "title": "Coverage Basis",
+            "type": "string"
+          },
+          "data_access": {
+            "const": "earthdata_login",
+            "description": "wtr_url y conf_url piden cuenta de Earthdata; browse_url no.",
+            "title": "Data Access",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "days": {
+            "title": "Days",
+            "type": "integer"
+          },
+          "doi": {
+            "title": "Doi",
+            "type": "string"
+          },
+          "min_water_body_ha": {
+            "description": "Superficie mínima de una masa de agua abierta que el producto detecta.",
+            "title": "Min Water Body Ha",
+            "type": "number"
+          },
+          "min_water_body_width_m": {
+            "description": "Anchura mínima de una masa de agua abierta que el producto detecta.",
+            "title": "Min Water Body Width M",
+            "type": "number"
+          },
+          "product_spec_url": {
+            "title": "Product Spec Url",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "aoi",
+          "date",
+          "days",
+          "source",
+          "collection",
+          "doi",
+          "attribution",
+          "product_spec_url",
+          "min_water_body_ha",
+          "min_water_body_width_m",
+          "coverage_basis",
+          "data_access",
+          "acquisitions"
+        ],
+        "title": "OperaOut",
+        "type": "object"
+      },
+      "OperaTileOut": {
+        "properties": {
+          "acquired_at": {
+            "description": "time_start de CMR, en UTC.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 4,
+                "minItems": 4,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja de la tesela MGRS en WGS84, [oeste, sur, este, norte], de los boxes de CMR. Sirve para situar browse_url en el mapa. null si CMR no la publica.",
+            "title": "Bbox"
+          },
+          "browse_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Vista previa PNG del bucket público de PO.DAAC, sin cuenta ni georreferencia.",
+            "title": "Browse Url"
+          },
+          "conf_url": {
+            "description": "GeoTIFF B03_CONF, confianza. Pide cuenta de Earthdata. Vacío si CMR no lo publica.",
+            "title": "Conf Url",
+            "type": "string"
+          },
+          "id": {
+            "description": "Título del gránulo en CMR, sin extensión.",
+            "title": "Id",
+            "type": "string"
+          },
+          "produced_at": {
+            "description": "Hora de producción que figura en el título, en UTC.",
+            "format": "date-time",
+            "title": "Produced At",
+            "type": "string"
+          },
+          "tile": {
+            "description": "Tesela MGRS sin la T inicial.",
+            "title": "Tile",
+            "type": "string"
+          },
+          "wtr_url": {
+            "description": "GeoTIFF B01_WTR, clasificación de agua. Pide cuenta de Earthdata.",
+            "title": "Wtr Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tile",
+          "acquired_at",
+          "produced_at",
+          "wtr_url",
+          "conf_url",
+          "browse_url"
+        ],
+        "title": "OperaTileOut",
+        "type": "object"
+      },
+      "OpticalAcquisition": {
+        "properties": {
+          "acquired_at": {
+            "description": "Hora UTC de la primera tesela de la adquisición.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "covers_aoi": {
+            "description": "Las teselas juntas cubren toda la zona.",
+            "title": "Covers Aoi",
+            "type": "boolean"
+          },
+          "days_from_date": {
+            "description": "Días respecto a la fecha pedida; negativo si es anterior.",
+            "title": "Days From Date",
+            "type": "integer"
+          },
+          "max_cloud_cover": {
+            "description": "Mayor nubosidad entre sus teselas. Es de la tesela, no de la zona.",
+            "title": "Max Cloud Cover",
+            "type": "number"
+          },
+          "platform": {
+            "title": "Platform",
+            "type": "string"
+          },
+          "tiles": {
+            "items": {
+              "$ref": "#/components/schemas/OpticalTile"
+            },
+            "title": "Tiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "platform",
+          "acquired_at",
+          "days_from_date",
+          "covers_aoi",
+          "max_cloud_cover",
+          "tiles"
+        ],
+        "title": "OpticalAcquisition",
+        "type": "object"
+      },
+      "OpticalOut": {
+        "properties": {
+          "acquisitions": {
+            "items": {
+              "$ref": "#/components/schemas/OpticalAcquisition"
+            },
+            "title": "Acquisitions",
+            "type": "array"
+          },
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "attribution": {
+            "description": "Texto de atribución que debe mostrarse junto a la imagen.",
+            "title": "Attribution",
+            "type": "string"
+          },
+          "cloud_cover_basis": {
+            "const": "tile",
+            "description": "La nubosidad es la de cada tesela MGRS completa; la zona puede estar más o menos nublada.",
+            "title": "Cloud Cover Basis",
+            "type": "string"
+          },
+          "collection": {
+            "title": "Collection",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "days": {
+            "title": "Days",
+            "type": "integer"
+          },
+          "license": {
+            "title": "License",
+            "type": "string"
+          },
+          "license_url": {
+            "title": "License Url",
+            "type": "string"
+          },
+          "max_cloud": {
+            "title": "Max Cloud",
+            "type": "number"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "aoi",
+          "date",
+          "days",
+          "max_cloud",
+          "source",
+          "collection",
+          "license",
+          "license_url",
+          "attribution",
+          "cloud_cover_basis",
+          "acquisitions"
+        ],
+        "title": "OpticalOut",
+        "type": "object"
+      },
+      "OpticalTile": {
+        "properties": {
+          "acquired_at": {
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 4,
+                "minItems": 4,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja de los datos de la escena en WGS84, [oeste, sur, este, norte], tomada del item STAC de Earth Search: la de su huella de datos, no la del cuadrado MGRS completo, así que una escena de borde de franja tiene una caja menor. Como en STAC, si cruza el antimeridiano el oeste es mayor que el este. Sirve como bounds de la fuente en el mapa, para no pedir teselas fuera de los datos. null si Earth Search no la da.",
+            "title": "Bbox"
+          },
+          "cloud_cover": {
+            "description": "Porcentaje de nubes de la tesela completa, no de la zona.",
+            "title": "Cloud Cover",
+            "type": "number"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "tile": {
+            "description": "Tesela MGRS de unos 110 km de lado.",
+            "title": "Tile",
+            "type": "string"
+          },
+          "visual_url": {
+            "description": "COG en color verdadero (TCI), legible por HTTPS sin cuenta.",
+            "title": "Visual Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tile",
+          "acquired_at",
+          "cloud_cover",
+          "visual_url"
+        ],
+        "title": "OpticalTile",
+        "type": "object"
+      },
+      "PassOut": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "at": {
+            "description": "Hora UTC: de adquisición, o la estimada si kind es estimated.",
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "contains_aoi": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "La huella de la serie contiene la zona; null en las excluidas.",
+            "title": "Contains Aoi"
+          },
+          "data_kind": {
+            "const": "real",
+            "description": "Siempre real: catalog solo lee CMR, nunca datos sintéticos.",
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "direction": {
+            "enum": [
+              "A",
+              "D"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "excluded_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Motivo de la exclusión; null si no está excluida.",
+            "title": "Excluded Reason"
+          },
+          "frame": {
+            "title": "Frame",
+            "type": "integer"
+          },
+          "granule_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Gránulo de CMR; null en las estimadas.",
+            "title": "Granule Id"
+          },
+          "kind": {
+            "description": "acquired: pasada publicada y utilizable. excluded: publicada pero declarada inservible en la zona. estimated: siguiente pasada estimada por el ciclo de 12 días, no adquirida.",
+            "enum": [
+              "acquired",
+              "excluded",
+              "estimated"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "latency_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Horas entre la adquisición y published_at.",
+            "title": "Latency Hours"
+          },
+          "observation_plan": {
+            "description": "Estado en el plan de observación de NISAR (NISAR_COP). El resumen de `ingest plan` solo cubre las pasadas que siguen a la última adquirida, así que las adquiridas y excluidas salen unknown.",
+            "enum": [
+              "planned",
+              "partial",
+              "not_planned",
+              "no_plan",
+              "unknown"
+            ],
+            "title": "Observation Plan",
+            "type": "string"
+          },
+          "orbit_precision": {
+            "anyOf": [
+              {
+                "enum": [
+                  "P",
+                  "M",
+                  "N",
+                  "F"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Letra que sigue al CRID en el nombre del gránulo: P precisa, M media, N casi en tiempo real y F pronóstico, según la guía de ASF. ORBIT_TYPE de CMR no coincide con ella. null en las estimadas.",
+            "title": "Orbit Precision"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Fecha 'updated' de CMR, en UTC; aproxima la publicación.",
+            "title": "Published At"
+          },
+          "series": {
+            "description": "Id completo de la serie, como en /aois/{id}/series.",
+            "title": "Series",
+            "type": "string"
+          },
+          "track": {
+            "title": "Track",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "aoi",
+          "series",
+          "kind",
+          "at",
+          "date",
+          "track",
+          "direction",
+          "frame",
+          "granule_id",
+          "published_at",
+          "latency_hours",
+          "orbit_precision",
+          "contains_aoi",
+          "excluded_reason",
+          "observation_plan",
+          "data_kind"
+        ],
+        "title": "PassOut",
+        "type": "object"
+      },
+      "PassSearchOut": {
+        "properties": {
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cursor opaco de la página siguiente; null en la última.",
+            "title": "Next Cursor"
+          },
+          "orbit_precision_basis": {
+            "const": "granule_name",
+            "default": "granule_name",
+            "title": "Orbit Precision Basis",
+            "type": "string"
+          },
+          "query": {
+            "additionalProperties": true,
+            "description": "La consulta tal como se aplicó, sin los valores por omisión vacíos.",
+            "title": "Query",
+            "type": "object"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/PassOut"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "total": {
+            "description": "Pasadas que cumplen la consulta, en todas las páginas.",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query",
+          "total",
+          "next_cursor",
+          "results"
+        ],
+        "title": "PassSearchOut",
+        "type": "object"
+      },
+      "SeriesFootprint": {
+        "properties": {
+          "geometry": {
+            "$ref": "#/components/schemas/FootprintGeometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/FootprintProperties"
+          },
+          "type": {
+            "const": "Feature",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "title": "SeriesFootprint",
+        "type": "object"
+      },
+      "SeriesGranule": {
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "download_url": {
+            "title": "Download Url",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "size_mb": {
+            "title": "Size Mb",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "size_mb",
+          "download_url"
+        ],
+        "title": "SeriesGranule",
+        "type": "object"
+      },
+      "SeriesOut": {
+        "properties": {
+          "contains_aoi": {
+            "title": "Contains Aoi",
+            "type": "boolean"
+          },
+          "crid": {
+            "title": "Crid",
+            "type": "string"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "excluded": {
+            "description": "Gránulos de la serie que existen en CMR pero se declararon inservibles en la zona.",
+            "items": {
+              "$ref": "#/components/schemas/ExcludedGranule"
+            },
+            "title": "Excluded",
+            "type": "array"
+          },
+          "footprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeriesFootprint"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Huella de la serie como Feature GeoJSON, para situarla en el globo y filtrar por área (RF-INT-16 y RF-BUS-10). null si CMR no da polígono para ninguna de sus fechas."
+          },
+          "frame": {
+            "title": "Frame",
+            "type": "integer"
+          },
+          "granules": {
+            "description": "Fechas utilizables, sin las excluidas.",
+            "items": {
+              "$ref": "#/components/schemas/SeriesGranule"
+            },
+            "title": "Granules",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "maturity": {
+            "title": "Maturity",
+            "type": "string"
+          },
+          "max_gap_days": {
+            "title": "Max Gap Days",
+            "type": "integer"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "polarization": {
+            "title": "Polarization",
+            "type": "string"
+          },
+          "spans_data_gap": {
+            "title": "Spans Data Gap",
+            "type": "boolean"
+          },
+          "track": {
+            "title": "Track",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "track",
+          "direction",
+          "frame",
+          "mode",
+          "polarization",
+          "crid",
+          "maturity",
+          "contains_aoi",
+          "max_gap_days",
+          "spans_data_gap",
+          "granules",
+          "excluded"
+        ],
+        "title": "SeriesOut",
+        "type": "object"
+      },
+      "TimelineGap": {
+        "properties": {
+          "end": {
+            "description": "Último día sin adquisiciones, incluido.",
+            "format": "date",
+            "title": "End",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "start": {
+            "description": "Primer día sin adquisiciones, incluido.",
+            "format": "date",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "source"
+        ],
+        "title": "TimelineGap",
+        "type": "object"
+      },
+      "TimelineInterval": {
+        "properties": {
+          "crosses_gap": {
+            "description": "El intervalo atraviesa un hueco de adquisición conocido.",
+            "title": "Crosses Gap",
+            "type": "boolean"
+          },
+          "days": {
+            "description": "Días entre dos pasadas consecutivas de la misma serie.",
+            "title": "Days",
+            "type": "integer"
+          },
+          "end": {
+            "format": "date-time",
+            "title": "End",
+            "type": "string"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          },
+          "start": {
+            "format": "date-time",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "series",
+          "start",
+          "end",
+          "days",
+          "crosses_gap"
+        ],
+        "title": "TimelineInterval",
+        "type": "object"
+      },
+      "TimelineOut": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "excluded": {
+            "description": "Pasadas que existen pero se declararon inservibles; no están en passes ni en intervals.",
+            "items": {
+              "$ref": "#/components/schemas/ExcludedPass"
+            },
+            "title": "Excluded",
+            "type": "array"
+          },
+          "gaps": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineGap"
+            },
+            "title": "Gaps",
+            "type": "array"
+          },
+          "intervals": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineInterval"
+            },
+            "title": "Intervals",
+            "type": "array"
+          },
+          "next_pass_estimates": {
+            "items": {
+              "$ref": "#/components/schemas/NextPassEstimate"
+            },
+            "title": "Next Pass Estimates",
+            "type": "array"
+          },
+          "passes": {
+            "items": {
+              "$ref": "#/components/schemas/TimelinePass"
+            },
+            "title": "Passes",
+            "type": "array"
+          },
+          "published_at_basis": {
+            "const": "cmr_updated",
+            "description": "published_at es la fecha 'updated' de CMR, una aproximación a la publicación real.",
+            "title": "Published At Basis",
+            "type": "string"
+          }
+        },
+        "required": [
+          "aoi",
+          "published_at_basis",
+          "passes",
+          "intervals",
+          "gaps",
+          "next_pass_estimates",
+          "excluded"
+        ],
+        "title": "TimelineOut",
+        "type": "object"
+      },
+      "TimelinePass": {
+        "properties": {
+          "acquired_at": {
+            "description": "Inicio de la adquisición, en UTC.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "contains_aoi": {
+            "description": "La huella de la serie contiene la zona completa.",
+            "title": "Contains Aoi",
+            "type": "boolean"
+          },
+          "granule_id": {
+            "title": "Granule Id",
+            "type": "string"
+          },
+          "latency_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Horas entre la adquisición y published_at.",
+            "title": "Latency Hours"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Última actualización del gránulo en CMR, en UTC. Aproxima la publicación.",
+            "title": "Published At"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          }
+        },
+        "required": [
+          "series",
+          "granule_id",
+          "acquired_at",
+          "published_at",
+          "latency_hours",
+          "contains_aoi"
+        ],
+        "title": "TimelinePass",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "WorldGranuleOut": {
+        "properties": {
+          "acquired_at": {
+            "description": "Inicio de la adquisición, UTC, del nombre del gránulo.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja [oeste, sur, este, norte] de la huella, o null sin huella.",
+            "title": "Bbox"
+          },
+          "browse_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Vista previa _LATLON.png de ASF: pública, sin cuenta. No es un producto georreferenciado: su caja en el mapa es la de la huella y se dice aproximada.",
+            "title": "Browse Url"
+          },
+          "data_url": {
+            "description": "HDF5 completo en ASF; pide una cuenta de Earthdata.",
+            "title": "Data Url",
+            "type": "string"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "direction": {
+            "enum": [
+              "A",
+              "D"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "earthdata_search_url": {
+            "description": "El gránulo en NASA Earthdata Search.",
+            "title": "Earthdata Search Url",
+            "type": "string"
+          },
+          "footprint": {
+            "description": "Anillo cerrado [lon, lat] de la huella en CMR, 5 decimales. Vacío si CMR no da polígono.",
+            "items": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "title": "Footprint",
+            "type": "array"
+          },
+          "frame": {
+            "title": "Frame",
+            "type": "integer"
+          },
+          "id": {
+            "description": "Nombre del gránulo (título en CMR).",
+            "title": "Id",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "polarization": {
+            "title": "Polarization",
+            "type": "string"
+          },
+          "size_mb": {
+            "title": "Size Mb",
+            "type": "number"
+          },
+          "thumbnail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Miniatura de esa vista previa.",
+            "title": "Thumbnail Url"
+          },
+          "track": {
+            "title": "Track",
+            "type": "integer"
+          },
+          "vertex_url": {
+            "description": "El gránulo en ASF Data Search Vertex.",
+            "title": "Vertex Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "acquired_at",
+          "date",
+          "track",
+          "direction",
+          "frame",
+          "mode",
+          "polarization",
+          "size_mb",
+          "footprint",
+          "bbox",
+          "browse_url",
+          "thumbnail_url",
+          "data_url",
+          "vertex_url",
+          "earthdata_search_url"
+        ],
+        "title": "WorldGranuleOut",
+        "type": "object"
+      },
+      "WorldSearchOut": {
+        "properties": {
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Bbox",
+            "type": "array"
+          },
+          "collection": {
+            "title": "Collection",
+            "type": "string"
+          },
+          "data_kind": {
+            "const": "real",
+            "default": "real",
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          },
+          "from": {
+            "format": "date",
+            "title": "From",
+            "type": "string"
+          },
+          "granules": {
+            "description": "Los más recientes primero, como mucho `limit`.",
+            "items": {
+              "$ref": "#/components/schemas/WorldGranuleOut"
+            },
+            "title": "Granules",
+            "type": "array"
+          },
+          "sources": {
+            "description": "Recursos oficiales usados: CMR (NASA Earthdata Search) y ASF.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "to": {
+            "format": "date",
+            "title": "To",
+            "type": "string"
+          },
+          "total": {
+            "description": "Gránulos que CMR encuentra en el rectángulo y las fechas, sin filtrar por dirección.",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bbox",
+          "from",
+          "to",
+          "direction",
+          "total",
+          "granules",
+          "collection",
+          "sources"
+        ],
+        "title": "WorldSearchOut",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "NISAR catalog",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/aois": {
+      "get": {
+        "operationId": "aois_aois_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Aoi"
+                  },
+                  "title": "Response Aois Aois Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Aois"
+      }
+    },
+    "/aois/{aoi_id}/references/opera": {
+      "get": {
+        "operationId": "opera_water_aois__aoi_id__references_opera_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi_id",
+            "required": true,
+            "schema": {
+              "title": "Aoi Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Fecha de referencia, normalmente la de una pasada NISAR.",
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "description": "Fecha de referencia, normalmente la de una pasada NISAR.",
+              "format": "date",
+              "title": "Date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Días antes y después de la fecha.",
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 7,
+              "description": "Días antes y después de la fecha.",
+              "maximum": 30,
+              "minimum": 0,
+              "title": "Days",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperaOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Opera Water"
+      }
+    },
+    "/aois/{aoi_id}/references/optical": {
+      "get": {
+        "operationId": "optical_aois__aoi_id__references_optical_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi_id",
+            "required": true,
+            "schema": {
+              "title": "Aoi Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Fecha de referencia, normalmente la de una pasada NISAR.",
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "description": "Fecha de referencia, normalmente la de una pasada NISAR.",
+              "format": "date",
+              "title": "Date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Días antes y después de la fecha.",
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 7,
+              "description": "Días antes y después de la fecha.",
+              "maximum": 30,
+              "minimum": 0,
+              "title": "Days",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Nubosidad máxima por tesela, en %. Valor inicial sin calibrar.",
+            "in": "query",
+            "name": "max_cloud",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "description": "Nubosidad máxima por tesela, en %. Valor inicial sin calibrar.",
+              "maximum": 100,
+              "minimum": 0,
+              "title": "Max Cloud",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpticalOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Optical"
+      }
+    },
+    "/aois/{aoi_id}/series": {
+      "get": {
+        "operationId": "series_aois__aoi_id__series_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi_id",
+            "required": true,
+            "schema": {
+              "title": "Aoi Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_dates",
+            "required": false,
+            "schema": {
+              "default": 2,
+              "minimum": 2,
+              "title": "Min Dates",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesOut"
+                  },
+                  "title": "Response Series Aois  Aoi Id  Series Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Series"
+      }
+    },
+    "/aois/{aoi_id}/timeline": {
+      "get": {
+        "operationId": "timeline_aois__aoi_id__timeline_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi_id",
+            "required": true,
+            "schema": {
+              "title": "Aoi Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimelineOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Timeline"
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/search/passes": {
+      "get": {
+        "description": "Pasadas de las zonas filtradas por fecha, dirección, latencia, precisión de órbita, exclusión y plan.\n\nPerfil mínimo student (specs/06-acceso). Mientras el gateway no tenga cuentas (AUTH_ENABLED=0) todo el\nmundo es public y responde 403 con el perfil necesario.",
+        "operationId": "search_passes_search_passes_get",
+        "parameters": [
+          {
+            "description": "Zonas; por omisión, todas. Se puede repetir.",
+            "in": "query",
+            "name": "aoi",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Zonas; por omisión, todas. Se puede repetir.",
+              "title": "Aoi"
+            }
+          },
+          {
+            "description": "Series por id completo o corto (T048A-F015). Se puede repetir.",
+            "in": "query",
+            "name": "series",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Series por id completo o corto (T048A-F015). Se puede repetir.",
+              "title": "Series"
+            }
+          },
+          {
+            "description": "Primer día, incluido (UTC).",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Primer día, incluido (UTC).",
+              "title": "From"
+            }
+          },
+          {
+            "description": "Último día, incluido (UTC).",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Último día, incluido (UTC).",
+              "title": "To"
+            }
+          },
+          {
+            "description": "A ascendente o D descendente.",
+            "in": "query",
+            "name": "direction",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "A",
+                    "D"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A ascendente o D descendente.",
+              "title": "Direction"
+            }
+          },
+          {
+            "description": "Sin latencia conocida no pasa el filtro.",
+            "in": "query",
+            "name": "min_latency_hours",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Sin latencia conocida no pasa el filtro.",
+              "title": "Min Latency Hours"
+            }
+          },
+          {
+            "description": "Sin latencia conocida no pasa el filtro.",
+            "in": "query",
+            "name": "max_latency_hours",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Sin latencia conocida no pasa el filtro.",
+              "title": "Max Latency Hours"
+            }
+          },
+          {
+            "description": "Se puede repetir.",
+            "in": "query",
+            "name": "orbit_precision",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "P",
+                      "M",
+                      "N",
+                      "F"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Se puede repetir.",
+              "title": "Orbit Precision"
+            }
+          },
+          {
+            "description": "Se puede repetir.",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "acquired",
+                      "excluded",
+                      "estimated"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Se puede repetir.",
+              "title": "Kind"
+            }
+          },
+          {
+            "description": "Estado en el plan de observación. Se puede repetir.",
+            "in": "query",
+            "name": "plan",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "planned",
+                      "partial",
+                      "not_planned",
+                      "no_plan",
+                      "unknown"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Estado en el plan de observación. Se puede repetir.",
+              "title": "Plan"
+            }
+          },
+          {
+            "description": "Sin latencia, al final.",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "date",
+              "description": "Sin latencia, al final.",
+              "enum": [
+                "date",
+                "-date",
+                "latency",
+                "-latency"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Más de 50 por página pide el perfil researcher.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "description": "Más de 50 por página pide el perfil researcher.",
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "next_cursor de la página anterior.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "next_cursor de la página anterior.",
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassSearchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "403": {
+            "description": "Perfil insuficiente: sin cuenta (public) o limit > 50 sin perfil researcher. El cuerpo trae required_role."
+          },
+          "422": {
+            "description": "Parámetro o cursor no válido."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Search Passes",
+        "x-required-role": "student"
+      }
+    },
+    "/search/world": {
+      "get": {
+        "description": "Pasadas NISAR GCOV en cualquier parte del mundo, sin descargar nada y sin cuenta (buscador mundial).\n\nUsa CMR, el catálogo detrás de NASA Earthdata Search, y las vistas previas públicas de ASF. Abierta a todos:\nsolo son metadatos públicos.",
+        "operationId": "search_world_search_world_get",
+        "parameters": [
+          {
+            "description": "oeste,sur,este,norte en WGS84; sin cruzar el antimeridiano.",
+            "in": "query",
+            "name": "bbox",
+            "required": true,
+            "schema": {
+              "description": "oeste,sur,este,norte en WGS84; sin cruzar el antimeridiano.",
+              "title": "Bbox",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Primer día (UTC). Por omisión, 90 días antes de `to`.",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Primer día (UTC). Por omisión, 90 días antes de `to`.",
+              "title": "From"
+            }
+          },
+          {
+            "description": "Último día (UTC), incluido. Por omisión, hoy.",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Último día (UTC), incluido. Por omisión, hoy.",
+              "title": "To"
+            }
+          },
+          {
+            "description": "A ascendente o D descendente.",
+            "in": "query",
+            "name": "direction",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "A",
+                    "D"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A ascendente o D descendente.",
+              "title": "Direction"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 60,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldSearchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Rectángulo o fechas no válidos."
+          },
+          "502": {
+            "description": "CMR no respondió."
+          }
+        },
+        "summary": "Search World"
+      }
+    }
+  }
+}

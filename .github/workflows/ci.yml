@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [auth, catalog, ingest, processor, verdicts]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+        working-directory: services/${{ matrix.service }}
+      - run: pytest -q
+        working-directory: services/${{ matrix.service }}
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up -d --build
+      - run: bash scripts/smoke.sh
+      - if: failure()
+        run: docker compose logs --no-color

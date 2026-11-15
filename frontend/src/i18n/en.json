@@ -1,0 +1,588 @@
+{
+  "app": {
+    "title": "NISAR Verdicts",
+    "tagline": "What changed, what was not detected and what cannot be known, with the data behind it.",
+    "skipToMain": "Skip to main content"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English"
+  },
+  "view": {
+    "label": "View",
+    "public": "Public",
+    "student": "Student",
+    "researcher": "Researcher"
+  },
+  "public": {
+    "question": "What did the radar see in this area?",
+    "lead": "NISAR is a radar satellite from the space agencies of the United States (NASA) and India (ISRO). It sees through clouds and passes over each area every 12 days. Here you can see what it noticed between two passes, what it could not see and what is still unknown."
+  },
+  "series": {
+    "loading": "Loading data…",
+    "error": "Could not reach the API. Check that the stack is running."
+  },
+  "dataKind": {
+    "real": "real",
+    "synthetic": "synthetic"
+  },
+  "synthetic": {
+    "banner": "Synthetic data: it shows how the application works and does not describe what happened in Parral.",
+    "card": "This verdict uses synthetic data."
+  },
+  "layout": {
+    "left": "Filters",
+    "filters": "Filters",
+    "top": "top bar",
+    "tools": "Map tools",
+    "right": "Reading panels",
+    "collapse": "Collapse {{name}}",
+    "expand": "Open {{name}}",
+    "tabs": {
+      "hallazgos": "Findings",
+      "historia": "Area story",
+      "evento": "Could it see it?",
+      "comunidad": "Community",
+      "mundo": "World",
+      "investigacion": "Research"
+    }
+  },
+  "search": {
+    "heading": "Search verdicts",
+    "allSeries": "All series",
+    "allShort": "All",
+    "timeline": "Period",
+    "from": "From",
+    "to": "To",
+    "states": "States",
+    "fullWindows": "Include full windows",
+    "more": "More filters",
+    "results_one": "{{count}} verdict",
+    "results_other": "{{count}} verdicts",
+    "help": "Choose which passes to look at, the period and what you are looking for. Then tap a result to see it on the map.",
+    "direction": {
+      "A": "ascending",
+      "D": "descending"
+    },
+    "periodHelp": "Each bar is a pair of consecutive passes: the taller, the more the signal changed. Glowing peaks are probable change. Drag the handles to choose the period or tap a bar to see it on the map.",
+    "shortcuts": "Period shortcuts",
+    "shortcut": {
+      "all": "All",
+      "last30": "Last month",
+      "last90": "Last 3 months"
+    },
+    "statesHelp": "Which kind of answer you want to see. Each state has its own shape on the map.",
+    "fullWindowsHelp": "Compares the first and last pass of the series, not only consecutive passes.",
+    "reset": "Clear filters",
+    "pickHelp": "Tap one to see it on the map and read its explanation.",
+    "none": "Nothing with these filters. Widen the period or tick more states.",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "chartDesc_one": "Chart of the change fraction per pair of passes, with {{count}} probable change peak.",
+    "chartDesc_other": "Chart of the change fraction per pair of passes, with {{count}} probable change peaks.",
+    "threshold": "threshold {{value}}",
+    "periodStart": "Start of the period",
+    "periodEnd": "End of the period",
+    "seriesHelp_one": "NISAR passes over this area on {{count}} orbit, every 12 days.",
+    "seriesHelp_other": "NISAR passes over this area on {{count}} orbits, every 12 days. You can see them together.",
+    "groupCount_one": "{{count}} finding",
+    "groupCount_other": "{{count}} findings",
+    "groupChanges_one": "{{count}} with probable change",
+    "groupChanges_other": "{{count}} with probable change"
+  },
+  "interpreter": {
+    "heading": "Story interpreter",
+    "intro": "Build a story from the verdicts in the search. The texts are the API's, unchanged; your notes are saved separately and labelled as yours.",
+    "title": "Title",
+    "defaultTitle": "{{zone}}, {{series}}, {{from}} to {{to}}",
+    "fromApi": "What the API says",
+    "summary_one": "{{count}} pair: {{change}} probable change, {{nochange}} no detectable change and {{notobs}} not observable.",
+    "summary_other": "{{count}} pairs: {{change}} probable change, {{nochange}} no detectable change and {{notobs}} not observable.",
+    "empty": "The search has no verdicts with these filters. Widen the range or the states.",
+    "tooMany": "A story holds at most {{max}} pairs and there are {{count}}. Narrow the range or remove pairs.",
+    "include": "Include the pair from {{from}} to {{to}} of {{series}}",
+    "limits": "What it does not prove and what is missing",
+    "notes": "Your notes",
+    "notesHelp": "{{n}} of {{max}} characters. Shown separately from the API texts and not checked.",
+    "save": "Save story",
+    "saved": "Story saved. It is in the Community tab.",
+    "loginToSave": "Sign in to publish your story: it will show your alias and profile.",
+    "reading": "Community story",
+    "authorNotes": "Notes by the author",
+    "notesDisclaimer": "They are not API text and have not been checked.",
+    "missingPair": "{{pair}}: this pair is no longer in the API or belongs to another area.",
+    "otherZone": "This story is about the {{aoi}} area; only pairs from the current area can be shown here.",
+    "backToDraft": "Back to the draft",
+    "readTexts": "Read what the API says"
+  },
+  "community": {
+    "heading": "Community stories",
+    "sort": "Sort",
+    "sortRecent": "Newest",
+    "sortStars": "Best rated",
+    "loading": "Loading stories…",
+    "error": "The operation on stories could not be completed.",
+    "empty": "There are no stories for this area yet. Save the first one from the interpreter.",
+    "meta": "By a {{role}}, {{from}} to {{to}}",
+    "pairs_one": "{{count}} pair",
+    "pairs_other": "{{count}} pairs",
+    "downloads_one": "{{count}} download",
+    "downloads_other": "{{count}} downloads",
+    "stars": "Stars",
+    "votes_one": "({{count}} vote)",
+    "votes_other": "({{count}} votes)",
+    "notRated": "not rated",
+    "byRole": {
+      "student": "From students",
+      "researcher": "From researchers"
+    },
+    "role": {
+      "student": "student",
+      "researcher": "researcher"
+    },
+    "rate": "Your rating",
+    "starsN_one": "{{count}} star",
+    "starsN_other": "{{count}} stars",
+    "unrate": "Remove my rating",
+    "ownStory": "This is your story: you cannot rate it.",
+    "loginToRate": "Sign in to rate stories and publish your own.",
+    "open": "Open",
+    "download": "Download",
+    "delete": "Delete",
+    "confirmDelete": "Delete the story “{{title}}”? Its ratings are deleted too.",
+    "file": {
+      "zone": "Area",
+      "series": "Series",
+      "range": "Date range",
+      "author": "Author (declared profile)",
+      "generated": "File generated on {{date}} UTC",
+      "apiHeading": "What the API says",
+      "apiNote": "Verdict texts as the API gives them at download time (language: {{lang}}). Each pair has its state, its three texts and its receipt.",
+      "missingPair": "This pair is no longer in the API or belongs to another area.",
+      "cause": "Why it could not be measured",
+      "notesHeading": "Notes by the author of the story",
+      "notesNote": "These notes are not API text and have not been checked.",
+      "noNotes": "No notes."
+    }
+  },
+  "session": {
+    "login": "Sign in",
+    "register": "Create account",
+    "logout": "Sign out",
+    "as": "Signed in as {{role}}",
+    "account": "Account: {{role}}",
+    "accountTitle": "Your account",
+    "viewFromRole": "The page adapts to your profile: what you see in addition are explanations and tools, never different data.",
+    "email": "Email",
+    "password": "Password (12 characters or more)",
+    "role": "Profile",
+    "declared": "You declare the profile and it is not checked: it adds tools, it never changes data.",
+    "toRegister": "I do not have an account",
+    "toLogin": "I already have an account",
+    "close": "Close",
+    "error": "It could not be completed. Check the email and password.",
+    "off": "Account access is off in this stack (AUTH_ENABLED=0). You can search, view and read without an account; to save, download or rate stories it has to be enabled in the .env."
+  },
+  "states": {
+    "label": "How to read each answer",
+    "change_probable": "The radar signal changed more than its noise over enough ground. It does not say why.",
+    "no_detectable_change": "The area could be observed and no change larger than the noise was seen.",
+    "not_observable": "The radar could not see it, and the reason is given."
+  },
+  "evidence": {
+    "heading": "Evidence",
+    "noData": "no data",
+    "db": "{{v}} dB",
+    "hhhv": "HH {{hh}}, HV {{hv}}",
+    "ofObserved": "{{v}} of the observed area",
+    "ofZone": "{{v}} of the area",
+    "ruleValue": "Probable change from {{change}} of the observed area; not observable if less than {{observed}} is observed.",
+    "notCalibrated": "Not checked against field data.",
+    "shiftExceeds": "Above the {{v}} dB threshold.",
+    "shiftBelow": "Below the {{v}} dB threshold.",
+    "shiftCorrected": "Already removed from the change.",
+    "shiftNotCorrected": "Not removed from the change.",
+    "json": "View this verdict's JSON in the API",
+    "rows": {
+      "changed": "Changed fraction",
+      "observed": "Observed fraction",
+      "rule": "Decision rule",
+      "threshold": "Per-pixel threshold",
+      "meanChange": "Mean change",
+      "sceneShift": "Whole-scene shift"
+    },
+    "explain": {
+      "changed": "Share of what the radar could see where the signal changed more than the threshold.",
+      "observed": "Share of the area the radar could see well on both dates.",
+      "rule": "The system sets these limits and states them; the person asking does not choose them.",
+      "threshold": "The decibel (dB) measures the signal returning to the radar: 3 dB is double or half. HH and HV are two polarizations: HH responds more to smooth water and buildings, HV to vegetation.",
+      "meanChange": "Average change over the whole observed area. Negative: the signal went down.",
+      "sceneShift": "If the whole scene goes up or down at once (for example, with wet soil), that general change is not local."
+    }
+  },
+  "story": {
+    "heading": "The story of Parral in three scenes",
+    "intro": "Three questions about Hidalgo del Parral. Each answer comes from the API with the already processed data, with what is known and what is not.",
+    "nav": "Scenes",
+    "prev": "Previous",
+    "next": "Next",
+    "position": "Scene {{n}} of {{total}}",
+    "loading": "Loading the scene…",
+    "error": "This scene could not be loaded. The others are still available.",
+    "storm": {
+      "step": "The storm",
+      "title": "1. The storm of 1 July 2026",
+      "text": "On 1 July 2026, a storm left water in the streets of Parral and swept a vehicle along the Arroyo de las Quintas. Chihuahua Civil Protection recorded 22.8 mm of rain in one hour. Did the satellite pass during the time we assume it lasted?",
+      "source": "Source: bulletin of the State Civil Protection Coordination, Government of Chihuahua (1 July 2026)"
+    },
+    "monsoon": {
+      "step": "August",
+      "title": "2. A date pair in August",
+      "text": "From 16 to 28 August 2026. This is what the radar says about that date pair, and what it cannot prove.",
+      "showOnMap": "Show this pair on the map"
+    },
+    "mine": {
+      "step": "The mine",
+      "title": "3. A point next to the La Prieta Mine",
+      "text": "We took a point next to the La Prieta Mine, according to OpenStreetMap, and looked at what the radar detected in each date pair.",
+      "point": "Point: lon {{lon}}, lat {{lat}} · series {{series}}",
+      "count": "{{same}} of {{total}} pairs with no detectable change at this point.",
+      "note": "Detecting no change is also information, but it does not prove that nothing changed: it says the radar saw no change larger than its threshold.",
+      "pairs": "Result by date pair"
+    }
+  },
+  "picker": {
+    "heading": "Verdict by date pair",
+    "series": "Series",
+    "pair": "Date pair",
+    "fullWindow": "full window",
+    "loading": "Loading verdicts…",
+    "error": "Could not load the verdicts for this series. Try again in a few seconds.",
+    "empty": "This series has no verdicts yet.",
+    "choose": "Choose another series or date pair"
+  },
+  "verdict": {
+    "state": {
+      "change_probable": "Probable change",
+      "no_detectable_change": "No detectable change",
+      "not_observable": "Not observable"
+    },
+    "cause": "Why it could not be measured: {{cause}}",
+    "dates_one": "from {{from}} to {{to}} · {{count}} day",
+    "dates_other": "from {{from}} to {{to}} · {{count}} days",
+    "detected": "What we detected",
+    "doesNotProve": "What it does not prove",
+    "missing": "What is missing",
+    "hypotheses": "Possible explanations, unverified"
+  },
+  "receipt": {
+    "summary": "Receipt: where this answer comes from",
+    "dataKind": "Data",
+    "maturity": "Maturity",
+    "series": "Series",
+    "seriesValue": "{{id}}: track {{track}}, {{direction}}, frame {{frame}}",
+    "direction": {
+      "A": "ascending",
+      "D": "descending"
+    },
+    "modePolarization": "Mode and polarization",
+    "crid": "Processing version (CRID)",
+    "granules": "Granules",
+    "dataGap": "Spans a gap with no acquisitions",
+    "yes": "yes",
+    "no": "no",
+    "notices": "Notices",
+    "freshness": "Freshness",
+    "before": "Earlier pass",
+    "after": "Later pass",
+    "age_one": "{{date}}, {{count}} day ago",
+    "age_other": "{{date}}, {{count}} days ago",
+    "latency": "published {{hours}} h after the pass",
+    "latencyStatus": {
+      "synthetic": "publication latency does not apply to synthetic data",
+      "catalog_unavailable": "latency unknown: the catalog did not respond",
+      "granule_not_in_catalog": "latency unknown: the granule is not in the catalog",
+      "not_published": "latency unknown: the catalog gives no publication date"
+    },
+    "optical": "Optical comparison (Sentinel-2)",
+    "water": "Water comparison (OPERA DSWx-S1)"
+  },
+  "event": {
+    "heading": "Could the satellite see an event?",
+    "intro": "Tell us when something happened (a storm, a river flood, a wildfire) and we will tell you whether NISAR passed over the area during the time we assume it lasted. It does not say whether anything changed.",
+    "date": "Event date (UTC)",
+    "dateHelp": "Dates and times are in UTC (universal time). If it is already evening in the area, in UTC it may be the next day.",
+    "type": "Event type",
+    "types": {
+      "none": "Not specified",
+      "urban_storm": "Urban storm",
+      "river_flood": "River flood",
+      "wildfire": "Wildfire"
+    },
+    "time": "Start time (UTC, optional)",
+    "timeHelp": "Convert local time to UTC with the area's offset; for example, in Chihuahua UTC is local time plus 6 hours.",
+    "submit": "Check",
+    "example": "Try the storm of 1 July 2026",
+    "loading": "Checking…",
+    "error": "The check could not be done. Review the date and try again.",
+    "state": {
+      "observable": "Observable: a pass fell within the event's assumed duration",
+      "not_observable": "Not observable"
+    },
+    "cause": "Reason: {{cause}}",
+    "observableNote": "This does not say that anything changed: for that, look at the verdict for the date pair that includes that pass.",
+    "detected": "What we found",
+    "previousPass": "Previous pass",
+    "nextPass": "Next pass",
+    "none": "none",
+    "excluded": "Excluded passes",
+    "fold": "Check another date"
+  },
+  "map": {
+    "label": "Map",
+    "compare": "Comparator: optical, HH, HV and subsidence"
+  },
+  "footer": {
+    "attribution": "NISAR data: NASA/JPL and ISRO, distributed by ASF DAAC. Optical: Copernicus Sentinel-2. Base map: EOX (CC BY 4.0) and OpenStreetMap (ODbL). Each source is credited where it is shown.",
+    "license": "Open source under the Apache License 2.0.",
+    "credits": "Credits and data we collect"
+  },
+  "tools": {
+    "projection": "Map view",
+    "view3d": "3D globe",
+    "view2d": "Flat 2D map",
+    "reframe": "Zoom to the analysed area or out to space",
+    "layers": "Radar layers",
+    "layer": "Visible layer",
+    "opacity": "Opacity",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Exit full screen",
+    "layerNames": {
+      "state": "Verdict state",
+      "change_hh": "HH change",
+      "change_hv": "HV change",
+      "subsidence": "Subsidence"
+    }
+  },
+  "geocoder": {
+    "label": "Search location (coming soon)",
+    "placeholder": "Search location…",
+    "soon": "Coming soon"
+  },
+  "status": {
+    "online": "Online",
+    "offline": "No connection to the API",
+    "connecting": "Connecting"
+  },
+  "player": {
+    "playStory": "Play story on the map",
+    "play": "Play",
+    "pause": "Pause",
+    "previous": "Previous pair",
+    "next": "Next pair",
+    "close": "Close playback",
+    "timeline": "Story pairs over time",
+    "position": "Pair {{n}} of {{total}}"
+  },
+  "portal": {
+    "title": "GeoLatido: NISAR radar verdicts",
+    "open": "About GeoLatido",
+    "sections": "Sections",
+    "close": "Close",
+    "carousel": "carousel",
+    "slide": "slide",
+    "slideOf": "{{n}} of {{total}}",
+    "slides": "Slides",
+    "goTo": "Go to {{n}}: {{title}}",
+    "previous": "Previous",
+    "next": "Next",
+    "pause": "Pause the carousel",
+    "play": "Resume the carousel",
+    "feature": "Feature",
+    "yes": "Included",
+    "no": "Not included"
+  },
+  "world": {
+    "heading": "Worldwide NISAR pass search",
+    "intro": "Search NISAR radar passes anywhere in the world without downloading anything or creating an account. Move the map to the area you care about and search: you will see each pass footprint and its preview.",
+    "area": "Search area (what you see on the map):",
+    "areaHelp": "Zoom the globe in or out to change the area. With the whole world in view, the search covers the planet.",
+    "direction": "Orbit direction",
+    "bothDirections": "Both",
+    "search": "Search this area",
+    "loading": "Searching passes in the NASA catalog…",
+    "error": "The NASA catalog (CMR) did not answer. Try again in a few seconds.",
+    "results": "The {{count}} most recent of {{total}} passes",
+    "none": "No NISAR passes in this area and these dates. Widen the area or the period.",
+    "frame": "frame",
+    "newTab": "opens in a new tab",
+    "note": "The ASF preview is placed on the footprint by its content: its position is approximate. Downloading the full product (about 7 GB) needs an Earthdata account. Verdicts for this area are computed online from the Findings tab, without storing subsets.",
+    "sources": "Sources: NASA CMR (Earthdata Search) and ASF DAAC (Vertex) previews, official challenge resources.",
+    "wholeWorld": "the whole world"
+  },
+  "research": {
+    "heading": "Research with satellite data",
+    "intro": "Write a question. The NASA catalog is searched for available data, change is measured where this project processed NISAR, verified events are cross-checked and a story is built in which every statement cites its evidence.",
+    "question": "Your question",
+    "placeholder": "E.g.: How has the terrain around the mining areas of Hidalgo del Parral changed between 2016 and 2026?",
+    "examplesLabel": "Example questions",
+    "examples": {
+      "mining": "How has the terrain around the mining areas of Hidalgo del Parral changed between 2016 and 2026?",
+      "flood": "How did flooded areas evolve in Parral in 2026?",
+      "glacier": "How has the motion of Jakobshavn evolved over the last five years?",
+      "compare": "Compare Parral and Jakobshavn in 2026"
+    },
+    "manual": "Choose places and dates by hand",
+    "place": "Add a place to the research",
+    "findPlace": "Search",
+    "noPlace": "No results.",
+    "areas": "Chosen places",
+    "removeArea": "Remove {{name}}",
+    "usePeriod": "Set the period",
+    "run": "Research",
+    "cancel": "Cancel",
+    "cancelled": "Research cancelled.",
+    "failed": "The research failed: {{error}}",
+    "error": "The research service did not respond.",
+    "step": {
+      "queued": "Queued…",
+      "discover": "Searching the NASA catalog…",
+      "analyze": "Analysing changes, series and events…",
+      "story": "Writing the story with its evidence…"
+    },
+    "synthetic": "Synthetic data: this story does not describe real observations.",
+    "spanishOnly": "The generated story text is in Spanish.",
+    "traceOk": "Every figure cites its evidence",
+    "traceFail": "Some statements lack evidence",
+    "chapters": "Story chapters",
+    "showOnMap": "Show on the map",
+    "caveat": "Limit:",
+    "hypothesis": "Hypothesis:",
+    "evidence_one": "{{count}} piece of evidence",
+    "evidence_other": "{{count}} pieces of evidence",
+    "prev": "Previous",
+    "next": "Next",
+    "previous": "Previous research",
+    "sources": "Sources: NASA CMR, NASA EONET, this project's verdicts and verified events. Nothing is downloaded; matching dates do not prove a cause.",
+    "play": "Play",
+    "pause": "Pause",
+    "chapterOf": "Chapter {{n}} of {{total}}",
+    "source": "Source {{n}}"
+  },
+  "places": {
+    "label": "Find a place",
+    "placeholder": "Search any place in the world…",
+    "results": "Places found",
+    "thisView": "What the map shows",
+    "thisViewSource": "Search passes in the current view",
+    "searching": "Searching places…",
+    "error": "The place search did not respond.",
+    "none": "No place with that name.",
+    "point": "Point {{lat}}, {{lon}}",
+    "pointNamed": "{{place}} ({{lat}}, {{lon}})"
+  },
+  "zone": {
+    "passesOnly": "There are no processed verdicts here yet: these are the real NISAR radar passes over the area, with their preview. The filters come from what is available.",
+    "processed": "Area with verdicts: {{name}}",
+    "processedList": "Areas with processed verdicts",
+    "back": "See verdicts for {{name}}",
+    "research": "Research this area",
+    "period": "Period",
+    "last90": "Last 3 months",
+    "last365": "Last year",
+    "sinceStart": "Since NISAR began",
+    "orbits": "Orbits over the area",
+    "allOrbits": "All ({{count}})"
+  },
+  "zoneStory": {
+    "heading": "Story of {{name}}",
+    "intro": "Built from the area's data: radar verdicts when processed, NASA passes and cited events (earthquakes, cyclones, floods, fires and landslides). Every sentence cites its evidence.",
+    "question": "What has changed in {{name}} and what events happened in the last year?"
+  },
+  "online": {
+    "heading": "Verdicts for this area",
+    "starting": "Requesting processing of the area…",
+    "error": "Processing could not be requested: {{error}}",
+    "series": "Series {{id}} ({{pol}}): its {{dates}} most recent dates are processed.",
+    "noSeries": "NISAR has no series with HH and HV here (or fewer than two dates), and change detection needs both polarizations. You can still see the passes:",
+    "retry": "Retry",
+    "cancel": "Cancel processing",
+    "state": {
+      "queued": "Queued: one area is processed at a time.",
+      "running": "Reading only the area from NASA in memory (no subsets stored), several dates at once, computing as they arrive. A 0.3° area takes about 2 to 3 minutes, depending on the connection.",
+      "done": "Done: the area now has verdicts.",
+      "failed": "Processing failed.",
+      "cancelled": "Processing cancelled.",
+      "no_processable_series": "No processable series."
+    },
+    "step": {
+      "zone": "Create the area",
+      "series": "Choose the series (HH and HV)",
+      "process": "Read from NASA in memory and compute the verdicts"
+    },
+    "stepState": {
+      "pending": "pending",
+      "running": "running…",
+      "done": "done",
+      "failed": "failed"
+    },
+    "pointIntro": "This point has no verdicts yet. They can be computed online: only the window around the point (about 0.1°) is read from NASA and no subset is stored, only the result.",
+    "processPoint": "Process verdicts for this point",
+    "summary": {
+      "heading": "Quick summary of the pairs",
+      "days_one": "{{count}} day",
+      "days_other": "{{count}} days",
+      "state": {
+        "change_probable": "Probable change",
+        "no_detectable_change": "No detectable change",
+        "not_observable": "Not observable"
+      },
+      "changed": "{{pct}} of the observable area changed",
+      "observed": "only {{pct}} observable",
+      "note": "Computed from the manifest with the verdict rule (probable change from {{pct}}, uncalibrated threshold). The full verdict, with its evidence, appears as soon as it loads.",
+      "synthetic": "Synthetic data: this summary does not describe real observations."
+    },
+    "noToken": "This installation has no EARTHDATA_TOKEN in its .env, so it cannot read NASA granules to compute verdicts here. The passes over the area are still shown in Filters."
+  },
+  "timeline": {
+    "heading": "Passes over time",
+    "help": "Each lane is an orbit and each dot a pass. Press an orbit name to show it alone (or with others) and move the two handles to set the period; with the keyboard, arrows move one day and Page Up/Page Down move more.",
+    "oldest": "Oldest possible: {{date}}",
+    "newest": "Newest possible: {{date}}",
+    "empty": "No NISAR orbit passes over this area in this period.",
+    "from": "Start of the period",
+    "to": "End of the period"
+  },
+  "subsidence": {
+    "title": "Is the ground sinking?",
+    "yes": "Yes: part of the area is sinking more than the rest.",
+    "no": "No subsidence above the noise.",
+    "none": "Not enough interferograms to measure it.",
+    "more": "What it does not prove and what is missing",
+    "source": "Measured with {{pairs}} NISAR interferograms (GUNW) over {{days}} days.",
+    "showLayer": "Show on the map",
+    "fly": "Go to where it sinks most"
+  },
+  "regenerate": {
+    "button": "Regenerate verdicts",
+    "working": "Regenerating…",
+    "help": "Processes this area again with the latest NISAR dates and rewrites its verdicts. It takes about 2 to 3 minutes.",
+    "offline": "This area is processed offline with its full series; only areas processed online can be regenerated here.",
+    "noToken": "EARTHDATA_TOKEN is missing in the server .env: NASA cannot be read without it.",
+    "error": "Could not regenerate. Try again in a moment.",
+    "step": {
+      "queued": "Queued…",
+      "zone": "Preparing the area…",
+      "series": "Choosing the series with HH and HV…",
+      "process": "Reading NASA and computing the verdicts…"
+    }
+  },
+  "welcome": {
+    "title": "Welcome to GeoLatido",
+    "text": "GeoLatido listens to the heartbeat of the Earth's surface with the NASA–ISRO NISAR radar: what changed, what was not detected and what cannot be known, anywhere in the world. Search for a city above or click on the map to start.",
+    "noAccount": "You do not need an account: everything looks the same without signing in. An account is only for publishing and rating stories.",
+    "start": "Start",
+    "more": "Learn more"
+  }
+}

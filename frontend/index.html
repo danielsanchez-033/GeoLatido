@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoLatido</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Refracción del vidrio líquido (src/tema/vidrio.css): desplaza lo que hay detrás del panel con un
+         ruido suave, como el borde de una gota. Solo lo aplican los navegadores que admiten url() en
+         backdrop-filter (Chromium); el resto se queda con el desenfoque. -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+      <filter id="vidrio-liquido" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="11" result="ruido" />
+        <feGaussianBlur in="ruido" stdDeviation="3" result="suave" />
+        <feDisplacementMap in="SourceGraphic" in2="suave" scale="36" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

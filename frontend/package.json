@@ -1,0 +1,41 @@
+{
+  "name": "nisar-veredictos-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "gen:types": "openapi-typescript ../contracts/verdicts.openapi.json -o src/api/verdicts.d.ts && openapi-typescript ../contracts/auth.openapi.json -o src/api/auth.d.ts"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible-next": "5.3.0",
+    "i18next": "^27.1.1",
+    "maplibre-gl": "6.16.0",
+    "openapi-fetch": "^0.17.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-i18next": "^18.0.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.10",
+    "@types/geojson": "7946.0.16",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "axe-core": "^4.14.0",
+    "jsdom": "^29.1.1",
+    "openapi-typescript": "^7.13.0",
+    "oxlint": "^1.90.0",
+    "typescript": "~5.9",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  }
+}

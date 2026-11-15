@@ -1,0 +1,184 @@
+/* Línea de tiempo (T-ATL-06). Tema claro, como el resto de la app (src/index.css). */
+.atlas-linea {
+  --linea-texto: #000000;
+  --linea-suave: #525252;
+  --linea-pista: #d4d4d4;
+  --linea-pasada: #000000;
+  --linea-excluida: #000000;
+  --linea-evento: #000000;
+  --linea-foco: #000000;
+  font-family: var(--fuente-texto, system-ui, sans-serif);
+  color: var(--linea-texto);
+  font-size: 14px;
+}
+
+.atlas-linea-titulo {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.atlas-linea-desplazable {
+  overflow-x: auto;
+}
+
+.atlas-linea-desplazable:focus-visible {
+  outline: 3px solid var(--linea-foco);
+  outline-offset: 2px;
+}
+
+.atlas-linea-grafica {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  overflow: visible;
+}
+
+.atlas-linea-eje line {
+  stroke: var(--linea-suave);
+}
+
+.atlas-linea-eje .atlas-linea-guia {
+  stroke: var(--linea-pista);
+  stroke-dasharray: 2 3;
+}
+
+.atlas-linea-eje text,
+.atlas-linea-hoy text {
+  fill: var(--linea-suave);
+  font-size: 12px;
+}
+
+.atlas-linea-serie {
+  fill: var(--linea-texto);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.atlas-linea-pista {
+  stroke: var(--linea-pista);
+  stroke-width: 2;
+}
+
+.atlas-linea-pasada {
+  fill: var(--linea-pasada);
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+/* La huella de la serie no contiene toda la zona: relleno a medias en lugar de sólido. */
+.atlas-linea-pasada-parcial {
+  fill: #ffffff;
+  stroke: var(--linea-pasada);
+  stroke-width: 3;
+}
+
+.atlas-linea-pasada[role="button"] {
+  cursor: pointer;
+}
+
+.atlas-linea-pasada[role="button"]:focus-visible {
+  outline: none;
+  stroke: var(--linea-foco);
+  stroke-width: 4;
+}
+
+.atlas-linea-excluida {
+  fill: none;
+  stroke: var(--linea-excluida);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.atlas-linea-estimada {
+  fill: #ffffff;
+  stroke: var(--linea-pasada);
+  stroke-width: 2;
+  stroke-dasharray: 3 2;
+}
+
+.atlas-linea-trama-fondo {
+  fill: #f3f3f3;
+}
+
+.atlas-linea-trama-raya {
+  stroke: #525252;
+  stroke-width: 2;
+}
+
+.atlas-linea-hueco {
+  opacity: 0.85;
+}
+
+.atlas-linea-evento {
+  fill: rgba(0, 0, 0, 0.12);
+  stroke: var(--linea-evento);
+  stroke-width: 1.5;
+}
+
+/* Sin hora: el borde de inicio no es un instante conocido. */
+.atlas-linea-evento-incierto {
+  stroke-dasharray: 5 3;
+}
+
+.atlas-linea-hoy line {
+  stroke: var(--linea-suave);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 3;
+}
+
+.atlas-linea-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.atlas-linea-leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.atlas-linea-notas {
+  margin: 8px 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+
+.atlas-linea-notas li {
+  margin-bottom: 4px;
+}
+
+.atlas-linea-notas small {
+  color: var(--linea-suave);
+}
+
+.atlas-linea-supuesto {
+  margin: 2px 0 0;
+}
+
+.atlas-linea-lista summary {
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.atlas-linea-lista summary:focus-visible {
+  outline: 3px solid var(--linea-foco);
+  outline-offset: 2px;
+}
+
+.atlas-linea-lista h4 {
+  margin: 8px 0 2px;
+  font-size: 13px;
+}
+
+.atlas-linea-lista ol {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}

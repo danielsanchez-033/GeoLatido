@@ -1,0 +1,48 @@
+# Acontecimientos verificados para la zona de Parral. Solo entran hechos leídos en su fuente, con URL y fecha de
+# consulta. Lo que la fuente no dice (duración del agua en la calle, causa) no se escribe aquí.
+events:
+  - id: parral-tormenta-2026-07-01
+    title: Tormenta en Hidalgo del Parral
+    type: heavy_rain
+    phenomena: [flood]
+    date: "2026-07-01"
+    # Horas de los incidentes del boletín (hora local UTC−6): no son el inicio ni el fin de la lluvia.
+    time_utc: "21:37"
+    verdicts_event_type: urban_storm
+    location: Hidalgo del Parral, Chihuahua
+    # La fuente no da coordenadas de cada incidente: la geometría es la caja de la ciudad (config/aois/parral.yaml).
+    bbox: [-105.75, 26.87, -105.60, 26.98]
+    geometry_precision: city
+    description: >-
+      Protección Civil del Estado registró 22,8 mm de lluvia acumulada en una hora; un vehículo arrastrado en el
+      Arroyo de las Quintas (15:37 hora local), un deslave en el Perimetral Norte (16:27) y una lámpara en riesgo de
+      caer (17:00). Sin personas lesionadas.
+    confidence: official
+    sources:
+      - name: Coordinación Estatal de Protección Civil (Gobierno del Estado de Chihuahua)
+        url: https://www.chihuahua.gob.mx/index.php/prensa/registra-parral-228-milimetros-de-lluvia-en-el-lapso-de-una-hora
+        published: "2026-07-01"
+        checked_on: "2026-11-12"
+      - name: El Tiempo de Parral
+        url: https://www.tiempo.com.mx/local/en-una-hora-llovio-228-mm-y-parral-sufrio-por-inundaciones-noticias-chihuahua/
+        published: "2026-07-01"
+        checked_on: "2026-11-12"
+    unknown:
+      - Cuánto tiempo estuvo el agua en la calle.
+      - Estación y método de la medida de lluvia.
+  - id: parral-hueco-asf-2026-07-27
+    title: Hueco de adquisición de NISAR declarado por ASF
+    type: data_gap
+    phenomena: []
+    date: "2026-07-27"
+    end_date: "2026-08-10"
+    location: Global (todas las zonas)
+    bbox: [-180, -90, 180, 90]
+    geometry_precision: global
+    description: ASF declara un hueco permanente de adquisición; los pares que lo cruzan miden un intervalo más largo.
+    confidence: official
+    sources:
+      - name: Alaska Satellite Facility
+        url: https://nisar-docs.asf.alaska.edu/
+        checked_on: "2026-11-09"
+        note: Sitio de documentación de NISAR en ASF; la página exacta del aviso no quedó registrada en MEMORY.md.

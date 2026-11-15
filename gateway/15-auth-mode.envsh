@@ -1,0 +1,14 @@
+#!/bin/sh
+# Lo ejecuta con "." el docker-entrypoint.sh de la imagen oficial de nginx, antes de procesar las plantillas
+# (20-envsubst-on-templates.sh). Traduce AUTH_ENABLED a AUTH_MODE, que elige auth-on.conf o auth-off.conf.
+# Cualquier otro valor detiene el gateway: mejor no arrancar que arrancar con el acceso que no se pidió.
+case "${AUTH_ENABLED:-0}" in
+  1) AUTH_MODE=on ;;
+  0) AUTH_MODE=off ;;
+  *)
+    echo "15-auth-mode: AUTH_ENABLED debe valer 0 o 1, no '${AUTH_ENABLED}'" >&2
+    exit 1
+    ;;
+esac
+export AUTH_MODE
+echo "15-auth-mode: AUTH_ENABLED=${AUTH_ENABLED:-0}, el gateway usa auth-${AUTH_MODE}.conf"

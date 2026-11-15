@@ -1,0 +1,26 @@
+# Series medidas en CMR el 2026-11-09. Las fechas candidatas salen del catálogo, no de este archivo.
+id: parral
+name: Hidalgo del Parral, Chihuahua
+bbox: [-105.95, 26.70, -105.40, 27.15]
+city_bbox: [-105.75, 26.87, -105.60, 26.98]
+collection: NISAR_L2_GCOV_PROVISIONAL_V1
+maturity: PROVISIONAL
+window:
+  start: "2026-06-17"
+  end: "2026-10-22"
+series:
+  - id: T048A-F015
+    track: 48
+    direction: A
+    frame: 15
+  - id: T171D-F075
+    track: 171
+    direction: D
+    frame: 75
+    exclude:
+      - granule: NISAR_L2_PR_GCOV_027_171_D_075_4005_DHDH_A_20260813T014433_20260813T014508_P05023_N_F_J_001
+        reason: product_defect
+        evidence: >-
+          La vista previa LATLON de ASF ya muestra la anomalía: sin la ciudad ni los ríos, con relieve y rayas,
+          frente al 07-20 y al 08-25. HH unos 6 dB más alto y correlación de 0,01 con las demás fechas.
+        checked_on: "2026-11-12"

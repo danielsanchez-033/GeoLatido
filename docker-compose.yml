@@ -1,0 +1,193 @@
+# Topes de memoria (2026-11-14): la pila cabe en un equipo de 16 GB con el navegador abierto. Medido en reposo con
+# datos reales: tiles ~1,8 GB sin tope de caché de GDAL, el resto < 160 MB. `process` (datos reales, bajo demanda)
+# llega a ~1,9 GB y no se limita para no cortarlo a media serie.
+services:
+  # Genera datos sintéticos una vez; conserva lo que ya exista en ./data.
+  seed:
+    build: ./services/processor
+    command: ["python", "-m", "processor", "seed-synthetic"]
+    volumes:
+      - ./data:/data
+      - ./config/aois:/config/aois:ro
+
+  # Datos reales, bajo demanda: docker compose run --rm fetch --aoi parral --series T048A-F015
+  fetch:
+    profiles: ["real"]
+    build: ./services/ingest
+    entrypoint: ["python", "-m", "ingest", "fetch"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      CATALOG_URL: http://catalog:8000
+    volumes:
+      - ./data:/data
+      - ./config/aois:/config/aois:ro
+    depends_on:
+      - catalog
+
+  # Reemplaza los artefactos sintéticos de esa serie por los reales.
+  process:
+    profiles: ["real"]
+    build: ./services/processor
+    entrypoint: ["python", "-m", "processor", "run"]
+    volumes:
+      - ./data:/data
+      - ./config/aois:/config/aois:ro
+
+  catalog:
+    build: ./services/catalog
+    mem_limit: 384m
+    environment:
+      # Zonas de config/aois y las que crea el procesado en línea (servicio online), separadas por ':'.
+      AOI_DIR: /config/aois:/data/aois-online
+      # Plan de observación de NISAR que escribe `ingest plan`; sin archivo, la línea de tiempo dice unknown.
+      PLAN_DIR: /data/plan
+    volumes:
+      - ./config/aois:/config/aois:ro
+      - ./data:/data:ro
+
+  verdicts:
+    build: ./services/verdicts
+    mem_limit: 1g
+    environment:
+      ARTIFACT_ROOT: /data/artifacts
+      # Línea de tiempo de Antena: hora UTC de adquisición y latencia de publicación (T-BAL-02).
+      CATALOG_URL: http://catalog:8000
+      # Opcional, del .env local: con él, verdicts lee la capa de agua de OPERA DSWx-S1 y la compara con el
+      # radar real (T-BAL-08); sin él, lista el producto y dice que no se comparó. Solo esta variable, no todo el .env.
+      EARTHDATA_TOKEN: ${EARTHDATA_TOKEN:-}
+      # Con token y radar real, el contraste con OPERA se calcula al arrancar, en segundo plano, y se guarda
+      # en disco: la primera carga de T048 tardaba ~63 s y el gateway cortaba a los 60 s. Sin token no hace nada.
+      VERDICTS_WARM_CACHE: "1"
+      # Índice de búsqueda (T-BAL-11): calcula todos los veredictos al arrancar, en segundo plano. Sin él, la primera
+      # búsqueda lo calcula. Con token, el contraste con OPERA entra en el índice cuando termina de calentarse.
+      VERDICTS_SEARCH_INDEX: "1"
+      VERDICTS_CACHE_DIR: /cache
+    volumes:
+      - ./data:/data:ro
+      - ./data/cache/verdicts:/cache
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      catalog:
+        condition: service_started
+
+  tiles:
+    image: ghcr.io/developmentseed/titiler:2.4.0
+    command: ["uvicorn", "titiler.application.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    # GDAL guardaba en caché hasta el 5 % de la RAM por bloque leído: 1,8 GB en reposo. Con 160 MB de caché de
+    # bloques y 32 MB de caché HTTP sigue sirviendo las teselas de la zona sin releerlas en cada petición.
+    # Tope de 1,5 GB: con 768 MB, en la prueba de uso del 2026-11-14, llegó al tope con la CPU al 1500 % y las
+    # teselas tardaban hasta 60 s (504); el navegador encolaba detrás hasta la búsqueda mundial (102 s).
+    # GDAL_NUM_THREADS acota los hilos por lectura para que unas pocas teselas no acaparen todos los núcleos.
+    mem_limit: 1536m
+    environment:
+      GDAL_CACHEMAX: "160"
+      GDAL_NUM_THREADS: "2"
+      CPL_VSIL_CURL_CACHE_SIZE: "33554432"
+      VSI_CACHE: "TRUE"
+      VSI_CACHE_SIZE: "16777216"
+      GDAL_DISABLE_READDIR_ON_OPEN: "EMPTY_DIR"
+    volumes:
+      - ./data:/data:ro
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  # Cuentas, sesiones y tokens de los perfiles (specs/06-acceso, Antena). Sin puerto publicado: solo el gateway
+  # llega a él. La clave Ed25519 se genera al primer arranque en ./data/auth (fuera de git) si el .env no la trae.
+  auth:
+    build: ./services/auth
+    mem_limit: 256m
+    environment:
+      AUTH_DATA_DIR: /data/auth
+      AUTH_PRIVATE_KEY: ${AUTH_PRIVATE_KEY:-}
+      AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE:-auto}
+    volumes:
+      - ./data/auth:/data/auth
+
+  # Motor de investigación (2026-11-15): de una pregunta a una investigación reproducible y a una historia con
+  # evidencia. Llama a verdicts por HTTP, a CMR y a NASA EONET (públicos, sin cuenta). Guarda en ./data/research.
+  research:
+    build: ./services/research
+    mem_limit: 384m
+    environment:
+      VERDICTS_URL: http://verdicts:8000
+      ARTIFACT_ROOT: /data/artifacts
+      EVENTS_DIR: /config/events
+      RESEARCH_DATA_DIR: /data/research
+      RESEARCH_MAX_JOBS: "2"
+      # Geocodificador de OpenStreetMap (Nominatim) para buscar lugares fuera del nomenclátor; vacío lo apaga.
+      RESEARCH_GEOCODER: ${RESEARCH_GEOCODER:-nominatim}
+      RESEARCH_EONET: ${RESEARCH_EONET:-1}
+      # Acontecimientos abiertos (USGS, GDACS, Copernicus EMS, NASA GLC, IBTrACS); vacío = todos. Ej.: usgs,gdacs
+      RESEARCH_EVENT_PROVIDERS: ${RESEARCH_EVENT_PROVIDERS:-}
+      # Opcionales, del .env local: sin ellas, ReliefWeb y FIRMS salen como needs_credentials.
+      RELIEFWEB_APPNAME: ${RELIEFWEB_APPNAME:-}
+      FIRMS_MAP_KEY: ${FIRMS_MAP_KEY:-}
+    volumes:
+      - ./data/artifacts:/data/artifacts:ro
+      - ./data/research:/data/research
+      - ./config/events:/config/events:ro
+    depends_on:
+      - verdicts
+
+  # Procesado en línea (2026-11-15): la zona buscada se trae con ingest y se procesa con processor, sin pasos a mano.
+  # Usa el EARTHDATA_TOKEN del .env (solo esa variable). Un trabajo a la vez; zonas de 0,3° como mucho y 4 fechas.
+  online:
+    build:
+      context: ./services
+      dockerfile: online/Dockerfile
+    mem_limit: 2560m
+    environment:
+      CATALOG_URL: http://catalog:8000
+      EARTHDATA_TOKEN: ${EARTHDATA_TOKEN:-}
+      ZONES_DIR: /data/aois-online
+      DATA_DIR: /data
+      ONLINE_MAX_SPAN_DEG: ${ONLINE_MAX_SPAN_DEG:-0.3}
+      ONLINE_MAX_DATES: ${ONLINE_MAX_DATES:-4}
+    volumes:
+      - ./data:/data
+      # Zonas de configuración (Parral) para `processor subsidence`; solo lectura.
+      - ./config/aois:/config/aois:ro
+    depends_on:
+      - catalog
+
+  gateway:
+    image: nginx:1.29-alpine
+    mem_limit: 128m
+    ports:
+      - "8080:80"
+    environment:
+      # 0 (por omisión): sin validar tokens, todo public y las rutas nuevas con 403 (RF-ACC-10). 1: valida cada
+      # petición a /api/ con auth (auth_request). Se cambia en el .env o al levantar: AUTH_ENABLED=1 docker compose up
+      AUTH_ENABLED: ${AUTH_ENABLED:-0}
+      # Origen exacto del frontend para /api/auth/, que lleva cookie y no admite el comodín de CORS.
+      AUTH_ALLOWED_ORIGIN: ${AUTH_ALLOWED_ORIGIN:-http://localhost:3000}
+      # envsubst solo toca ${AUTH_*} en la plantilla; las variables de nginx ($host...) quedan como están.
+      NGINX_ENVSUBST_FILTER: "^AUTH_"
+    volumes:
+      - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./gateway/auth:/etc/nginx/auth:ro
+      - ./gateway/snippets:/etc/nginx/snippets:ro
+      - ./gateway/15-auth-mode.envsh:/docker-entrypoint.d/15-auth-mode.envsh:ro
+    depends_on:
+      - catalog
+      - verdicts
+      - tiles
+      - auth
+      - research
+      - online
+
+  # Sitio estático de Faro y Atlas en http://localhost:3000. El navegador llama al gateway en :8080.
+  frontend:
+    mem_limit: 64m
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: http://localhost:8080
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway

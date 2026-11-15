@@ -1,0 +1,758 @@
+.atlas-mapa {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  font-family: var(--fuente-texto, system-ui, sans-serif);
+}
+
+.atlas-lienzo {
+  position: absolute;
+  inset: 0;
+}
+
+.atlas-mapa .maplibregl-canvas:focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: -3px;
+}
+
+.atlas-extension,
+.atlas-sintetico {
+  position: absolute;
+  left: 10px;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.atlas-extension {
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.94);
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-sintetico {
+  top: 64px;
+  background: #000000;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.atlas-mapa .maplibregl-ctrl-scale {
+  border-color: #000000;
+  color: #000000;
+}
+
+.atlas-panel {
+  position: absolute;
+  right: 10px;
+  top: 80px;
+  z-index: 2;
+  width: 230px;
+  max-height: calc(100% - 130px);
+  overflow-y: auto;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.atlas-capas {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.atlas-capas legend,
+.atlas-opacidad {
+  font-weight: 600;
+}
+
+.atlas-capas label {
+  cursor: pointer;
+}
+
+.atlas-opacidad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.atlas-opacidad input {
+  flex: 1;
+  min-width: 0;
+}
+
+.atlas-panel input:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+.atlas-leyenda {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 0;
+  border-top: 1px solid #d4d4d4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.atlas-leyenda li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.atlas-leyenda small {
+  display: block;
+  color: #525252;
+}
+
+.atlas-entrada {
+  display: flex;
+  flex-direction: column;
+}
+
+.atlas-muestra {
+  flex: none;
+  width: 22px;
+  height: 16px;
+  margin-top: 1px;
+  border: 1px solid #000000;
+}
+
+.atlas-muestra-vacia {
+  background: transparent;
+}
+
+/* Mismo dibujo que la trama del mapa (estado.ts): rayas diagonales gris oscuro sobre gris claro. */
+.atlas-muestra-trama {
+  background: repeating-linear-gradient(
+    135deg,
+    #000000 0 2px,
+    #d4d4d4 2px 5.7px
+  );
+}
+
+.atlas-escala {
+  flex-direction: column;
+}
+
+.atlas-degradado {
+  width: 100%;
+  height: 12px;
+  border: 1px solid #000000;
+}
+
+.atlas-marcas {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-causa {
+  margin-top: 2px;
+}
+
+/* ---- Selección de punto (T-ATL-04) ---- */
+
+.atlas-cruz {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  pointer-events: none;
+  display: none;
+  background:
+    linear-gradient(#000000, #000000) center / 2px 100% no-repeat,
+    linear-gradient(#000000, #000000) center / 100% 2px no-repeat;
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+}
+
+.atlas-ayuda {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 22px);
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #000000;
+  color: #fff;
+  font-size: 12px;
+  /* En 3D lleva también las teclas de giro: se parte en líneas en lugar de salirse. */
+  width: max-content;
+  max-width: min(340px, calc(100% - 20px));
+  text-align: center;
+  pointer-events: none;
+  display: none;
+}
+
+.atlas-foco-teclado .atlas-cruz,
+.atlas-foco-teclado .atlas-ayuda {
+  display: block;
+}
+
+.atlas-solo-lector {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.atlas-serie {
+  color: #000000;
+  font: 13px/1.35 var(--fuente-texto, system-ui, sans-serif);
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.atlas-serie h2 {
+  margin: 0 18px 2px 0;
+  font-size: 14px;
+}
+
+.atlas-serie p {
+  margin: 0 0 4px;
+}
+
+.atlas-serie-coord {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nombre del lugar del punto (2026-11-15); vacío mientras llega la geocodificación inversa. */
+.atlas-serie-lugar {
+  font-weight: 700;
+}
+
+.atlas-serie-lugar:empty {
+  display: none;
+}
+
+.atlas-serie-nota {
+  color: #525252;
+}
+
+.atlas-serie-error {
+  color: #000000;
+  font-weight: 600;
+}
+
+.atlas-serie-sintetico {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: #000000;
+  color: #fff;
+  font-weight: 600;
+}
+
+.atlas-serie-grafica {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 4px 0;
+  font-size: 9px;
+  fill: #525252;
+}
+
+.atlas-serie-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-serie-tabla caption {
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 2px;
+}
+
+.atlas-serie-tabla th,
+.atlas-serie-tabla td {
+  padding: 1px 4px;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: left;
+}
+
+.atlas-serie-cambio td {
+  font-weight: 600;
+}
+
+.atlas-serie summary {
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+/* ---- Comparador óptico (T-ATL-07) ---- */
+
+/* El mapa óptico va encima del radar, recortado a la derecha del deslizador
+   (clip-path en comparador.ts). Los controles de MapLibre (z-index 2) y los
+   paneles de Atlas quedan por encima; el ratón y el teclado los recibe el radar. */
+.atlas-optico {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* El marcador y la ventana del punto se ven también sobre el lado óptico. */
+.atlas-mapa .maplibregl-marker,
+.atlas-mapa .maplibregl-popup {
+  z-index: 3;
+}
+
+.atlas-divisor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 0;
+  border-left: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.atlas-divisor-asa {
+  position: absolute;
+  top: 50%;
+  left: -1px;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  cursor: ew-resize;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* Flechas ◀ ▶ dibujadas con bordes, sin depender de una fuente. */
+.atlas-divisor-asa::before,
+.atlas-divisor-asa::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+  border: 5px solid transparent;
+}
+
+.atlas-divisor-asa::before {
+  left: 2px;
+  border-right-color: #ffffff;
+}
+
+.atlas-divisor-asa::after {
+  right: 2px;
+  border-left-color: #ffffff;
+}
+
+.atlas-divisor-asa:focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+}
+
+.atlas-divisor-etiqueta {
+  position: absolute;
+  top: calc(50% + 22px);
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #ffffff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.atlas-divisor-radar {
+  right: 6px;
+}
+
+.atlas-divisor-optico {
+  left: 6px;
+}
+
+.atlas-optico-panel {
+  position: absolute;
+  left: 10px;
+  bottom: 44px;
+  z-index: 2;
+  width: 240px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.atlas-optico-panel p {
+  margin: 2px 0 0;
+}
+
+.atlas-optico-lados {
+  margin: 0 0 4px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.atlas-optico-lados legend {
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.atlas-optico-lados label {
+  cursor: pointer;
+}
+
+.atlas-optico-lados input:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+.atlas-optico-aviso {
+  color: #000000;
+  font-weight: 600;
+}
+
+.atlas-optico-atribucion {
+  display: block;
+  margin-top: 4px;
+  color: #525252;
+}
+
+/* Aviso de desplazamiento de toda la escena (PR 37), junto a lo que muestra cambio. */
+.atlas-leyenda .atlas-aviso-escena {
+  margin-top: 4px;
+  padding: 3px 6px;
+  border-left: 3px solid #000000;
+  background: #f3f3f3;
+  color: #000000;
+}
+
+/* Con scene_shift.corrected (PR 42): nota informativa, no un aviso. */
+.atlas-leyenda .atlas-aviso-escena-corregido {
+  border-left-color: #525252;
+  background: #f3f3f3;
+  color: #000000;
+}
+
+/* ---- Globo 3D (T-ATL-09) ---- */
+.atlas-aviso-3d {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  z-index: 2;
+  max-width: min(420px, calc(100% - 20px));
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #f3f3f3;
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.atlas-aviso-3d[hidden] {
+  display: none;
+}
+
+/* Sin WebGL 2: no hay lienzo, la extensión y el aviso van en flujo normal. */
+.atlas-sin-mapa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.atlas-sin-mapa .atlas-extension,
+.atlas-sin-mapa .atlas-sintetico {
+  position: static;
+  align-self: flex-start;
+}
+
+.atlas-aviso-sin-mapa {
+  margin: 0;
+  max-width: 480px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: #f3f3f3;
+  color: #000000;
+  font-size: 14px;
+}
+
+/* ---- Controles en 3D (T-ATL-10) ---- */
+.atlas-plano .maplibregl-ctrl-compass {
+  display: none;
+}
+
+.atlas-boton-3d {
+  font: 700 12px/1 var(--fuente-texto, system-ui, sans-serif);
+  color: #000000;
+}
+
+.atlas-boton-3d[aria-pressed="true"] {
+  background: #000000;
+  color: #ffffff;
+}
+
+.atlas-boton-3d[aria-pressed="true"]:hover {
+  background: #333333;
+}
+
+.atlas-mapa .atlas-boton-3d:focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 1px;
+}
+
+/* Ocupa el sitio de la barra de escala cuando no vale. */
+.atlas-aviso-escala {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  max-width: min(300px, calc(100% - 20px));
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.atlas-aviso-escala[hidden] {
+  display: none;
+}
+
+.atlas-teclas-3d {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #525252;
+}
+
+/* Con el botón 3D, la columna de la derecha crece (zoom, brújula y 3D): la leyenda baja para no taparla. */
+.atlas-con-3d .atlas-panel {
+  top: 146px;
+  max-height: calc(100% - 196px);
+}
+
+/* Nombre de cada huella en el mapa (T-ATL-13). Solo de vista: la lista está en .atlas-extension. */
+.atlas-etiqueta-huella {
+  padding: 1px 6px;
+  border: 1px solid #1d4e89;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1d4e89;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.atlas-sin-etiquetas .atlas-etiqueta-huella {
+  display: none;
+}
+
+.atlas-lista-huellas {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+/* ---------- Comparador antes/después recortado a la zona (src/mapa/antesDespues.ts) ---------- */
+
+.atlas-ad-capa,
+.atlas-ad-trazo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.atlas-ad-trazo {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.atlas-ad-contorno {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1.5;
+}
+
+.atlas-ad-linea {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}
+
+.atlas-ad-asa {
+  position: absolute;
+  z-index: 3;
+  width: 2.25rem;
+  height: 2.25rem;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.28), transparent 60%),
+    rgba(29, 30, 34, 0.6);
+  -webkit-backdrop-filter: blur(6px) saturate(1.6);
+  backdrop-filter: blur(6px) saturate(1.6);
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.6),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  cursor: ew-resize;
+  touch-action: none;
+  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.atlas-ad-asa svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.atlas-ad-asa:hover {
+  scale: 1.1;
+}
+
+.atlas-ad-asa.atlas-ad-arrastrando {
+  scale: 1.2 0.88;
+  transition-duration: 0.15s;
+}
+
+.atlas-ad-asa:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.atlas-ad-etiqueta,
+.atlas-ad-atribucion {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  color: #ffffff;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.atlas-ad-etiqueta {
+  margin: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.atlas-ad-etiqueta-despues {
+  translate: calc(-100% - 1rem) 0;
+}
+
+.atlas-ad-atribucion {
+  translate: -50% 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.4rem;
+  font-size: 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-ad-asa {
+    transition: none;
+  }
+}
+
+/* Panel fijo del comparador (antesDespues.ts): qué se ve a cada lado del deslizador. Va abajo en el centro, sobre
+   la barra de herramientas y entre los paneles laterales, para que no dependa de que las esquinas de la zona estén
+   en pantalla ni quede tapado por Filtros o Hallazgos. */
+.atlas-ad-panel {
+  position: absolute;
+  bottom: 4.9rem;
+  left: 50%;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.78);
+  color: #ffffff;
+  font-size: 0.8rem;
+  translate: -50% 0;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+}
+
+.atlas-ad-campo {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.atlas-ad-selector {
+  max-width: 13rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.5rem;
+  background: #111;
+  color: #ffffff;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Compacto: una fila por lado, para caber en el hueco entre Filtros y Hallazgos aun en pantallas de 1024 px. */
+.atlas-ad-panel {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  align-items: stretch;
+  border-radius: 1rem;
+}
+
+.atlas-ad-campo {
+  justify-content: space-between;
+}
+
+.atlas-ad-selector {
+  width: 11.5rem;
+}

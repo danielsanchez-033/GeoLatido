@@ -1,0 +1,31 @@
+name: Tarea
+description: Trabajo derivado de una especificación
+title: "T-XXX-NN: "
+body:
+  - type: dropdown
+    id: rol
+    attributes:
+      label: Rol
+      options: [Antena, Eco, Balanza, Atlas, Faro, Repositorio]
+    validations:
+      required: true
+  - type: input
+    id: spec
+    attributes:
+      label: Especificación
+      description: Enlace al requisito o a la tarea en specs/
+      placeholder: specs/02-eco/tasks.md T-ECO-03
+    validations:
+      required: true
+  - type: textarea
+    id: aceptacion
+    attributes:
+      label: Criterio de aceptación
+      description: Cómo sabremos que está terminada
+    validations:
+      required: true
+  - type: textarea
+    id: dependencias
+    attributes:
+      label: Depende de
+      description: Tareas o roles que deben avanzar antes

@@ -1,0 +1,4425 @@
+{
+  "components": {
+    "schemas": {
+      "AccessDenied": {
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "required_role": {
+            "enum": [
+              "public",
+              "student",
+              "researcher"
+            ],
+            "title": "Required Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "required_role"
+        ],
+        "title": "AccessDenied",
+        "type": "object"
+      },
+      "AreaResult": {
+        "description": "Estado del par dentro del rectángulo con las celdas de 1 km de Eco (RF-BUS-10, P2; T-BAL-18).",
+        "properties": {
+          "basis": {
+            "const": "cells_touching_bbox",
+            "default": "cells_touching_bbox",
+            "description": "Se cuentan enteras las celdas de 1 km que tocan el rectángulo: el área evaluada es cells_bbox, que puede ser mayor que el rectángulo pedido.",
+            "title": "Basis",
+            "type": "string"
+          },
+          "cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Con not_observable, la causa con más píxeles no observados entre las celdas que la declaran; null si ninguna la declara.",
+            "title": "Cause"
+          },
+          "cells": {
+            "description": "Celdas que tocan el rectángulo.",
+            "title": "Cells",
+            "type": "integer"
+          },
+          "cells_bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja [oeste, sur, este, norte] de las celdas usadas.",
+            "title": "Cells Bbox"
+          },
+          "changed_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Píxeles con cambio entre píxeles observados: la fracción de cada celda ponderada por sus píxeles observados (pixels · observed_fraction).",
+            "title": "Changed Fraction"
+          },
+          "decision_rule": {
+            "$ref": "#/components/schemas/AreaRule"
+          },
+          "observed_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Píxeles observados entre píxeles de las celdas.",
+            "title": "Observed Fraction"
+          },
+          "pixels": {
+            "description": "Píxeles de esas celdas.",
+            "title": "Pixels",
+            "type": "integer"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "enum": [
+                  "change_probable",
+                  "no_detectable_change",
+                  "not_observable"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Misma regla que el veredicto, sobre las celdas. null si no hay celdas.",
+            "title": "State"
+          },
+          "status": {
+            "description": "computed: hay celdas que tocan el rectángulo. no_cells: el manifiesto del par no trae celdas (artefactos anteriores a T-ECO-12 o malla no métrica). no_cells_in_bbox: ninguna celda del par toca el rectángulo.",
+            "enum": [
+              "computed",
+              "no_cells",
+              "no_cells_in_bbox"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "state",
+          "cause",
+          "observed_fraction",
+          "changed_fraction",
+          "cells",
+          "pixels",
+          "cells_bbox",
+          "decision_rule"
+        ],
+        "title": "AreaResult",
+        "type": "object"
+      },
+      "AreaRule": {
+        "properties": {
+          "calibrated": {
+            "default": false,
+            "description": "Siempre false, como en evidence.decision_rule.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "min_changed_fraction": {
+            "title": "Min Changed Fraction",
+            "type": "number"
+          },
+          "min_observed_fraction": {
+            "title": "Min Observed Fraction",
+            "type": "number"
+          }
+        },
+        "required": [
+          "min_observed_fraction",
+          "min_changed_fraction"
+        ],
+        "title": "AreaRule",
+        "type": "object"
+      },
+      "DateQuality": {
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "deviation_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Mediana de la fecha menos la mediana de las medianas de la serie.",
+            "title": "Deviation Hh Db"
+          },
+          "deviation_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deviation Hv Db"
+          },
+          "flags": {
+            "description": "radiometric_outlier: la fecha se aparta de la serie más que el umbral de Eco. Aviso, no exclusión.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Flags",
+            "type": "array"
+          },
+          "median_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median Hh Db"
+          },
+          "median_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Median Hv Db"
+          },
+          "valid_fraction": {
+            "description": "Fracción de píxeles válidos de la fecha, según Eco.",
+            "title": "Valid Fraction",
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "valid_fraction",
+          "median_hh_db",
+          "median_hv_db",
+          "deviation_hh_db",
+          "deviation_hv_db",
+          "flags"
+        ],
+        "title": "DateQuality",
+        "type": "object"
+      },
+      "DecisionRule": {
+        "properties": {
+          "calibrated": {
+            "default": false,
+            "description": "Siempre false: min_changed_fraction se fijó con el ruido medido en pares reales, pero ninguno de los dos umbrales se ha contrastado con verdad de campo.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "min_changed_fraction": {
+            "description": "Desde esta fracción de lo observado con cambio, change_probable; por debajo, no_detectable_change. Fijado en el 5 % con el ruido de 16 pares consecutivos reales de Parral, que tras corregir el desplazamiento de la escena quedan entre 0,58 % y 4,64 % salvo dos (T-BAL-09).",
+            "title": "Min Changed Fraction",
+            "type": "number"
+          },
+          "min_observed_fraction": {
+            "description": "Por debajo de esta fracción observada, not_observable.",
+            "title": "Min Observed Fraction",
+            "type": "number"
+          }
+        },
+        "required": [
+          "min_observed_fraction",
+          "min_changed_fraction"
+        ],
+        "title": "DecisionRule",
+        "type": "object"
+      },
+      "EventVerdict": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "assumption": {
+            "$ref": "#/components/schemas/PersistenceAssumption"
+          },
+          "cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause"
+          },
+          "cause_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause Label"
+          },
+          "data_kind": {
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "event_date": {
+            "format": "date",
+            "title": "Event Date",
+            "type": "string"
+          },
+          "event_time": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Hora UTC de inicio del evento, si se indicó. Sin ella, puede empezar en cualquier momento de su día.",
+            "title": "Event Time"
+          },
+          "event_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "urban_storm",
+                  "river_flood",
+                  "wildfire"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Tipo de evento indicado en la consulta, si lo hay.",
+            "title": "Event Type"
+          },
+          "excluded_passes": {
+            "description": "Pasadas de las series de la zona que catalog excluye, entre previous_pass y next_pass ambas incluidas, estén o no en el manifiesto: no cuentan para el evento. Vacía con datos sintéticos o si catalog no respondió.",
+            "items": {
+              "$ref": "#/components/schemas/ExcludedPassOut"
+            },
+            "title": "Excluded Passes",
+            "type": "array"
+          },
+          "next_pass": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Pass"
+          },
+          "next_pass_acquired_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Hora UTC de la siguiente pasada según la línea de tiempo de catalog. null si no se conoce (datos sintéticos o catalog sin respuesta): entonces se considera todo su día.",
+            "title": "Next Pass Acquired At"
+          },
+          "persistence_hours": {
+            "title": "Persistence Hours",
+            "type": "integer"
+          },
+          "previous_pass": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Pass"
+          },
+          "state": {
+            "description": "Responde otra pregunta que los pares: si alguna pasada cayó mientras duraba el evento, en horas UTC. observable exige que caiga dentro en todos los casos posibles y no afirma ningún cambio: hay que consultar el veredicto del par. not_observable lleva su causa; timing_uncertain si solo cae dentro en algunos casos.",
+            "enum": [
+              "observable",
+              "not_observable"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/Summary"
+          }
+        },
+        "required": [
+          "aoi",
+          "event_date",
+          "event_time",
+          "event_type",
+          "persistence_hours",
+          "assumption",
+          "state",
+          "cause",
+          "cause_label",
+          "previous_pass",
+          "next_pass",
+          "next_pass_acquired_at",
+          "data_kind",
+          "excluded_passes",
+          "summary"
+        ],
+        "title": "EventVerdict",
+        "type": "object"
+      },
+      "Evidence": {
+        "properties": {
+          "changed_fraction": {
+            "title": "Changed Fraction",
+            "type": "number"
+          },
+          "decision_rule": {
+            "$ref": "#/components/schemas/DecisionRule",
+            "description": "Umbrales con los que se decidió el estado de este veredicto."
+          },
+          "mean_change_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Change Hh Db"
+          },
+          "mean_change_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Change Hv Db"
+          },
+          "noise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NoiseOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dispersión de la diferencia del par en HH y HV (RF-BUS-09, T-BAL-14). null si el manifiesto no trae stats.noise_* (artefactos anteriores a T-ECO-09). No es ruido del instrumento: ver caveat. No cambia el estado."
+          },
+          "observed_fraction": {
+            "title": "Observed Fraction",
+            "type": "number"
+          },
+          "optical": {
+            "$ref": "#/components/schemas/OpticalEvidence"
+          },
+          "pixel_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Pixel Counts",
+            "type": "object"
+          },
+          "scene_shift": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SceneShiftOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cambio de nivel de toda la escena entre las dos fechas. null si el manifiesto no trae QA."
+          },
+          "signature_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Signature Counts",
+            "type": "object"
+          },
+          "threshold_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold Hh Db"
+          },
+          "threshold_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold Hv Db"
+          },
+          "water": {
+            "$ref": "#/components/schemas/WaterEvidence",
+            "description": "Contraste del agua del radar con OPERA DSWx-S1 (RF-BAL-07). Un desacuerdo es un dato, no un fallo."
+          }
+        },
+        "required": [
+          "observed_fraction",
+          "changed_fraction",
+          "decision_rule",
+          "threshold_hh_db",
+          "threshold_hv_db",
+          "mean_change_hh_db",
+          "mean_change_hv_db",
+          "pixel_counts",
+          "signature_counts",
+          "optical",
+          "scene_shift",
+          "water"
+        ],
+        "title": "Evidence",
+        "type": "object"
+      },
+      "ExcludedPassOut": {
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "evidence": {
+            "description": "Cómo lo comprobó Antena.",
+            "title": "Evidence",
+            "type": "string"
+          },
+          "granule": {
+            "description": "granule_id que catalog excluye.",
+            "title": "Granule",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Código del motivo según catalog; product_defect: fallo en el producto publicado.",
+            "title": "Reason",
+            "type": "string"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          }
+        },
+        "required": [
+          "granule",
+          "series",
+          "date",
+          "reason",
+          "evidence"
+        ],
+        "title": "ExcludedPassOut",
+        "type": "object"
+      },
+      "Freshness": {
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/PassFreshness"
+          },
+          "before": {
+            "$ref": "#/components/schemas/PassFreshness"
+          },
+          "published_at_basis": {
+            "const": "cmr_updated",
+            "default": "cmr_updated",
+            "title": "Published At Basis",
+            "type": "string"
+          },
+          "reference_date": {
+            "description": "Fecha UTC con la que se calcula age_days (hoy, al responder).",
+            "format": "date",
+            "title": "Reference Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference_date",
+          "before",
+          "after"
+        ],
+        "title": "Freshness",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Layers": {
+        "properties": {
+          "change_hh": {
+            "title": "Change Hh",
+            "type": "string"
+          },
+          "change_hv": {
+            "title": "Change Hv",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "change_hh",
+          "change_hv"
+        ],
+        "title": "Layers",
+        "type": "object"
+      },
+      "NoiseOut": {
+        "description": "Dispersión de la diferencia del par (RF-BUS-09), copiada de stats.noise_* del manifiesto de Eco (T-ECO-09).",
+        "properties": {
+          "basis": {
+            "const": "pair_stats",
+            "default": "pair_stats",
+            "description": "Siempre pair_stats: stats.noise_hh_db y noise_hv_db del par en el manifiesto.",
+            "title": "Basis",
+            "type": "string"
+          },
+          "calibrated": {
+            "default": false,
+            "description": "Siempre false: no hay un umbral de ruido contrastado.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "caveat": {
+            "description": "Advertencia fija: no es ruido del instrumento. Incluye también cambio real repartido (humedad, vegetación) y textura, así que un valor alto no prueba que el cambio sea ruido.",
+            "title": "Caveat",
+            "type": "string"
+          },
+          "hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Desviación robusta de la diferencia HH (1,4826 · MAD alrededor de la mediana), en dB, sobre los píxeles observables, tras suavizar 5 × 5 y antes del umbral y del filtro de grupos. null si falta.",
+            "title": "Hh Db"
+          },
+          "hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Igual que hh_db, para HV.",
+            "title": "Hv Db"
+          }
+        },
+        "required": [
+          "hh_db",
+          "hv_db",
+          "caveat"
+        ],
+        "title": "NoiseOut",
+        "type": "object"
+      },
+      "NotEvaluated": {
+        "properties": {
+          "count": {
+            "description": "Filas que el filtro dejó fuera porque no se podía evaluar en ellas.",
+            "title": "Count",
+            "type": "integer"
+          },
+          "reasons": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "Cuántas filas por cada motivo.",
+            "title": "Reasons",
+            "type": "object"
+          }
+        },
+        "required": [
+          "count",
+          "reasons"
+        ],
+        "title": "NotEvaluated",
+        "type": "object"
+      },
+      "OpticalEvidence": {
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/OpticalSide",
+            "description": "Escena más cercana a to_date que no es anterior a la pasada."
+          },
+          "before": {
+            "$ref": "#/components/schemas/OpticalSide",
+            "description": "Escena más cercana a from_date que no es posterior a la pasada."
+          },
+          "cloud_cover_basis": {
+            "const": "tile",
+            "default": "tile",
+            "title": "Cloud Cover Basis",
+            "type": "string"
+          },
+          "collection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collection"
+          },
+          "data_kind": {
+            "const": "real",
+            "default": "real",
+            "description": "Las escenas ópticas son siempre datos reales.",
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License"
+          },
+          "license_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License Url"
+          },
+          "max_cloud_cover": {
+            "description": "Nubosidad máxima por tesela, en %. Valor inicial sin calibrar.",
+            "title": "Max Cloud Cover",
+            "type": "number"
+          },
+          "search_days": {
+            "description": "Días máximos entre la escena óptica y su fecha de radar.",
+            "title": "Search Days",
+            "type": "integer"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Buscador de escenas usado por catalog. null si no respondió.",
+            "title": "Source"
+          },
+          "text": {
+            "description": "Resumen en el idioma pedido de qué escenas hay y con cuántas nubes.",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "collection",
+          "license",
+          "license_url",
+          "max_cloud_cover",
+          "search_days",
+          "before",
+          "after",
+          "text"
+        ],
+        "title": "OpticalEvidence",
+        "type": "object"
+      },
+      "OpticalScene": {
+        "properties": {
+          "acquired_at": {
+            "description": "Hora UTC de la primera tesela de la adquisición.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "attribution": {
+            "description": "Texto de atribución que debe mostrarse junto a la imagen.",
+            "title": "Attribution",
+            "type": "string"
+          },
+          "covers_aoi": {
+            "description": "Las teselas juntas cubren toda la zona.",
+            "title": "Covers Aoi",
+            "type": "boolean"
+          },
+          "days_from_radar": {
+            "description": "Días respecto a radar_date; negativo si es anterior.",
+            "title": "Days From Radar",
+            "type": "integer"
+          },
+          "max_cloud_cover": {
+            "description": "Mayor nubosidad entre sus teselas. Es de la tesela, no de la zona.",
+            "title": "Max Cloud Cover",
+            "type": "number"
+          },
+          "platform": {
+            "title": "Platform",
+            "type": "string"
+          },
+          "tiles": {
+            "items": {
+              "$ref": "#/components/schemas/OpticalTileOut"
+            },
+            "title": "Tiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "platform",
+          "acquired_at",
+          "days_from_radar",
+          "covers_aoi",
+          "max_cloud_cover",
+          "attribution",
+          "tiles"
+        ],
+        "title": "OpticalScene",
+        "type": "object"
+      },
+      "OpticalSide": {
+        "properties": {
+          "radar_acquired_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Hora UTC de la pasada de radar. Si se conoce, antes y después se comparan al segundo; si es null, se compara por día UTC y una escena del mismo día cuenta en los dos lados.",
+            "title": "Radar Acquired At"
+          },
+          "radar_date": {
+            "format": "date",
+            "title": "Radar Date",
+            "type": "string"
+          },
+          "scene": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OpticalScene"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "description": "clear: cubre la zona con nubosidad <= max_cloud_cover. cloudy: la menos nublada que cubre la zona, por encima del límite. partial_coverage: ninguna cubre la zona entera. none_in_window: ninguna a search_days o menos. catalog_unavailable: catalog no respondió.",
+            "enum": [
+              "clear",
+              "cloudy",
+              "partial_coverage",
+              "none_in_window",
+              "catalog_unavailable"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "radar_date",
+          "radar_acquired_at",
+          "scene"
+        ],
+        "title": "OpticalSide",
+        "type": "object"
+      },
+      "OpticalTileOut": {
+        "properties": {
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 4,
+                "minItems": 4,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja de los datos de la escena en WGS84, [oeste, sur, este, norte], vía catalog: la del item STAC de Earth Search o, si falta, la de su huella; no la del cuadrado MGRS completo. Sirve como bounds de la fuente en el mapa, para no pedir teselas fuera de los datos. Si oeste > este, cruza el antimeridiano. null si catalog no la da o no es válida.",
+            "title": "Bbox"
+          },
+          "cloud_cover": {
+            "description": "Porcentaje de nubes de la tesela completa, no de la zona.",
+            "title": "Cloud Cover",
+            "type": "number"
+          },
+          "tile": {
+            "description": "Tesela MGRS de unos 110 km de lado.",
+            "title": "Tile",
+            "type": "string"
+          },
+          "tile_url": {
+            "description": "Plantilla XYZ por el gateway: TiTiler lee visual_url.",
+            "title": "Tile Url",
+            "type": "string"
+          },
+          "visual_url": {
+            "description": "COG en color verdadero (TCI) en el bucket público de Sentinel-2.",
+            "title": "Visual Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tile",
+          "cloud_cover",
+          "visual_url",
+          "tile_url"
+        ],
+        "title": "OpticalTileOut",
+        "type": "object"
+      },
+      "PairQuality": {
+        "properties": {
+          "after": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateQuality"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "QA de to_date. null si el manifiesto no lo trae."
+          },
+          "before": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DateQuality"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "QA de from_date. null si el manifiesto no lo trae."
+          },
+          "source": {
+            "const": "manifest_qa",
+            "default": "manifest_qa",
+            "description": "Copiado de dates[].qa del manifiesto de Eco (T-ECO-03).",
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "before",
+          "after"
+        ],
+        "title": "PairQuality",
+        "type": "object"
+      },
+      "PassFreshness": {
+        "properties": {
+          "acquired_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Inicio de la adquisición en UTC, según la línea de tiempo de catalog. null si no se conoce.",
+            "title": "Acquired At"
+          },
+          "age_days": {
+            "description": "Días entre la fecha de la pasada y reference_date.",
+            "title": "Age Days",
+            "type": "integer"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "granule": {
+            "title": "Granule",
+            "type": "string"
+          },
+          "latency_status": {
+            "description": "Por qué hay o no hay latencia: dato real disponible, dato sintético, catalog sin respuesta, gránulo ausente del catálogo o gránulo sin fecha de publicación.",
+            "enum": [
+              "available",
+              "synthetic",
+              "catalog_unavailable",
+              "granule_not_in_catalog",
+              "not_published"
+            ],
+            "title": "Latency Status",
+            "type": "string"
+          },
+          "publication_latency_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Horas entre la adquisición y published_at, tal como las da catalog. null si no se conoce.",
+            "title": "Publication Latency Hours"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Fecha 'updated' de CMR en UTC: aproxima la publicación. null si no se conoce.",
+            "title": "Published At"
+          }
+        },
+        "required": [
+          "date",
+          "granule",
+          "acquired_at",
+          "published_at",
+          "publication_latency_hours",
+          "latency_status",
+          "age_days"
+        ],
+        "title": "PassFreshness",
+        "type": "object"
+      },
+      "PersistenceAssumption": {
+        "properties": {
+          "calibrated": {
+            "description": "Siempre false: las persistencias son valores iniciales sin calibrar.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "event_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "urban_storm",
+                  "river_flood",
+                  "wildfire"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Type"
+          },
+          "hours_by_event_type": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "Tabla completa de persistencias supuestas, en horas.",
+            "title": "Hours By Event Type",
+            "type": "object"
+          },
+          "persistence_hours": {
+            "description": "Horas que se supone que dura el evento. Nunca es una medición.",
+            "title": "Persistence Hours",
+            "type": "integer"
+          },
+          "source": {
+            "description": "event_type: valor de la tabla por tipo; user: persistence_hours de la consulta; default: valor por omisión, sin tipo ni horas.",
+            "enum": [
+              "event_type",
+              "user",
+              "default"
+            ],
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "description": "El supuesto redactado en el idioma pedido; también va en summary.does_not_prove.",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "persistence_hours",
+          "source",
+          "event_type",
+          "calibrated",
+          "hours_by_event_type",
+          "text"
+        ],
+        "title": "PersistenceAssumption",
+        "type": "object"
+      },
+      "PixelChange": {
+        "properties": {
+          "pair": {
+            "title": "Pair",
+            "type": "string"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          }
+        },
+        "required": [
+          "pair",
+          "state"
+        ],
+        "title": "PixelChange",
+        "type": "object"
+      },
+      "PixelDate": {
+        "properties": {
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hh Db"
+          },
+          "hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hv Db"
+          }
+        },
+        "required": [
+          "date",
+          "hh_db",
+          "hv_db"
+        ],
+        "title": "PixelDate",
+        "type": "object"
+      },
+      "PixelSeries": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/PixelChange"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "data_kind": {
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "lat": {
+            "title": "Lat",
+            "type": "number"
+          },
+          "lon": {
+            "title": "Lon",
+            "type": "number"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/PixelDate"
+            },
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "aoi",
+          "series",
+          "lon",
+          "lat",
+          "data_kind",
+          "values",
+          "changes"
+        ],
+        "title": "PixelSeries",
+        "type": "object"
+      },
+      "RadarWaterRule": {
+        "properties": {
+          "calibrated": {
+            "default": false,
+            "description": "Siempre false.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "hh_db_below": {
+            "description": "Un píxel es agua para el radar si HH está por debajo de este valor y...",
+            "title": "Hh Db Below",
+            "type": "number"
+          },
+          "hv_db_below": {
+            "description": "...HV por debajo de este. Umbrales de T-ECO-06, sin calibrar.",
+            "title": "Hv Db Below",
+            "type": "number"
+          },
+          "resampling": {
+            "const": "average",
+            "default": "average",
+            "description": "El radar de 10 m se promedia en la malla de DSWx-S1 (30 m) antes de aplicar los umbrales.",
+            "title": "Resampling",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hh_db_below",
+          "hv_db_below"
+        ],
+        "title": "RadarWaterRule",
+        "type": "object"
+      },
+      "Receipt": {
+        "properties": {
+          "crid": {
+            "title": "Crid",
+            "type": "string"
+          },
+          "data_kind": {
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "direction": {
+            "title": "Direction",
+            "type": "string"
+          },
+          "excluded_passes": {
+            "description": "Pasadas de esta serie que catalog excluye, entre from_date y to_date ambas incluidas. Vacía con datos sintéticos o si catalog no respondió.",
+            "items": {
+              "$ref": "#/components/schemas/ExcludedPassOut"
+            },
+            "title": "Excluded Passes",
+            "type": "array"
+          },
+          "frame": {
+            "title": "Frame",
+            "type": "integer"
+          },
+          "freshness": {
+            "$ref": "#/components/schemas/Freshness"
+          },
+          "granules": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Granules",
+            "type": "array"
+          },
+          "maturity": {
+            "title": "Maturity",
+            "type": "string"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "notices": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notices",
+            "type": "array"
+          },
+          "polarization": {
+            "title": "Polarization",
+            "type": "string"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/PairQuality",
+            "description": "Control de calidad de Eco de las dos fechas (RF-BAL-09)."
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          },
+          "spans_data_gap": {
+            "title": "Spans Data Gap",
+            "type": "boolean"
+          },
+          "track": {
+            "title": "Track",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "data_kind",
+          "maturity",
+          "series",
+          "track",
+          "direction",
+          "frame",
+          "mode",
+          "polarization",
+          "crid",
+          "granules",
+          "spans_data_gap",
+          "notices",
+          "freshness",
+          "quality",
+          "excluded_passes"
+        ],
+        "title": "Receipt",
+        "type": "object"
+      },
+      "ReliefOut": {
+        "description": "Plantilla de teselas de relieve con el DEM de la zona que publica Eco (T-ECO-10).",
+        "properties": {
+          "attribution": {
+            "description": "Texto de atribución que exige la licencia; la interfaz lo muestra junto al relieve.",
+            "title": "Attribution",
+            "type": "string"
+          },
+          "crs": {
+            "description": "CRS del COG del DEM, que no es el del radar.",
+            "title": "Crs",
+            "type": "string"
+          },
+          "data_kind": {
+            "description": "dem.data_kind del manifiesto (T-ECO-13); real si falta. synthetic: DEM inventado de la pila sintética, que no describe ningún relieve real; la interfaz debe decirlo y no atribuirlo a Copernicus.",
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "encoding": {
+            "const": "mapbox",
+            "default": "mapbox",
+            "description": "Terrain-RGB: altura = -10000 + (R * 65536 + G * 256 + B) * 0,1 m.",
+            "title": "Encoding",
+            "type": "string"
+          },
+          "exaggeration": {
+            "default": 1.0,
+            "description": "Exageración vertical por omisión (RF-INT-12): 1, sin exagerar. Si la interfaz la cambia, debe mostrar el factor en pantalla.",
+            "title": "Exaggeration",
+            "type": "number"
+          },
+          "source": {
+            "description": "Fuente del DEM, del manifiesto (dem.source).",
+            "title": "Source",
+            "type": "string"
+          },
+          "tile_size": {
+            "default": 256,
+            "description": "Píxeles por lado de cada tesela.",
+            "title": "Tile Size",
+            "type": "integer"
+          },
+          "tiles": {
+            "description": "Plantilla XYZ por el gateway, con algorithm=terrainrgb. Se pide como fuente raster-dem de MapLibre con encoding mapbox y tileSize 256.",
+            "title": "Tiles",
+            "type": "string"
+          },
+          "units": {
+            "const": "m",
+            "default": "m",
+            "title": "Units",
+            "type": "string"
+          },
+          "vertical_datum": {
+            "description": "Referencia de las alturas. EGM2008: sobre el geoide, no el elipsoide.",
+            "title": "Vertical Datum",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tiles",
+          "data_kind",
+          "source",
+          "crs",
+          "vertical_datum",
+          "attribution"
+        ],
+        "title": "ReliefOut",
+        "type": "object"
+      },
+      "SceneShiftOut": {
+        "properties": {
+          "basis": {
+            "description": "pair_stats: stats.scene_shift_* del par, que processor mide desde T-ECO-07 y ya restó del cambio. qa_median_difference: mediana de to_date menos la de from_date, del QA de Eco, sin restar.",
+            "enum": [
+              "pair_stats",
+              "qa_median_difference"
+            ],
+            "title": "Basis",
+            "type": "string"
+          },
+          "calibrated": {
+            "default": false,
+            "description": "Siempre false.",
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "corrected": {
+            "description": "true: el porcentaje de cambio ya descuenta este desplazamiento (basis pair_stats). false: no lo descuenta y puede reflejarlo.",
+            "title": "Corrected",
+            "type": "boolean"
+          },
+          "exceeds_threshold": {
+            "description": "Si es true, summary.does_not_prove avisa del cambio de nivel de toda la escena: que ya se descontó (corrected) o que el porcentaje puede reflejarlo. No cambia el estado.",
+            "title": "Exceeds Threshold",
+            "type": "boolean"
+          },
+          "hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hh Db"
+          },
+          "hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hv Db"
+          },
+          "same_direction": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "HH y HV se mueven en el mismo sentido. null si falta alguna o alguna no se movió.",
+            "title": "Same Direction"
+          },
+          "threshold_db": {
+            "description": "Por encima de este valor absoluto, el veredicto avisa. Sin calibrar.",
+            "title": "Threshold Db",
+            "type": "number"
+          }
+        },
+        "required": [
+          "basis",
+          "corrected",
+          "hh_db",
+          "hv_db",
+          "same_direction",
+          "threshold_db",
+          "exceeds_threshold"
+        ],
+        "title": "SceneShiftOut",
+        "type": "object"
+      },
+      "SearchPage": {
+        "properties": {
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Cursor de la página siguiente. null en la última.",
+            "title": "Next Cursor"
+          },
+          "query": {
+            "$ref": "#/components/schemas/SearchQuery"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/SearchResult"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "total": {
+            "description": "Resultados que cumplen la consulta, sumando todas las páginas.",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "results",
+          "next_cursor",
+          "query"
+        ],
+        "title": "SearchPage",
+        "type": "object"
+      },
+      "SearchQuery": {
+        "properties": {
+          "filters": {
+            "additionalProperties": true,
+            "description": "Filtros aplicados, tal como se interpretaron.",
+            "title": "Filters",
+            "type": "object"
+          },
+          "indexed_at": {
+            "description": "Cuándo se calcularon los veredictos del índice, en UTC.",
+            "format": "date-time",
+            "title": "Indexed At",
+            "type": "string"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "not_evaluated": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/NotEvaluated"
+            },
+            "description": "Por filtro: filas que quedaron fuera porque el dato no existe (p. ej. water sin contraste).",
+            "title": "Not Evaluated",
+            "type": "object"
+          },
+          "order": {
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "title": "Order",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "public",
+              "student",
+              "researcher"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "sort": {
+            "enum": [
+              "date",
+              "interval",
+              "changed_fraction",
+              "noise_hh",
+              "noise_hv"
+            ],
+            "title": "Sort",
+            "type": "string"
+          },
+          "water_contrast": {
+            "description": "pending: el índice aún no tiene el contraste con OPERA y todas las filas dicen not_available.",
+            "enum": [
+              "included",
+              "pending"
+            ],
+            "title": "Water Contrast",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filters",
+          "sort",
+          "order",
+          "limit",
+          "role",
+          "not_evaluated",
+          "water_contrast",
+          "indexed_at"
+        ],
+        "title": "SearchQuery",
+        "type": "object"
+      },
+      "SearchResult": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "area": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AreaResult"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Solo con bbox: el par dentro del rectángulo con las celdas de 1 km de Eco (T-BAL-18). Es un cálculo aparte del veredicto, que sigue siendo de toda la zona; state y los filtros de la búsqueda miran el veredicto, no area."
+          },
+          "cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause"
+          },
+          "changed_fraction": {
+            "title": "Changed Fraction",
+            "type": "number"
+          },
+          "data_kind": {
+            "description": "Nunca falta: los datos sintéticos lo dicen en cada fila.",
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Dirección de la órbita de la serie: A ascendente, D descendente.",
+            "title": "Direction",
+            "type": "string"
+          },
+          "flagged_dates": {
+            "description": "Fechas del par con la bandera radiometric_outlier del QA de Eco (receipt.quality).",
+            "items": {
+              "format": "date",
+              "type": "string"
+            },
+            "title": "Flagged Dates",
+            "type": "array"
+          },
+          "from_date": {
+            "format": "date",
+            "title": "From Date",
+            "type": "string"
+          },
+          "granules": {
+            "description": "granule_id de las dos fechas, como en receipt.granules.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Granules",
+            "type": "array"
+          },
+          "interval_days": {
+            "title": "Interval Days",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "consecutive",
+              "full_window"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "noise_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "evidence.noise.hh_db. null si el veredicto no trae ruido (manifiesto anterior a T-ECO-09).",
+            "title": "Noise Hh Db"
+          },
+          "noise_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "evidence.noise.hv_db.",
+            "title": "Noise Hv Db"
+          },
+          "observed_fraction": {
+            "title": "Observed Fraction",
+            "type": "number"
+          },
+          "optical_max_cloud_cover": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Mayor max_cloud_cover de las escenas ópticas de antes y después, por tesela. null si falta alguna de las dos escenas.",
+            "title": "Optical Max Cloud Cover"
+          },
+          "pair_id": {
+            "title": "Pair Id",
+            "type": "string"
+          },
+          "scene_shift_exceeds_threshold": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "evidence.scene_shift.exceeds_threshold. null si el veredicto no trae desplazamiento.",
+            "title": "Scene Shift Exceeds Threshold"
+          },
+          "scene_shift_hh_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "evidence.scene_shift.hh_db. null si el veredicto no lo trae.",
+            "title": "Scene Shift Hh Db"
+          },
+          "scene_shift_hv_db": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scene Shift Hv Db"
+          },
+          "series_id": {
+            "title": "Series Id",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "change_probable",
+              "no_detectable_change",
+              "not_observable"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "to_date": {
+            "format": "date",
+            "title": "To Date",
+            "type": "string"
+          },
+          "verdict_path": {
+            "description": "Ruta del veredicto completo en esta API. Por el gateway lleva delante /api/verdicts.",
+            "title": "Verdict Path",
+            "type": "string"
+          },
+          "water": {
+            "$ref": "#/components/schemas/WaterRow"
+          }
+        },
+        "required": [
+          "aoi",
+          "series_id",
+          "pair_id",
+          "kind",
+          "direction",
+          "data_kind",
+          "state",
+          "cause",
+          "from_date",
+          "to_date",
+          "interval_days",
+          "observed_fraction",
+          "changed_fraction",
+          "scene_shift_hh_db",
+          "scene_shift_hv_db",
+          "scene_shift_exceeds_threshold",
+          "flagged_dates",
+          "optical_max_cloud_cover",
+          "noise_hh_db",
+          "noise_hv_db",
+          "water",
+          "granules",
+          "verdict_path"
+        ],
+        "title": "SearchResult",
+        "type": "object"
+      },
+      "SeriesInfo": {
+        "properties": {
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Bbox",
+            "type": "array"
+          },
+          "data_kind": {
+            "enum": [
+              "real",
+              "synthetic"
+            ],
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "dates": {
+            "items": {
+              "format": "date",
+              "type": "string"
+            },
+            "title": "Dates",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "maturity": {
+            "title": "Maturity",
+            "type": "string"
+          },
+          "relief": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReliefOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Teselas de relieve con el DEM de la zona (RF-INT-12, T-BAL-15). null si el manifiesto no trae dem. Es el mismo DEM para todas las series de la zona. Los datos del DEM son los de su fuente aunque el radar de la serie sea sintético."
+          }
+        },
+        "required": [
+          "id",
+          "data_kind",
+          "maturity",
+          "bbox",
+          "dates"
+        ],
+        "title": "SeriesInfo",
+        "type": "object"
+      },
+      "Subsidence": {
+        "description": "Hundimiento relativo con interferogramas NISAR GUNW (processor subsidence). Sin calibrar.",
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "calibrated": {
+            "default": false,
+            "title": "Calibrated",
+            "type": "boolean"
+          },
+          "days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          },
+          "fastest_point": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fastest Point"
+          },
+          "max_rate_mm_yr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Percentil 99 de la velocidad: lo más rápido sin píxeles aislados.",
+            "title": "Max Rate Mm Yr"
+          },
+          "noise_mm_yr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Incertidumbre típica de la velocidad, de la dispersión de los pares.",
+            "title": "Noise Mm Yr"
+          },
+          "pairs": {
+            "description": "Interferogramas usados (id y fechas de referencia y secundaria).",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Pairs",
+            "type": "array"
+          },
+          "sign_check": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sign Check"
+          },
+          "sinking_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Parte de lo medido que se hunde al menos threshold_mm_yr respecto a la zona.",
+            "title": "Sinking Fraction"
+          },
+          "status": {
+            "enum": [
+              "computed",
+              "no_interferograms"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/SubsidenceText"
+          },
+          "threshold_mm_yr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Desde esta velocidad relativa (mm/año, se aleja) se cuenta como hundimiento.",
+            "title": "Threshold Mm Yr"
+          },
+          "tiles": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Plantilla XYZ de la velocidad (mm/año), por el gateway.",
+            "title": "Tiles"
+          },
+          "track": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track"
+          },
+          "valid_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid Fraction"
+          }
+        },
+        "required": [
+          "aoi",
+          "status",
+          "summary"
+        ],
+        "title": "Subsidence",
+        "type": "object"
+      },
+      "SubsidenceText": {
+        "properties": {
+          "detected": {
+            "title": "Detected",
+            "type": "string"
+          },
+          "does_not_prove": {
+            "title": "Does Not Prove",
+            "type": "string"
+          },
+          "missing": {
+            "title": "Missing",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detected",
+          "does_not_prove",
+          "missing"
+        ],
+        "title": "SubsidenceText",
+        "type": "object"
+      },
+      "Summary": {
+        "properties": {
+          "detected": {
+            "title": "Detected",
+            "type": "string"
+          },
+          "does_not_prove": {
+            "title": "Does Not Prove",
+            "type": "string"
+          },
+          "missing": {
+            "title": "Missing",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detected",
+          "does_not_prove",
+          "missing"
+        ],
+        "title": "Summary",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "Verdict": {
+        "properties": {
+          "aoi": {
+            "title": "Aoi",
+            "type": "string"
+          },
+          "cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause"
+          },
+          "cause_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause Label"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/Evidence"
+          },
+          "from_date": {
+            "format": "date",
+            "title": "From Date",
+            "type": "string"
+          },
+          "hypotheses": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hypotheses",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "interval_days": {
+            "description": "Días entre from_date y to_date.",
+            "title": "Interval Days",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "consecutive",
+              "full_window"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "layers": {
+            "$ref": "#/components/schemas/Layers"
+          },
+          "receipt": {
+            "$ref": "#/components/schemas/Receipt"
+          },
+          "series": {
+            "title": "Series",
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "change_probable",
+              "no_detectable_change",
+              "not_observable"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/Summary"
+          },
+          "to_date": {
+            "format": "date",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "aoi",
+          "series",
+          "kind",
+          "from_date",
+          "to_date",
+          "interval_days",
+          "state",
+          "cause",
+          "cause_label",
+          "summary",
+          "hypotheses",
+          "evidence",
+          "layers",
+          "receipt"
+        ],
+        "title": "Verdict",
+        "type": "object"
+      },
+      "WaterComparison": {
+        "properties": {
+          "agreement_fraction": {
+            "description": "Fracción de los píxeles comparables en que las dos fuentes dicen lo mismo.",
+            "title": "Agreement Fraction",
+            "type": "number"
+          },
+          "both_not_water": {
+            "title": "Both Not Water",
+            "type": "integer"
+          },
+          "both_water": {
+            "title": "Both Water",
+            "type": "integer"
+          },
+          "comparable_pixels": {
+            "description": "Píxeles de la malla de DSWx-S1 con dato de radar y clase 0, 1 o 3 en B01_WTR.",
+            "title": "Comparable Pixels",
+            "type": "integer"
+          },
+          "compared_fraction": {
+            "description": "comparable_pixels entre todos los píxeles de la zona. Por debajo de min_compared_fraction no hay assessment (status partial_overlap).",
+            "title": "Compared Fraction",
+            "type": "number"
+          },
+          "not_comparable_pixels": {
+            "description": "Píxeles de la zona sin dato en alguna fuente o enmascarados por DSWx-S1 (HAND, layover o sombra).",
+            "title": "Not Comparable Pixels",
+            "type": "integer"
+          },
+          "radar_only_water": {
+            "title": "Radar Only Water",
+            "type": "integer"
+          },
+          "radar_water_fraction": {
+            "title": "Radar Water Fraction",
+            "type": "number"
+          },
+          "reference_only_water": {
+            "title": "Reference Only Water",
+            "type": "integer"
+          },
+          "reference_water_fraction": {
+            "title": "Reference Water Fraction",
+            "type": "number"
+          },
+          "water_iou": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Píxeles con agua en las dos entre los píxeles con agua en alguna. null si ninguna ve agua.",
+            "title": "Water Iou"
+          }
+        },
+        "required": [
+          "comparable_pixels",
+          "not_comparable_pixels",
+          "compared_fraction",
+          "both_water",
+          "radar_only_water",
+          "reference_only_water",
+          "both_not_water",
+          "agreement_fraction",
+          "water_iou",
+          "radar_water_fraction",
+          "reference_water_fraction"
+        ],
+        "title": "WaterComparison",
+        "type": "object"
+      },
+      "WaterEvidence": {
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/WaterSide",
+            "description": "Producto más cercano a to_date."
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Texto de atribución que debe mostrarse junto al producto.",
+            "title": "Attribution"
+          },
+          "before": {
+            "$ref": "#/components/schemas/WaterSide",
+            "description": "Producto más cercano a from_date."
+          },
+          "collection": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collection"
+          },
+          "data_kind": {
+            "const": "real",
+            "default": "real",
+            "description": "Los productos DSWx-S1 son siempre datos reales.",
+            "title": "Data Kind",
+            "type": "string"
+          },
+          "doi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doi"
+          },
+          "min_compared_fraction": {
+            "description": "Fracción mínima de la zona con dato en las dos fuentes para dar acuerdo o desacuerdo. covers_aoi no basta: mira la caja de la tesela, no los píxeles válidos.",
+            "title": "Min Compared Fraction",
+            "type": "number"
+          },
+          "min_water_body_ha": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Superficie mínima de agua abierta que DSWx-S1 detecta.",
+            "title": "Min Water Body Ha"
+          },
+          "min_water_body_width_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Anchura mínima de agua abierta que DSWx-S1 detecta.",
+            "title": "Min Water Body Width M"
+          },
+          "min_water_fraction": {
+            "description": "Si ninguna fuente llega a esta fracción de agua, coinciden en que no hay agua apreciable. Sin calibrar.",
+            "title": "Min Water Fraction",
+            "type": "number"
+          },
+          "min_water_iou": {
+            "description": "water_iou mínimo para hablar de acuerdo. Sin calibrar.",
+            "title": "Min Water Iou",
+            "type": "number"
+          },
+          "product_spec_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Spec Url"
+          },
+          "radar_rule": {
+            "$ref": "#/components/schemas/RadarWaterRule"
+          },
+          "reference_water_classes": {
+            "description": "Clases de B01_WTR que cuentan como agua: 1 agua abierta y 3 vegetación inundada.",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Reference Water Classes",
+            "type": "array"
+          },
+          "search_days": {
+            "description": "Días máximos entre el producto DSWx-S1 y su fecha de radar.",
+            "title": "Search Days",
+            "type": "integer"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Buscador usado por catalog. null si no respondió.",
+            "title": "Source"
+          },
+          "text": {
+            "description": "Resumen en el idioma pedido: qué productos hay, si coinciden y sus límites.",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "collection",
+          "doi",
+          "attribution",
+          "product_spec_url",
+          "min_water_body_ha",
+          "min_water_body_width_m",
+          "search_days",
+          "reference_water_classes",
+          "radar_rule",
+          "min_water_fraction",
+          "min_water_iou",
+          "min_compared_fraction",
+          "before",
+          "after",
+          "text"
+        ],
+        "title": "WaterEvidence",
+        "type": "object"
+      },
+      "WaterReference": {
+        "properties": {
+          "acquired_at": {
+            "description": "Hora UTC de la primera tesela de la pasada de Sentinel-1.",
+            "format": "date-time",
+            "title": "Acquired At",
+            "type": "string"
+          },
+          "covers_aoi": {
+            "description": "Las cajas de sus teselas contienen la zona. No dice si hay datos válidos en toda ella.",
+            "title": "Covers Aoi",
+            "type": "boolean"
+          },
+          "days_from_radar": {
+            "description": "Días respecto a radar_date; negativo si es anterior.",
+            "title": "Days From Radar",
+            "type": "integer"
+          },
+          "platform": {
+            "title": "Platform",
+            "type": "string"
+          },
+          "tiles": {
+            "items": {
+              "$ref": "#/components/schemas/WaterTileOut"
+            },
+            "title": "Tiles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "platform",
+          "acquired_at",
+          "days_from_radar",
+          "covers_aoi",
+          "tiles"
+        ],
+        "title": "WaterReference",
+        "type": "object"
+      },
+      "WaterRow": {
+        "properties": {
+          "after": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WaterSideRow"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "before": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WaterSideRow"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "null mientras el contraste no está calculado."
+          },
+          "reasons": {
+            "description": "Por qué no hay contraste en alguna fecha: los status distintos de compared, o contrast_not_computed si el índice aún no tiene el contraste. Vacía si las dos fechas se compararon.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "summary": {
+            "description": "disagree si alguna de las dos fechas del par sale disagree; agree si las dos salen agree; not_available en cualquier otro caso, también mientras el contraste con OPERA no está calculado o si verdicts no tiene token. disagree es un desacuerdo entre dos métodos, no dice cuál acierta.",
+            "enum": [
+              "agree",
+              "disagree",
+              "not_available"
+            ],
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary",
+          "reasons",
+          "before",
+          "after"
+        ],
+        "title": "WaterRow",
+        "type": "object"
+      },
+      "WaterSide": {
+        "properties": {
+          "assessment": {
+            "anyOf": [
+              {
+                "enum": [
+                  "agree",
+                  "disagree"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Acuerdo o desacuerdo entre dos métodos sobre dónde hay agua. disagree no dice cuál acierta. null si no se comparó.",
+            "title": "Assessment"
+          },
+          "assessment_basis": {
+            "anyOf": [
+              {
+                "enum": [
+                  "little_water",
+                  "water_overlap"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "little_water: ninguna fuente ve agua en min_water_fraction o más de los píxeles comparables, y eso cuenta como acuerdo. water_overlap: se decide con water_iou frente a min_water_iou.",
+            "title": "Assessment Basis"
+          },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WaterComparison"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "radar_date": {
+            "format": "date",
+            "title": "Radar Date",
+            "type": "string"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WaterReference"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Pasada DSWx-S1 elegida: la más cercana a radar_date, antes o después; primero las que cubren la zona."
+          },
+          "status": {
+            "description": "compared: se comparó píxel a píxel. synthetic: el radar es sintético y no se compara. no_credentials: verdicts no tiene token de Earthdata para leer B01_WTR. none_in_window: ningún producto a search_days o menos. catalog_unavailable: catalog no respondió. read_failed: no se pudo leer el producto o el radar. no_overlap: sin píxeles válidos en común, aunque reference.covers_aoi sea true (la caja de la tesela no garantiza datos). partial_overlap: se comparó menos de min_compared_fraction de la zona; hay conteos pero no assessment.",
+            "enum": [
+              "compared",
+              "synthetic",
+              "no_credentials",
+              "none_in_window",
+              "catalog_unavailable",
+              "read_failed",
+              "no_overlap",
+              "partial_overlap"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "radar_date",
+          "reference",
+          "assessment",
+          "assessment_basis",
+          "comparison"
+        ],
+        "title": "WaterSide",
+        "type": "object"
+      },
+      "WaterSideRow": {
+        "properties": {
+          "assessment": {
+            "anyOf": [
+              {
+                "enum": [
+                  "agree",
+                  "disagree"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assessment"
+          },
+          "compared_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Fracción de la zona comparada. null si no se comparó.",
+            "title": "Compared Fraction"
+          },
+          "status": {
+            "description": "evidence.water.<lado>.status del veredicto.",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "assessment",
+          "compared_fraction"
+        ],
+        "title": "WaterSideRow",
+        "type": "object"
+      },
+      "WaterTileOut": {
+        "properties": {
+          "bbox": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "maxItems": 4,
+                "minItems": 4,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Caja de la tesela MGRS en WGS84, [oeste, sur, este, norte], de los boxes de CMR vía catalog. Sirve para situar browse_url en el mapa. Si oeste > este, cruza el antimeridiano. null si catalog no la da.",
+            "title": "Bbox"
+          },
+          "browse_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Vista previa PNG pública de PO.DAAC, sin georreferencia. null si no hay.",
+            "title": "Browse Url"
+          },
+          "id": {
+            "description": "Título del producto DSWx-S1 en CMR. Es el que cita el recibo.",
+            "title": "Id",
+            "type": "string"
+          },
+          "tile": {
+            "description": "Tesela MGRS.",
+            "title": "Tile",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "tile",
+          "browse_url"
+        ],
+        "title": "WaterTileOut",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "description": "Token de acceso de auth (specs/06-acceso). El gateway lo valida y pasa el perfil en X-Auth-Role; sin token la petición es public. Las rutas que no lo declaran no lo piden.",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "NISAR verdicts",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/aois": {
+      "get": {
+        "operationId": "aois_aois_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Aois Aois Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Aois"
+      }
+    },
+    "/aois/{aoi}/events": {
+      "get": {
+        "operationId": "event_aois__aoi__events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Horas que dura el evento. Si se da, manda sobre event_type. Sin ninguno de los dos, 24 h.",
+            "in": "query",
+            "name": "persistence_hours",
+            "required": false,
+            "schema": {
+              "default": 24,
+              "description": "Horas que dura el evento. Si se da, manda sobre event_type. Sin ninguno de los dos, 24 h.",
+              "maximum": 720,
+              "minimum": 1,
+              "title": "Persistence Hours",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Tipo de evento: fija una persistencia supuesta (urban_storm 6 h, river_flood 72 h, wildfire 240 h).",
+            "in": "query",
+            "name": "event_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "urban_storm",
+                    "river_flood",
+                    "wildfire"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Tipo de evento: fija una persistencia supuesta (urban_storm 6 h, river_flood 72 h, wildfire 240 h).",
+              "title": "Event Type"
+            }
+          },
+          {
+            "description": "Hora UTC de inicio del evento, HH:MM. Opcional.",
+            "in": "query",
+            "name": "time",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Hora UTC de inicio del evento, HH:MM. Opcional.",
+              "title": "Time"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventVerdict"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Event"
+      }
+    },
+    "/aois/{aoi}/series": {
+      "get": {
+        "operationId": "series_aois__aoi__series_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesInfo"
+                  },
+                  "title": "Response Series Aois  Aoi  Series Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Series"
+      }
+    },
+    "/aois/{aoi}/series/{series_id}/pixel": {
+      "get": {
+        "operationId": "pixel_aois__aoi__series__series_id__pixel_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "title": "Series Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lon",
+            "required": true,
+            "schema": {
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lat",
+            "required": true,
+            "schema": {
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat",
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PixelSeries"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pixel"
+      }
+    },
+    "/aois/{aoi}/series/{series_id}/verdicts": {
+      "get": {
+        "operationId": "verdicts_aois__aoi__series__series_id__verdicts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "title": "Series Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Verdict"
+                  },
+                  "title": "Response Verdicts Aois  Aoi  Series  Series Id  Verdicts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Verdicts"
+      }
+    },
+    "/aois/{aoi}/series/{series_id}/verdicts/{pair_id}": {
+      "get": {
+        "operationId": "verdict_aois__aoi__series__series_id__verdicts__pair_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "title": "Series Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "pair_id",
+            "required": true,
+            "schema": {
+              "title": "Pair Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Verdict"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Verdict"
+      }
+    },
+    "/aois/{aoi}/subsidence": {
+      "get": {
+        "description": "Hundimiento relativo de la zona con NISAR GUNW, si se calculó. 404 si la zona no existe o no lo tiene.",
+        "operationId": "subsidence_aois__aoi__subsidence_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aoi",
+            "required": true,
+            "schema": {
+              "title": "Aoi",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subsidence"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Subsidence"
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health"
+      }
+    },
+    "/search/verdicts": {
+      "get": {
+        "description": "Filtra, ordena y pagina todos los veredictos precalculados (RF-BUS-01, 03 a 05). Cada fila copia los campos del veredicto completo y enlaza a él. public recibe 403; student, sin los filtros de calidad y de ruido ni el orden por ruido, y con 50 resultados por página como máximo; researcher, todo y hasta 500. Un filtro sin resultados devuelve una lista vacía con total 0, nunca 404.",
+        "operationId": "search_verdicts_search_verdicts_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "next_cursor de la página anterior, con la misma consulta.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "next_cursor de la página anterior, con la misma consulta.",
+              "title": "Cursor"
+            }
+          },
+          {
+            "description": "Zona.",
+            "in": "query",
+            "name": "aoi",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Zona.",
+              "title": "Aoi"
+            }
+          },
+          {
+            "description": "Serie, p. ej. T048A-F015.",
+            "in": "query",
+            "name": "series_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Serie, p. ej. T048A-F015.",
+              "title": "Series Id"
+            }
+          },
+          {
+            "description": "Dirección de la órbita.",
+            "in": "query",
+            "name": "direction",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "A",
+                    "D"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Dirección de la órbita.",
+              "title": "Direction"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "consecutive",
+                    "full_window"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "description": "from_date del par igual o posterior.",
+            "in": "query",
+            "name": "date_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "from_date del par igual o posterior.",
+              "title": "Date From"
+            }
+          },
+          {
+            "description": "to_date del par igual o anterior.",
+            "in": "query",
+            "name": "date_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "to_date del par igual o anterior.",
+              "title": "Date To"
+            }
+          },
+          {
+            "description": "interval_days mínimo.",
+            "in": "query",
+            "name": "interval_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "interval_days mínimo.",
+              "title": "Interval Min"
+            }
+          },
+          {
+            "description": "interval_days máximo.",
+            "in": "query",
+            "name": "interval_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "interval_days máximo.",
+              "title": "Interval Max"
+            }
+          },
+          {
+            "description": "Uno o varios estados.",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "change_probable",
+                      "no_detectable_change",
+                      "not_observable"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Uno o varios estados.",
+              "title": "State"
+            }
+          },
+          {
+            "description": "Una o varias causas de not_observable.",
+            "in": "query",
+            "name": "cause",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Una o varias causas de not_observable.",
+              "title": "Cause"
+            }
+          },
+          {
+            "description": "changed_fraction mínima (0 a 1).",
+            "in": "query",
+            "name": "changed_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "changed_fraction mínima (0 a 1).",
+              "title": "Changed Min"
+            }
+          },
+          {
+            "description": "changed_fraction máxima (0 a 1).",
+            "in": "query",
+            "name": "changed_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "changed_fraction máxima (0 a 1).",
+              "title": "Changed Max"
+            }
+          },
+          {
+            "description": "Desplazamiento de la escena sobre el umbral. Las filas sin desplazamiento no se evalúan.",
+            "in": "query",
+            "name": "scene_shift_exceeds",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Desplazamiento de la escena sobre el umbral. Las filas sin desplazamiento no se evalúan.",
+              "title": "Scene Shift Exceeds"
+            }
+          },
+          {
+            "description": "Solo researcher. true: alguna fecha con radiometric_outlier; false: ninguna.",
+            "in": "query",
+            "name": "quality_flag",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. true: alguna fecha con radiometric_outlier; false: ninguna.",
+              "title": "Quality Flag"
+            }
+          },
+          {
+            "description": "Contraste con OPERA. Las filas con water not_available quedan fuera y se cuentan en query.not_evaluated.",
+            "in": "query",
+            "name": "water",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "agree",
+                    "disagree"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Contraste con OPERA. Las filas con water not_available quedan fuera y se cuentan en query.not_evaluated.",
+              "title": "Water"
+            }
+          },
+          {
+            "description": "Nubosidad máxima por tesela de las dos escenas ópticas, en %.",
+            "in": "query",
+            "name": "max_cloud_cover",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Nubosidad máxima por tesela de las dos escenas ópticas, en %.",
+              "title": "Max Cloud Cover"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hh_db mínima, en dB. Las filas sin ruido no se evalúan y se cuentan en query.not_evaluated.",
+            "in": "query",
+            "name": "noise_hh_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hh_db mínima, en dB. Las filas sin ruido no se evalúan y se cuentan en query.not_evaluated.",
+              "title": "Noise Hh Min"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hh_db máxima, en dB.",
+            "in": "query",
+            "name": "noise_hh_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hh_db máxima, en dB.",
+              "title": "Noise Hh Max"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hv_db mínima, en dB.",
+            "in": "query",
+            "name": "noise_hv_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hv_db mínima, en dB.",
+              "title": "Noise Hv Min"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hv_db máxima, en dB.",
+            "in": "query",
+            "name": "noise_hv_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hv_db máxima, en dB.",
+              "title": "Noise Hv Max"
+            }
+          },
+          {
+            "in": "query",
+            "name": "data_kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "real",
+                    "synthetic"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Data Kind"
+            }
+          },
+          {
+            "description": "Texto libre sobre los textos del veredicto (summary, hipótesis, causa), su identificador y los granule_id, en el idioma de lang (RF-BUS-02). Cada palabra cuenta como prefijo, todas deben aparecer, sin distinguir mayúsculas ni acentos. Sin palabras, no hay resultados.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto libre sobre los textos del veredicto (summary, hipótesis, causa), su identificador y los granule_id, en el idioma de lang (RF-BUS-02). Cada palabra cuenta como prefijo, todas deben aparecer, sin distinguir mayúsculas ni acentos. Sin palabras, no hay resultados.",
+              "title": "Q"
+            }
+          },
+          {
+            "description": "Idioma de los textos en los que busca q.",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "description": "Idioma de los textos en los que busca q.",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Rectángulo WGS84 'oeste,sur,este,norte' (RF-BUS-10): series cuya huella de catalog (T-ANT-17) toca el rectángulo. Si no hay huella, la fila no se evalúa y se cuenta en query.not_evaluated. Dice qué series cubren el área, no que el veredicto hable de ella: el veredicto sigue siendo de toda la zona.",
+            "in": "query",
+            "name": "bbox",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Rectángulo WGS84 'oeste,sur,este,norte' (RF-BUS-10): series cuya huella de catalog (T-ANT-17) toca el rectángulo. Si no hay huella, la fila no se evalúa y se cuenta en query.not_evaluated. Dice qué series cubren el área, no que el veredicto hable de ella: el veredicto sigue siendo de toda la zona.",
+              "examples": [
+                "-105.8,26.85,-105.6,27.0"
+              ],
+              "title": "Bbox"
+            }
+          },
+          {
+            "description": "date ordena por to_date. noise_hh y noise_hv son solo para researcher; las filas sin ruido van al final en los dos sentidos.",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "date",
+              "description": "date ordena por to_date. noise_hh y noise_hv son solo para researcher; las filas sin ruido van al final en los dos sentidos.",
+              "enum": [
+                "date",
+                "interval",
+                "changed_fraction",
+                "noise_hh",
+                "noise_hv"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "title": "Order",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "description": "Cursor ilegible, de otra consulta o de un índice anterior."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDenied"
+                }
+              }
+            },
+            "description": "Perfil insuficiente; required_role dice cuál hace falta."
+          },
+          "422": {
+            "description": "Parámetro no válido, p. ej. un bbox mal formado."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Búsqueda de veredictos (student y researcher)",
+        "x-required-role": "student"
+      }
+    },
+    "/search/verdicts/export": {
+      "get": {
+        "description": "Los mismos filtros y orden que /search/verdicts, sin paginar (RF-BUS-06). Cada fila copia el veredicto completo: data_kind, los dos granule_id, interval_days, la regla de decisión con sus umbrales y calibrated, y los supuestos declarados (assumptions, todos sin calibrar salvo que digan lo contrario). La consulta, el perfil, la hora y el total van en metadata (JSON y GeoJSON) y en las cabeceras X-Export-*.",
+        "operationId": "export_verdicts_search_verdicts_export_get",
+        "parameters": [
+          {
+            "description": "csv, geojson o json.",
+            "in": "query",
+            "name": "format",
+            "required": true,
+            "schema": {
+              "description": "csv, geojson o json.",
+              "enum": [
+                "csv",
+                "geojson",
+                "json"
+              ],
+              "title": "Format",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Zona.",
+            "in": "query",
+            "name": "aoi",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Zona.",
+              "title": "Aoi"
+            }
+          },
+          {
+            "description": "Serie, p. ej. T048A-F015.",
+            "in": "query",
+            "name": "series_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Serie, p. ej. T048A-F015.",
+              "title": "Series Id"
+            }
+          },
+          {
+            "description": "Dirección de la órbita.",
+            "in": "query",
+            "name": "direction",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "A",
+                    "D"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Dirección de la órbita.",
+              "title": "Direction"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "consecutive",
+                    "full_window"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "description": "from_date del par igual o posterior.",
+            "in": "query",
+            "name": "date_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "from_date del par igual o posterior.",
+              "title": "Date From"
+            }
+          },
+          {
+            "description": "to_date del par igual o anterior.",
+            "in": "query",
+            "name": "date_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "to_date del par igual o anterior.",
+              "title": "Date To"
+            }
+          },
+          {
+            "description": "interval_days mínimo.",
+            "in": "query",
+            "name": "interval_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "interval_days mínimo.",
+              "title": "Interval Min"
+            }
+          },
+          {
+            "description": "interval_days máximo.",
+            "in": "query",
+            "name": "interval_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "interval_days máximo.",
+              "title": "Interval Max"
+            }
+          },
+          {
+            "description": "Uno o varios estados.",
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "change_probable",
+                      "no_detectable_change",
+                      "not_observable"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Uno o varios estados.",
+              "title": "State"
+            }
+          },
+          {
+            "description": "Una o varias causas de not_observable.",
+            "in": "query",
+            "name": "cause",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Una o varias causas de not_observable.",
+              "title": "Cause"
+            }
+          },
+          {
+            "description": "changed_fraction mínima (0 a 1).",
+            "in": "query",
+            "name": "changed_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "changed_fraction mínima (0 a 1).",
+              "title": "Changed Min"
+            }
+          },
+          {
+            "description": "changed_fraction máxima (0 a 1).",
+            "in": "query",
+            "name": "changed_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "changed_fraction máxima (0 a 1).",
+              "title": "Changed Max"
+            }
+          },
+          {
+            "description": "Desplazamiento de la escena sobre el umbral. Las filas sin desplazamiento no se evalúan.",
+            "in": "query",
+            "name": "scene_shift_exceeds",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Desplazamiento de la escena sobre el umbral. Las filas sin desplazamiento no se evalúan.",
+              "title": "Scene Shift Exceeds"
+            }
+          },
+          {
+            "description": "Solo researcher. true: alguna fecha con radiometric_outlier; false: ninguna.",
+            "in": "query",
+            "name": "quality_flag",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. true: alguna fecha con radiometric_outlier; false: ninguna.",
+              "title": "Quality Flag"
+            }
+          },
+          {
+            "description": "Contraste con OPERA. Las filas con water not_available quedan fuera y se cuentan en query.not_evaluated.",
+            "in": "query",
+            "name": "water",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "agree",
+                    "disagree"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Contraste con OPERA. Las filas con water not_available quedan fuera y se cuentan en query.not_evaluated.",
+              "title": "Water"
+            }
+          },
+          {
+            "description": "Nubosidad máxima por tesela de las dos escenas ópticas, en %.",
+            "in": "query",
+            "name": "max_cloud_cover",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Nubosidad máxima por tesela de las dos escenas ópticas, en %.",
+              "title": "Max Cloud Cover"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hh_db mínima, en dB. Las filas sin ruido no se evalúan y se cuentan en query.not_evaluated.",
+            "in": "query",
+            "name": "noise_hh_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hh_db mínima, en dB. Las filas sin ruido no se evalúan y se cuentan en query.not_evaluated.",
+              "title": "Noise Hh Min"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hh_db máxima, en dB.",
+            "in": "query",
+            "name": "noise_hh_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hh_db máxima, en dB.",
+              "title": "Noise Hh Max"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hv_db mínima, en dB.",
+            "in": "query",
+            "name": "noise_hv_min",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hv_db mínima, en dB.",
+              "title": "Noise Hv Min"
+            }
+          },
+          {
+            "description": "Solo researcher. evidence.noise.hv_db máxima, en dB.",
+            "in": "query",
+            "name": "noise_hv_max",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Solo researcher. evidence.noise.hv_db máxima, en dB.",
+              "title": "Noise Hv Max"
+            }
+          },
+          {
+            "in": "query",
+            "name": "data_kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "real",
+                    "synthetic"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Data Kind"
+            }
+          },
+          {
+            "description": "Texto libre sobre los textos del veredicto (summary, hipótesis, causa), su identificador y los granule_id, en el idioma de lang (RF-BUS-02). Cada palabra cuenta como prefijo, todas deben aparecer, sin distinguir mayúsculas ni acentos. Sin palabras, no hay resultados.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto libre sobre los textos del veredicto (summary, hipótesis, causa), su identificador y los granule_id, en el idioma de lang (RF-BUS-02). Cada palabra cuenta como prefijo, todas deben aparecer, sin distinguir mayúsculas ni acentos. Sin palabras, no hay resultados.",
+              "title": "Q"
+            }
+          },
+          {
+            "description": "Idioma de los textos en los que busca q.",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "default": "es",
+              "description": "Idioma de los textos en los que busca q.",
+              "enum": [
+                "es",
+                "en"
+              ],
+              "title": "Lang",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Rectángulo WGS84 'oeste,sur,este,norte' (RF-BUS-10): series cuya huella de catalog (T-ANT-17) toca el rectángulo. Si no hay huella, la fila no se evalúa y se cuenta en query.not_evaluated. Dice qué series cubren el área, no que el veredicto hable de ella: el veredicto sigue siendo de toda la zona.",
+            "in": "query",
+            "name": "bbox",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Rectángulo WGS84 'oeste,sur,este,norte' (RF-BUS-10): series cuya huella de catalog (T-ANT-17) toca el rectángulo. Si no hay huella, la fila no se evalúa y se cuenta en query.not_evaluated. Dice qué series cubren el área, no que el veredicto hable de ella: el veredicto sigue siendo de toda la zona.",
+              "examples": [
+                "-105.8,26.85,-105.6,27.0"
+              ],
+              "title": "Bbox"
+            }
+          },
+          {
+            "description": "date ordena por to_date. noise_hh y noise_hv son solo para researcher; las filas sin ruido van al final en los dos sentidos.",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "date",
+              "description": "date ordena por to_date. noise_hh y noise_hv son solo para researcher; las filas sin ruido van al final en los dos sentidos.",
+              "enum": [
+                "date",
+                "interval",
+                "changed_fraction",
+                "noise_hh",
+                "noise_hv"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "title": "Order",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/geo+json": {},
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Archivo en streaming. CSV: una fila por veredicto, la consulta en las cabeceras X-Export-*. JSON: {metadata, results}. GeoJSON: FeatureCollection con metadata y la caja de la zona como geometría de cada Feature."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessDenied"
+                }
+              }
+            },
+            "description": "Solo researcher; required_role dice cuál hace falta."
+          },
+          "422": {
+            "description": "Parámetro no válido, p. ej. un bbox mal formado."
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Exportación de la búsqueda de veredictos (researcher)",
+        "x-required-role": "researcher"
+      }
+    }
+  }
+}

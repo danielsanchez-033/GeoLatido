@@ -1,0 +1,107 @@
+/*
+ * Sistema de diseño (T-FAR-12, RF-INT-01).
+ *
+ * Única fuente de las variables de la app. Cada color se declara una vez con
+ * light-dark(claro, oscuro): el tema oscuro no es una copia aparte.
+ * src/tema/contraste.test.ts lee este archivo y comprueba el contraste de cada
+ * par texto-fondo declarado allí. Si añades un color que se usa como texto,
+ * borde de control o icono, añade también su par a esa prueba.
+ *
+ * Los colores van en hexadecimal de 6 cifras dentro de light-dark(): la prueba
+ * solo sabe leer ese formato.
+ */
+
+/*
+ * Solo tema oscuro desde el rediseño de vidrio (T-FAR-21, RF-INT-23, 2026-11-14): no hay botón de
+ * tema ni islas claras. Los valores claros de light-dark() se conservan para la prueba de contraste
+ * y por si vuelve el tema claro, pero con color-scheme: dark nunca se aplican.
+ */
+:root {
+  color-scheme: dark;
+  /*
+   * Blanco y negro (diseño de referencia del 2026-11-14): la interfaz no usa color.
+   * Lo que hay que distinguir se distingue por la forma: relleno, contorno y trama.
+   * El negro es #000 y el blanco #fff, sin tintes.
+   */
+
+  /* Texto y fondos */
+  --color-texto: light-dark(#000000, #ffffff);
+  --color-texto-suave: light-dark(#525252, #c8c8c8);
+  --color-fondo: light-dark(#ffffff, #000000);
+  --color-superficie: light-dark(#f3f3f3, #26282c);
+
+  /* Bordes: decorativo (solo separa, sin requisito de contraste) y de control, en tinta */
+  --color-borde: light-dark(#d4d4d4, #2f2f2f);
+  --color-borde-control: light-dark(#000000, #ffffff);
+
+  /* Acento: foco y enlaces. También tinta; el foco se distingue por el contorno separado. */
+  --color-acento: light-dark(#000000, #ffffff);
+
+  /*
+   * Estados, sin color (constitución IX.2): cambio probable con relleno, sin cambio
+   * con contorno y no observable con trama. Los tres en tinta; los distingue la marca.
+   */
+  --color-cambio: light-dark(#000000, #ffffff);
+  --color-sin-cambio: light-dark(#000000, #ffffff);
+  --color-no-observable: light-dark(#000000, #ffffff);
+  --color-trama: light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.14));
+
+  /* Aviso (distintivo de datos sintéticos): superficie con borde en tinta y la marca de trama */
+  --color-aviso-fondo: light-dark(#f3f3f3, #26282c);
+  --color-aviso-borde: light-dark(#000000, #ffffff);
+
+  /*
+   * Vidrio esmerilado (T-FAR-21): paneles translúcidos sobre el mapa. El contraste se comprueba con
+   * --color-vidrio-peor, el color opaco que queda en el peor caso: el vidrio (78 % de #1d1e22) sobre
+   * blanco puro, lo más claro que puede haber debajo con cualquier mapa base.
+   */
+  --vidrio-fondo: rgba(29, 30, 34, 0.78);
+  --vidrio-fondo-solido: rgba(29, 30, 34, 0.96);
+  --vidrio-borde: rgba(255, 255, 255, 0.18);
+  --vidrio-brillo: rgba(255, 255, 255, 0.07);
+  --vidrio-activo: rgba(255, 255, 255, 0.16);
+  --vidrio-desenfoque: blur(18px) saturate(1.2);
+  --vidrio-sombra: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --radio-vidrio: 1.25rem;
+  --color-vidrio-peor: light-dark(#4f4f4f, #4f4f4f);
+  /* Botón activo sobre vidrio: --vidrio-activo encima del peor caso */
+  --color-vidrio-activo-peor: light-dark(#6f6f6f, #6f6f6f);
+
+  /* Velo sobre el mapa mientras llega otro veredicto */
+  --color-velo: light-dark(rgba(255, 255, 255, 0.88), rgba(0, 0, 0, 0.88));
+
+  /* Tipografía */
+  --fuente-texto: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+  --fuente-codigo: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  --texto-s: 0.875rem;
+  --texto-m: 1rem;
+  --texto-l: 1.25rem;
+  --texto-xl: 1.5rem;
+  --texto-xxl: 1.75rem;
+  /* Titulares: escalan con el ancho, de móvil a escritorio */
+  --texto-titular: clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem);
+  --texto-seccion: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  --interlineado: 1.5;
+  --peso-normal: 400;
+  --peso-fuerte: 700;
+
+  /* Espaciado */
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-5: 1.5rem;
+  --espacio-6: 2.5rem;
+
+  /* Radios */
+  --radio-s: 0.375rem;
+  --radio-m: 0.5rem;
+
+  /* Elevación: sin sombras. Lo activo se marca invirtiendo (tinta sobre fondo). */
+  --elevacion-1: none;
+  --elevacion-2: none;
+
+  /* Grosor de las líneas de control y de las marcas de estado */
+  --linea-control: 1.5px;
+}

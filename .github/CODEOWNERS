@@ -1,0 +1,42 @@
+# La última regla que coincide gana. Ver CONTRIBUTING.md.
+
+*                                         @KinzzoCS
+
+# Gobierno común: cualquier cambio lo ven las cinco personas
+/specs/constitution.md                    @KinzzoCS @TakoKami-dev @lospapulindos2-netizen @Fransomware @danielsanchez-033
+/specs/00-sistema/                        @KinzzoCS @TakoKami-dev @lospapulindos2-netizen @Fransomware @danielsanchez-033
+/AGENTS.md                                @KinzzoCS @TakoKami-dev @lospapulindos2-netizen @Fransomware @danielsanchez-033
+
+# Antena
+/services/catalog/                        @KinzzoCS
+/services/ingest/                         @KinzzoCS
+/services/auth/                           @KinzzoCS
+/config/aois/                             @KinzzoCS
+/specs/01-antena/                         @KinzzoCS
+/contracts/catalog.openapi.json           @KinzzoCS @lospapulindos2-netizen @Fransomware
+/contracts/gcov-subset.md                 @KinzzoCS @TakoKami-dev
+/contracts/auth.openapi.json              @KinzzoCS @lospapulindos2-netizen @danielsanchez-033
+
+# Eco
+/services/processor/                      @TakoKami-dev
+/specs/02-eco/                            @TakoKami-dev
+/contracts/artifact-manifest.schema.json  @TakoKami-dev @lospapulindos2-netizen
+
+# Balanza
+/services/verdicts/                       @lospapulindos2-netizen
+/gateway/                                 @lospapulindos2-netizen
+/docker-compose.yml                       @lospapulindos2-netizen
+/scripts/                                 @lospapulindos2-netizen
+/specs/03-balanza/                        @lospapulindos2-netizen
+/contracts/verdicts.openapi.json          @lospapulindos2-netizen @Fransomware @danielsanchez-033
+
+# Frontend: Atlas (mapa) y Faro (resto)
+/frontend/                                @danielsanchez-033 @Fransomware
+/frontend/src/mapa/                       @Fransomware
+/specs/04-atlas/                          @Fransomware
+/specs/05-faro/                           @danielsanchez-033
+
+# Funcionalidades que cruzan roles (ola 2)
+/specs/06-acceso/                         @KinzzoCS @lospapulindos2-netizen
+/specs/07-busqueda/                       @lospapulindos2-netizen @KinzzoCS @TakoKami-dev
+/specs/08-interfaz/                       @danielsanchez-033 @Fransomware

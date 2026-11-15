@@ -1,0 +1,221 @@
+# Punto de entrada único para el frontend. Plantilla: la imagen oficial de nginx sustituye las variables
+# ${AUTH_*} con envsubst al arrancar (NGINX_ENVSUBST_FILTER en el compose); las de nginx, como $host, no se tocan.
+#
+# Solo lectura salvo /api/auth/, que admite POST y DELETE (T-BAL-10). El método se comprueba en cada location
+# y no en el server: allí se evalúa antes de elegir el location y cerraría /api/auth/.
+
+# TiTiler abre lo que reciba en url=. Solo pasan los artefactos propios y las
+# escenas Sentinel-2 L2A del bucket público de Earth Search (T-BAL-04). Se compara
+# la forma codificada, que es la que entregan las APIs; cualquier otra se rechaza.
+map $arg_url $cog_url_allowed {
+    default 0;
+    "~^file%3A%2F%2F%2Fdata%2Fartifacts%2F" 1;
+    "~^https%3A%2F%2Fsentinel-cogs\.s3\.us-west-2\.amazonaws\.com%2Fsentinel-s2-l2a-cogs%2F" 1;
+}
+
+# Origen exacto del frontend para /api/auth/, que lleva cookie y por eso no admite el comodín (specs/06-acceso).
+map $host $auth_allowed_origin {
+    default "${AUTH_ALLOWED_ORIGIN}";
+}
+
+# --- Cuotas (T-BAL-12, RF-ACC-09) -----------------------------------------------------------------------------
+# Solo en las rutas nuevas (/api/verdicts/search/ y /api/catalog/search/): public por IP, student y researcher por
+# sub. Las rutas actuales y las teselas no cuentan (RF-ACC-07). Con AUTH_ENABLED=0 no hay cuotas (RF-ACC-10): las
+# rutas nuevas ya responden 403 a todos. auth-on.conf fija $quota_mode a on.
+#
+# limit_req va en la fase preaccess, antes que auth_request (access): en el server de fuera el perfil aún no se
+# conoce. Por eso las rutas nuevas pasan por un server interno (127.0.0.1:8081, sin puerto publicado) que recibe
+# la clave de cuota en cabeceras puestas por el gateway, nunca por el cliente, y la aplica antes de llamar al
+# servicio. Una clave vacía no cuenta.
+# Sin Authorization, el atajo de /_auth no siempre deja $auth_role con valor (llega vacío y verdicts lo trata como
+# public), así que vacío cuenta como public.
+map "$quota_mode:$auth_role" $quota_public_key {
+    "on:public" $remote_addr;
+    "on:" $remote_addr;
+    default "";
+}
+map "$quota_mode:$auth_role" $quota_student_key {
+    "on:student" $auth_sub;
+    default "";
+}
+map "$quota_mode:$auth_role" $quota_researcher_key {
+    "on:researcher" $auth_sub;
+    default "";
+}
+# Cuota orientativa de specs/06-acceso: 60, 120 y 600 por minuto. El cubo admite ese número de golpe y se vacía
+# al mismo ritmo: tras agotarla, vuelve una petición cada 1 s, 0,5 s o 0,1 s. burst es la cuota menos 1, porque
+# la primera petición no cuenta como exceso.
+limit_req_zone $http_x_quota_public zone=quota_public:1m rate=60r/m;
+limit_req_zone $http_x_quota_student zone=quota_student:1m rate=120r/m;
+limit_req_zone $http_x_quota_researcher zone=quota_researcher:1m rate=600r/m;
+# Contra quien adivina contraseñas: 5 intentos por minuto y por IP en POST /api/auth/login, y otros 5 en
+# /api/auth/register (cuotas separadas). OPTIONS no cuenta. Solo existen con AUTH_ENABLED=1 (auth-on.conf).
+map $request_method $auth_attempt_key {
+    POST $binary_remote_addr;
+    default "";
+}
+limit_req_zone $auth_attempt_key zone=quota_login:1m rate=5r/m;
+limit_req_zone $auth_attempt_key zone=quota_register:1m rate=5r/m;
+limit_req_status 429;
+
+server {
+    listen 80;
+
+    # DNS interno de Docker. Resolver en cada petición (proxy_pass con variable)
+    # evita quedarse con IPs viejas si se recrea un servicio sin reiniciar el
+    # gateway; si no, dos servicios pueden acabar con las IPs intercambiadas.
+    resolver 127.0.0.11 valid=10s ipv6=off;
+
+    proxy_hide_header Access-Control-Allow-Origin;
+    include /etc/nginx/snippets/cors-api.conf;
+
+    # El perfil lo decide solo el gateway (RF-ACC-05): estas cabeceras pisan siempre las que mande el cliente.
+    # auth-on.conf las toma de la respuesta de auth /verify; auth-off.conf fija public (RF-ACC-10).
+    proxy_set_header X-Auth-Role $auth_role;
+    proxy_set_header X-Auth-Sub $auth_sub;
+
+    # AUTH_MODE vale on u off según AUTH_ENABLED (gateway/15-auth-mode.envsh). Si falta, nginx no arranca.
+    include /etc/nginx/auth/auth-${AUTH_MODE}.conf;
+
+    location = /health {
+        auth_request off;
+        include /etc/nginx/snippets/read-only.conf;
+        default_type application/json;
+        return 200 '{"status":"ok"}';
+    }
+
+    # Con variables, proxy_pass no reescribe la URI: el prefijo se quita con
+    # rewrite ... break, que conserva la query string.
+    location /api/catalog/ {
+        include /etc/nginx/snippets/read-only.conf;
+        set $catalog http://catalog:8000;
+        rewrite ^/api/catalog/(.*)$ /$1 break;
+        proxy_pass $catalog;
+    }
+
+    location /api/verdicts/ {
+        include /etc/nginx/snippets/read-only.conf;
+        set $verdicts http://verdicts:8000;
+        rewrite ^/api/verdicts/(.*)$ /$1 break;
+        proxy_pass $verdicts;
+        # Margen para la primera lectura del contraste con OPERA si aún no está en caché (~63 s medidos en
+        # T048 por Antena el 2026-11-12). verdicts lo calienta al arrancar y lo guarda en disco; esto es la red.
+        proxy_read_timeout 180s;
+    }
+
+    # Rutas nuevas con cuota: mismo token y perfil que el resto de /api/, y después al server interno de cuotas.
+    location /api/verdicts/search/ {
+        include /etc/nginx/snippets/read-only.conf;
+        include /etc/nginx/snippets/quota-proxy.conf;
+        proxy_read_timeout 180s;
+    }
+
+    location /api/catalog/search/ {
+        include /etc/nginx/snippets/read-only.conf;
+        include /etc/nginx/snippets/quota-proxy.conf;
+    }
+
+    # Motor de investigación (services/research): crea investigaciones (POST) y lanza sus pasos. La respuesta de un
+    # POST es inmediata (202) y el trabajo sigue en segundo plano, así que no necesita un timeout largo.
+    location /api/research/ {
+        include /etc/nginx/snippets/research.conf;
+        set $research http://research:8000;
+        rewrite ^/api/research/(.*)$ /$1 break;
+        proxy_pass $research;
+        proxy_read_timeout 60s;
+    }
+
+    # Procesado en línea (services/online): POST crea o reutiliza la zona y responde 202; el trabajo sigue en segundo
+    # plano. Mismas reglas de método y CORS que /api/research/.
+    location /api/online/ {
+        include /etc/nginx/snippets/research.conf;
+        set $online http://online:8000;
+        rewrite ^/api/online/(.*)$ /$1 break;
+        proxy_pass $online;
+        proxy_read_timeout 60s;
+    }
+
+    location /tiles/cog/ {
+        # Las teselas no son /api/: no validan el token ni reciben el perfil (specs/06-acceso, plan).
+        auth_request off;
+        proxy_set_header X-Auth-Role "";
+        proxy_set_header X-Auth-Sub "";
+        include /etc/nginx/snippets/read-only.conf;
+        # nginx revisa el primer url= y TiTiler usa el último: con dos, TiTiler
+        # podía pedir cualquier URL. Se rechaza el url= repetido (sin distinguir
+        # mayúsculas) y cualquier nombre de parámetro codificado, como ur%6C=.
+        if ($args ~ "(^|&)[^=&]*%[^=&]*=") {
+            return 403;
+        }
+        if ($args ~* "(^|&)url=.*&url=") {
+            return 403;
+        }
+        if ($cog_url_allowed = 0) {
+            return 403;
+        }
+        if ($arg_url ~* "(\.\.|%2e%2e)") {
+            return 403;
+        }
+        # Algoritmos de TiTiler: solo terrainrgb, para el relieve (T-BAL-15, RF-INT-12). Otros (hillshade,
+        # contours...) cuestan más y no los usa la interfaz. Sin parámetros de algoritmo y sin repetir el nombre.
+        if ($arg_algorithm !~ "^(terrainrgb)?$") {
+            return 403;
+        }
+        if ($args ~* "(^|&)algorithm_params=") {
+            return 403;
+        }
+        if ($args ~* "(^|&)algorithm=.*&algorithm=") {
+            return 403;
+        }
+        set $tiles http://tiles:8000;
+        rewrite ^/tiles/cog/(.*)$ /cog/$1 break;
+        proxy_pass $tiles;
+    }
+
+    location / {
+        auth_request off;
+        include /etc/nginx/snippets/read-only.conf;
+        return 404;
+    }
+}
+
+# Server interno de cuotas (T-BAL-12). Solo escucha en el propio contenedor; el de fuera le pasa el perfil y la
+# clave de cuota. No valida tokens: eso ya lo hizo el de fuera.
+server {
+    listen 127.0.0.1:8081;
+    resolver 127.0.0.11 valid=10s ipv6=off;
+
+    proxy_set_header X-Auth-Role $http_x_auth_role;
+    proxy_set_header X-Auth-Sub $http_x_auth_sub;
+    proxy_set_header X-Quota-Public "";
+    proxy_set_header X-Quota-Student "";
+    proxy_set_header X-Quota-Researcher "";
+
+    limit_req zone=quota_public burst=59 nodelay;
+    limit_req zone=quota_student burst=119 nodelay;
+    limit_req zone=quota_researcher burst=599 nodelay;
+    error_page 429 = @quota_exceeded;
+
+    location /api/verdicts/search/ {
+        set $verdicts http://verdicts:8000;
+        rewrite ^/api/verdicts/(.*)$ /$1 break;
+        proxy_pass $verdicts;
+        proxy_read_timeout 180s;
+    }
+
+    location /api/catalog/search/ {
+        set $catalog http://catalog:8000;
+        rewrite ^/api/catalog/(.*)$ /$1 break;
+        proxy_pass $catalog;
+    }
+
+    location @quota_exceeded {
+        add_header Retry-After 60 always;
+        default_type application/json;
+        return 429 '{"detail":"Cuota de búsqueda agotada para tu perfil (public por IP; student y researcher por cuenta). Las rutas actuales y las teselas no tienen cuota y siguen funcionando.","retry_after_seconds":60}';
+    }
+
+    location / {
+        return 404;
+    }
+}

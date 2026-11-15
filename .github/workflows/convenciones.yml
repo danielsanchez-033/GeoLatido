@@ -1,0 +1,30 @@
+name: convenciones
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  titulo-y-rama:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validar título del PR y nombre de la rama
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          title_pattern='^(feat|fix|spec|docs|test|refactor|perf|build|ci|chore|revert)\((antena|eco|balanza|atlas|faro|contratos|repo)\)!?: [^ ].{0,71}$'
+          branch_pattern='^(antena|eco|balanza|atlas|faro|contratos|repo)/[a-z0-9._-]+$'
+          status=0
+          if [[ ! "$TITLE" =~ $title_pattern ]]; then
+            echo "::error::El título del PR no sigue Conventional Commits con los ámbitos del proyecto (ver CONTRIBUTING.md)."
+            status=1
+          fi
+          if [[ ! "$BRANCH" =~ $branch_pattern ]]; then
+            echo "::error::La rama debe llamarse <ámbito>/<tema-en-minusculas>."
+            status=1
+          fi
+          exit $status
