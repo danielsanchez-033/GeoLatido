@@ -3,7 +3,7 @@
 GeoLatido convierte el radar NISAR (NASA–ISRO) en veredictos claros sobre la superficie de la Tierra: qué cambió, qué
 no se detectó y qué no se puede saber. Esta guía explica cómo instalarlo, cómo usar datos reales y cómo recorrer la app.
 
-**Video de demostración (30 s):** [verlo en el navegador](https://cdn.jsdelivr.net/gh/danielsanchez-033/GeoLatido@main/docs/media/geolatido-demo.mp4) · [archivo en el repositorio](media/geolatido-demo.mp4).
+**Video de demostración (30 s):** [verlo en el navegador](https://cdn.jsdelivr.net/gh/danielsanchez-033/GeoLatido@c7b3b7e/docs/media/geolatido-demo.mp4) · [archivo en el repositorio](media/geolatido-demo.mp4).
 
 ## 1. Instalación
 
