@@ -490,6 +490,19 @@ test('avisa si la API no responde', async () => {
   expect(avisos[0]).toHaveTextContent('No se pudo conectar con la API')
 })
 
+test('sin zonas procesadas (con token no hay datos sintéticos) invita a buscar y no dice que la API falla', async () => {
+  const base = stubApi()
+  vi.stubGlobal('fetch', vi.fn(async (input: Request | string, init?: RequestInit) => {
+    const path = new URL(typeof input === 'string' ? input : input.url).pathname
+    if (path.endsWith('/api/verdicts/aois')) return json([])
+    return base(input, init)
+  }))
+  render(<App />)
+  const avisos = await screen.findAllByText(/Todavía no hay zonas procesadas/)
+  expect(avisos.length).toBeGreaterThan(0)
+  expect(screen.queryByText(/No se pudo conectar con la API/)).not.toBeInTheDocument()
+})
+
 test('el enlace para saltar al contenido es lo primero con el tabulador y lleva a main', async () => {
   const user = userEvent.setup()
   stubApi()
