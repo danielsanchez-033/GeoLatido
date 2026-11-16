@@ -16,9 +16,9 @@ GeoLatido turns NASA–ISRO NISAR radar data into clear, auditable answers about
 
 ## Demo video
 
-[![GeoLatido demo video (30 s)](docs/media/geolatido-demo-portada.jpg)](docs/media/geolatido-demo.mp4)
+[![GeoLatido demo video (30 s) — click to play](docs/media/geolatido-demo-portada.jpg)](https://cdn.jsdelivr.net/gh/danielsanchez-033/GeoLatido@main/docs/media/geolatido-demo.mp4)
 
-▶️ **[Watch the 30-second demo](docs/media/geolatido-demo.mp4)** · [direct download](https://github.com/danielsanchez-033/GeoLatido/raw/main/docs/media/geolatido-demo.mp4)
+▶️ **[Play the 30-second demo in your browser](https://cdn.jsdelivr.net/gh/danielsanchez-033/GeoLatido@main/docs/media/geolatido-demo.mp4)** · [file in the repository](docs/media/geolatido-demo.mp4) · [download](https://github.com/danielsanchez-033/GeoLatido/raw/main/docs/media/geolatido-demo.mp4)
 
 ---
 
