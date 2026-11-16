@@ -82,9 +82,7 @@ type Reproduccion = { titulo: string; claves: string[]; indice: number; enMarcha
 
 async function loadSeries(): Promise<Load> {
   const aois = await verdictsApi.GET('/aois')
-  if (!aois.data) return { status: 'error' }
-  // Sin zonas procesadas (con token no hay datos sintéticos de Parral): la API responde y se busca un lugar.
-  if (!aois.data.length) return { status: 'ready', zonas: [] }
+  if (!aois.data?.length) return { status: 'error' }
   // Nombres legibles de catalog; si no responde, se usa el id de la zona.
   const nombres = new Map<string, string>()
   try {
@@ -101,7 +99,7 @@ async function loadSeries(): Promise<Load> {
     const bbox: Bbox = [Math.min(...b.map((x) => x[0])), Math.min(...b.map((x) => x[1])), Math.max(...b.map((x) => x[2])), Math.max(...b.map((x) => x[3]))]
     zonas.push({ aoi, nombre: nombres.get(aoi) ?? aoi, bbox, series: series.data })
   }
-  return { status: 'ready', zonas }
+  return zonas.length ? { status: 'ready', zonas } : { status: 'error' }
 }
 
 
@@ -622,7 +620,6 @@ function Contenido() {
                 {t('series.error')}
               </p>
             )}
-            {!modoMundo && state.status === 'ready' && zonas.length === 0 && <p className="estado-carga">{t('series.noZones')}</p>}
             {modoMundo && lugar && (
               <>
                 {zonas.length > 0 && (
@@ -762,8 +759,7 @@ function Contenido() {
                 {!modoMundo && resumenOnline && resumenOnline.aoi === aoi && (cargando || !verdict) && (
                   <ResumenPares resumen={resumenOnline.resumen} />
                 )}
-                {!modoMundo && state.status === 'ready' && zonas.length === 0 && <p>{t('series.noZones')}</p>}
-                {!modoMundo && (!verdict || deOtraZona) && state.status !== 'error' && !(state.status === 'ready' && zonas.length === 0) && (
+                {!modoMundo && (!verdict || deOtraZona) && state.status !== 'error' && (
                   <Esqueleto etiqueta={t('picker.loading')} variante="tarjeta" filas={5} />
                 )}
                 {!modoMundo && verdict && !deOtraZona && (

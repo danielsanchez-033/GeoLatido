@@ -14,10 +14,17 @@ GeoLatido turns NASA–ISRO NISAR radar data into clear, auditable answers about
 > detectó y qué no se puede saber, con cada cifra respaldada por sus datos. **Guía de uso e instalación:
 > [docs/GUIA.md](docs/GUIA.md).**
 
+## Demo video
+
+[![GeoLatido demo video (30 s)](docs/media/geolatido-demo-portada.jpg)](docs/media/geolatido-demo.mp4)
+
+▶️ **[Watch the 30-second demo](docs/media/geolatido-demo.mp4)** · [direct download](https://github.com/danielsanchez-033/GeoLatido/raw/main/docs/media/geolatido-demo.mp4)
+
 ---
 
 ## Contents
 
+- [Demo video](#demo-video)
 - [The challenge](#the-challenge)
 - [Our solution](#our-solution)
 - [Key findings](#key-findings)
@@ -107,8 +114,7 @@ docker compose up --build
 
 A fresh clone runs with **synthetic data** (clearly labelled in the UI) so it works offline. To read **real NISAR data**,
 create a free [NASA Earthdata](https://urs.earthdata.nasa.gov/) token, copy `.env.example` to `.env` and set
-`EARTHDATA_TOKEN`. With the token, synthetic data are neither generated nor shown: search for any place and the app
-processes its real NISAR data. Step-by-step instructions, including processing Parral's full series, are in
+`EARTHDATA_TOKEN`. Step-by-step instructions, including processing Parral's full series, are in
 **[docs/GUIA.md](docs/GUIA.md)**. Deployment notes: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Architecture

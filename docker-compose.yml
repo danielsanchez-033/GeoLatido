@@ -6,10 +6,6 @@ services:
   seed:
     build: ./services/processor
     command: ["python", "-m", "processor", "seed-synthetic"]
-    environment:
-      # Con EARTHDATA_TOKEN en el .env vale 1 y no se generan datos sintéticos (la app procesa datos reales en línea).
-      # Solo pasa la marca, nunca el token.
-      SEED_SKIP: ${EARTHDATA_TOKEN:+1}
     volumes:
       - ./data:/data
       - ./config/aois:/config/aois:ro
@@ -68,8 +64,6 @@ services:
       # búsqueda lo calcula. Con token, el contraste con OPERA entra en el índice cuando termina de calentarse.
       VERDICTS_SEARCH_INDEX: "1"
       VERDICTS_CACHE_DIR: /cache
-      # Con EARTHDATA_TOKEN no se sirven artefactos sintéticos que ya existieran en ./data (quedan en disco).
-      VERDICTS_HIDE_SYNTHETIC: ${EARTHDATA_TOKEN:+1}
     volumes:
       - ./data:/data:ro
       - ./data/cache/verdicts:/cache

@@ -21,8 +21,7 @@
   },
   "series": {
     "loading": "Loading data…",
-    "error": "Could not reach the API. Check that the stack is running.",
-    "noZones": "No areas have been processed yet. Search for a place above and GeoLatido will process its real NISAR data."
+    "error": "Could not reach the API. Check that the stack is running."
   },
   "dataKind": {
     "real": "real",

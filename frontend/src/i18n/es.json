@@ -21,8 +21,7 @@
   },
   "series": {
     "loading": "Cargando datos…",
-    "error": "No se pudo conectar con la API. Comprueba que la pila está levantada.",
-    "noZones": "Todavía no hay zonas procesadas. Busca un lugar arriba y GeoLatido procesará sus datos reales de NISAR."
+    "error": "No se pudo conectar con la API. Comprueba que la pila está levantada."
   },
   "dataKind": {
     "real": "reales",

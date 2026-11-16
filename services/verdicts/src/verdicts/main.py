@@ -1000,7 +1000,7 @@ def create_app(
     footprint_source: FootprintSource | None = None,
 ) -> FastAPI:
     root = artifact_root or Path(os.environ.get("ARTIFACT_ROOT", "/data/artifacts"))
-    store = Store(root, hide_synthetic=os.environ.get("VERDICTS_HIDE_SYNTHETIC", "") == "1")
+    store = Store(root)
     if timeline is None and os.environ.get("CATALOG_URL"):
         timeline = HttpTimeline(os.environ["CATALOG_URL"])
     if optical_source is None and os.environ.get("CATALOG_URL"):
