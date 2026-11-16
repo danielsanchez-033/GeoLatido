@@ -29,6 +29,10 @@ def series_id_for(spec) -> str:
 
 
 def seed_synthetic(args: argparse.Namespace) -> int:
+    # Con EARTHDATA_TOKEN la app procesa datos reales en línea: los sintéticos sobran (compose pone SEED_SKIP=1).
+    if os.environ.get("SEED_SKIP", "") == "1" and not args.force:
+        print("Hay datos reales disponibles (EARTHDATA_TOKEN): no se generan datos sintéticos")
+        return 0
     aoi = load_aoi(args.aoi_dir, "parral")
     artifacts = args.data_dir / "artifacts"
     # DEM sintético (T-ECO-13): da relieve a la pila sintética sin bajar GLO-30. Va marcado como sintético.

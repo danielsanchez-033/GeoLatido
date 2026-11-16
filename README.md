@@ -107,7 +107,8 @@ docker compose up --build
 
 A fresh clone runs with **synthetic data** (clearly labelled in the UI) so it works offline. To read **real NISAR data**,
 create a free [NASA Earthdata](https://urs.earthdata.nasa.gov/) token, copy `.env.example` to `.env` and set
-`EARTHDATA_TOKEN`. Step-by-step instructions, including processing Parral's full series, are in
+`EARTHDATA_TOKEN`. With the token, synthetic data are neither generated nor shown: search for any place and the app
+processes its real NISAR data. Step-by-step instructions, including processing Parral's full series, are in
 **[docs/GUIA.md](docs/GUIA.md)**. Deployment notes: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Architecture
